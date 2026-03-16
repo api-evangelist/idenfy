@@ -1,30 +1,56 @@
 aid: idenfy
 name: iDenfy
 description: >-
-  Fraud checking API is an additional service used to further identify a person
-  and stop fraudulent activities. 
+  iDenfy is an identity verification platform providing KYC and AML compliance
+  solutions. The iDenfy API enables businesses to verify identities, check for
+  fraud, and comply with regulatory requirements through automated document
+  verification, facial recognition, and fraud detection services.
 type: Index
-position: Consumer
-access: 3rd-Party
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - API
+  - Identity Verification
+  - KYC
+  - AML
+  - Fraud Detection
+  - Compliance
 created: '2024-11-13'
-modified: '2024-11-13'
+modified: '2026-03-16'
 url: https://raw.githubusercontent.com/api-search/idenfy/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-  - aid: idenfy:idenfy
-    name: iDenfy
+  - aid: idenfy:idenfy-fraud-api
+    name: iDenfy Fraud API
     description: >-
-      Fraud checking API is an additional service used to further identify a
-      person and stop fraudulent activities. 
-    humanURL: ' https://documentation.idenfy.com/fraud/FraudApi/'
+      The iDenfy Fraud API is an additional service used to further identify a
+      person and stop fraudulent activities. It provides tools for fraud
+      checking and verification beyond standard identity verification.
+    humanURL: https://documentation.idenfy.com/fraud/FraudApi/
     tags:
-      - API
+      - Fraud Detection
+      - Identity Verification
     properties:
       - type: Documentation
-        url: ' https://documentation.idenfy.com/fraud/FraudApi/'
+        url: https://documentation.idenfy.com/fraud/FraudApi/
+  - aid: idenfy:idenfy-verification-api
+    name: iDenfy Identity Verification API
+    description: >-
+      The iDenfy Identity Verification API provides document verification,
+      facial recognition, and liveness detection for KYC and AML compliance.
+    humanURL: https://documentation.idenfy.com/
+    tags:
+      - Identity Verification
+      - KYC
+      - AML
+    properties:
+      - type: Documentation
+        url: https://documentation.idenfy.com/
+common:
+  - type: Website
+    url: https://www.idenfy.com/
+  - type: Documentation
+    url: https://documentation.idenfy.com/
+  - type: Support
+    url: https://www.idenfy.com/contact/
 maintainers:
   - FN: Kin Lane
-    email: info@apievangelist.com
+    email: kin@apievangelist.com
