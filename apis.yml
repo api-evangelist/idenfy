@@ -8,11 +8,11 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
+  - AML
+  - Compliance
+  - Fraud Detection
   - Identity Verification
   - KYC
-  - AML
-  - Fraud Detection
-  - Compliance
 created: '2024-11-13'
 modified: '2026-03-16'
 url: https://raw.githubusercontent.com/api-search/idenfy/refs/heads/main/apis.yml
@@ -38,9 +38,9 @@ apis:
       facial recognition, and liveness detection for KYC and AML compliance.
     humanURL: https://documentation.idenfy.com/
     tags:
+      - AML
       - Identity Verification
       - KYC
-      - AML
     properties:
       - type: Documentation
         url: https://documentation.idenfy.com/
