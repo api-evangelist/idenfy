@@ -109,6 +109,29 @@ common:
     url: https://documentation.idenfy.com/
   - type: Support
     url: https://www.idenfy.com/contact/
+  - type: Integrations
+    url: https://idenfy.com/integrations/
+integrations:
+  - name: iDenfy
+  - name: Logo of iDenfy
+  - name: Talk to Partnerships
+  - name: Zapier
+  - name: Woocommerce
+  - name: Magento
+  - name: Shopify
+  - name: Bubble integration
+  - name: Wordpress.com
+  - name: Flutter
+  - name: React Native
+  - name: Arrow
+  - name: Image of salesmens
+  - name: LLOYDS
+  - name: GDPR ready badge
+  - name: CCPA compliant badge
+  - name: SOC certificate
+  - name: ISO 27001 standard
+  - name: iBeta ISO 30107 standard
+  - name: Arrow down
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
