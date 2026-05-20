@@ -103,6 +103,10 @@ apis:
       - type: Documentation
         url: https://documentation.idenfy.com/
 common:
+  - type: GitHubOrganization
+    url: https://github.com/idenfy
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/idenfy
   - type: Website
     url: https://www.idenfy.com/
   - type: Documentation
