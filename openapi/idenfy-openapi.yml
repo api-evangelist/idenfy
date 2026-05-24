@@ -1,0 +1,341 @@
+openapi: 3.1.0
+info:
+  title: iDenfy API
+  description: |
+    iDenfy identity verification, business verification (KYB), AML screening,
+    face authentication, bank verification, and fraud prevention REST API.
+  version: "2.0"
+  contact:
+    name: iDenfy Support
+    url: https://documentation.idenfy.com/
+servers:
+  - url: https://ivs.idenfy.com
+    description: Production
+security:
+  - basicAuth: []
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic auth using API_KEY as username and API_SECRET as password.
+paths:
+  /api/v2/token:
+    post:
+      summary: Create verification token
+      operationId: createToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  type: string
+      responses:
+        "200":
+          description: Token created
+  /kyc/sessions:
+    post:
+      summary: Create KYC verification session
+      operationId: createKycSession
+      responses:
+        "200":
+          description: Session created
+  /kyc/identifications:
+    get:
+      summary: List identifications
+      operationId: listIdentifications
+      responses:
+        "200":
+          description: A list of identifications
+  /kyc/identifications/{scanRef}:
+    parameters:
+      - name: scanRef
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve verification data
+      operationId: getIdentification
+      responses:
+        "200":
+          description: Identification details
+    delete:
+      summary: Delete verification
+      operationId: deleteIdentification
+      responses:
+        "204":
+          description: Deleted
+  /kyc/identifications/{scanRef}/request-update:
+    parameters:
+      - name: scanRef
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Request additional information
+      operationId: requestIdentificationUpdate
+      responses:
+        "200":
+          description: Update requested
+  /kyc/pdf:
+    post:
+      summary: Generate PDF report
+      operationId: generateKycPdf
+      responses:
+        "200":
+          description: PDF generated
+  /kyb/sessions:
+    post:
+      summary: Create KYB session
+      operationId: createKybSession
+      responses:
+        "200":
+          description: Session created
+  /kyb/companies:
+    get:
+      summary: List companies
+      operationId: listCompanies
+      responses:
+        "200":
+          description: A list of companies
+  /kyb/companies/{companyId}:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve company info
+      operationId: getCompany
+      responses:
+        "200":
+          description: Company details
+    patch:
+      summary: Update company
+      operationId: updateCompany
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete company
+      operationId: deleteCompany
+      responses:
+        "204":
+          description: Deleted
+  /kyb/companies/{companyId}/pdf:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Generate company PDF
+      operationId: generateCompanyPdf
+      responses:
+        "200":
+          description: PDF generated
+  /kyb/forms:
+    get:
+      summary: List KYB forms
+      operationId: listForms
+      responses:
+        "200":
+          description: A list of forms
+    post:
+      summary: Create KYB form
+      operationId: createForm
+      responses:
+        "200":
+          description: Form created
+  /kyb/forms/{formId}:
+    parameters:
+      - name: formId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve form info
+      operationId: getForm
+      responses:
+        "200":
+          description: Form details
+    patch:
+      summary: Update form info
+      operationId: updateForm
+      responses:
+        "200":
+          description: Updated
+  /kyb/forms/{formId}/submit:
+    parameters:
+      - name: formId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Submit form
+      operationId: submitForm
+      responses:
+        "200":
+          description: Submitted
+  /aml/checks:
+    post:
+      summary: Create AML check
+      operationId: createAmlCheck
+      responses:
+        "200":
+          description: Check created
+  /aml/checks/{checkId}:
+    parameters:
+      - name: checkId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve AML profile
+      operationId: getAmlCheck
+      responses:
+        "200":
+          description: Check details
+  /aml/checks/{checkId}/pdf:
+    parameters:
+      - name: checkId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Generate AML PDF
+      operationId: generateAmlPdf
+      responses:
+        "200":
+          description: PDF generated
+  /aml/monitoring:
+    post:
+      summary: Create monitoring
+      operationId: createAmlMonitoring
+      responses:
+        "200":
+          description: Created
+    get:
+      summary: List monitoring
+      operationId: listAmlMonitoring
+      responses:
+        "200":
+          description: A list of monitoring records
+  /aml/monitoring/{monitoringId}:
+    parameters:
+      - name: monitoringId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve monitoring
+      operationId: getAmlMonitoring
+      responses:
+        "200":
+          description: Monitoring details
+    patch:
+      summary: Update monitoring
+      operationId: updateAmlMonitoring
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete monitoring
+      operationId: deleteAmlMonitoring
+      responses:
+        "204":
+          description: Deleted
+  /aml/monitoring/{monitoringId}/start-stop:
+    parameters:
+      - name: monitoringId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Start or stop monitoring
+      operationId: startStopAmlMonitoring
+      responses:
+        "200":
+          description: Toggled
+  /face-authentication/sessions:
+    post:
+      summary: Create face authentication session
+      operationId: createFaceAuthSession
+      responses:
+        "200":
+          description: Session created
+  /face-authentication/sessions/{sessionId}:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve face authentication session info
+      operationId: getFaceAuthSession
+      responses:
+        "200":
+          description: Session details
+  /bank/sessions:
+    post:
+      summary: Generate bank verification token
+      operationId: createBankSession
+      responses:
+        "200":
+          description: Session created
+  /bank/transactions:
+    get:
+      summary: List account transactions
+      operationId: listBankTransactions
+      responses:
+        "200":
+          description: A list of transactions
+  /fraud/address-verification:
+    post:
+      summary: Verify address
+      operationId: verifyAddress
+      responses:
+        "200":
+          description: Verification result
+  /fraud/phone-validation:
+    post:
+      summary: Validate phone
+      operationId: validatePhone
+      responses:
+        "200":
+          description: Validation result
+  /fraud/phone-verification:
+    post:
+      summary: Verify phone ownership
+      operationId: verifyPhone
+      responses:
+        "200":
+          description: Verification result
+  /fraud/proxy-check:
+    post:
+      summary: Check proxy or VPN
+      operationId: checkProxy
+      responses:
+        "200":
+          description: Check result
+  /fraud/risk-assessment:
+    post:
+      summary: Calculate fraud probability
+      operationId: assessRisk
+      responses:
+        "200":
+          description: Risk assessment
