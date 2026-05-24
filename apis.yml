@@ -115,6 +115,8 @@ common:
     url: https://www.idenfy.com/contact/
   - type: Integrations
     url: https://idenfy.com/integrations/
+  - type: LLMsTxt
+    url: https://idenfy.com/llms.txt
 integrations:
   - name: iDenfy
   - name: Logo of iDenfy
