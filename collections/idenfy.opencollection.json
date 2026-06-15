@@ -1,0 +1,536 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Create verification token",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/api/v2/token",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "Create verification token"
+    },
+    {
+      "info": {
+        "name": "Create KYC verification session",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyc/sessions"
+      },
+      "docs": "Create KYC verification session"
+    },
+    {
+      "info": {
+        "name": "List identifications",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/kyc/identifications"
+      },
+      "docs": "List identifications"
+    },
+    {
+      "info": {
+        "name": "Retrieve verification data",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/kyc/identifications/:scanRef",
+        "params": [
+          {
+            "name": "scanRef",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Retrieve verification data"
+    },
+    {
+      "info": {
+        "name": "Delete verification",
+        "type": "http"
+      },
+      "http": {
+        "method": "DELETE",
+        "url": "https://ivs.idenfy.com/kyc/identifications/:scanRef",
+        "params": [
+          {
+            "name": "scanRef",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Delete verification"
+    },
+    {
+      "info": {
+        "name": "Request additional information",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyc/identifications/:scanRef/request-update",
+        "params": [
+          {
+            "name": "scanRef",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Request additional information"
+    },
+    {
+      "info": {
+        "name": "Generate PDF report",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyc/pdf"
+      },
+      "docs": "Generate PDF report"
+    },
+    {
+      "info": {
+        "name": "Create KYB session",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyb/sessions"
+      },
+      "docs": "Create KYB session"
+    },
+    {
+      "info": {
+        "name": "List companies",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/kyb/companies"
+      },
+      "docs": "List companies"
+    },
+    {
+      "info": {
+        "name": "Retrieve company info",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/kyb/companies/:companyId",
+        "params": [
+          {
+            "name": "companyId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Retrieve company info"
+    },
+    {
+      "info": {
+        "name": "Update company",
+        "type": "http"
+      },
+      "http": {
+        "method": "PATCH",
+        "url": "https://ivs.idenfy.com/kyb/companies/:companyId",
+        "params": [
+          {
+            "name": "companyId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Update company"
+    },
+    {
+      "info": {
+        "name": "Delete company",
+        "type": "http"
+      },
+      "http": {
+        "method": "DELETE",
+        "url": "https://ivs.idenfy.com/kyb/companies/:companyId",
+        "params": [
+          {
+            "name": "companyId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Delete company"
+    },
+    {
+      "info": {
+        "name": "Generate company PDF",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyb/companies/:companyId/pdf",
+        "params": [
+          {
+            "name": "companyId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Generate company PDF"
+    },
+    {
+      "info": {
+        "name": "List KYB forms",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/kyb/forms"
+      },
+      "docs": "List KYB forms"
+    },
+    {
+      "info": {
+        "name": "Create KYB form",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyb/forms"
+      },
+      "docs": "Create KYB form"
+    },
+    {
+      "info": {
+        "name": "Retrieve form info",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/kyb/forms/:formId",
+        "params": [
+          {
+            "name": "formId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Retrieve form info"
+    },
+    {
+      "info": {
+        "name": "Update form info",
+        "type": "http"
+      },
+      "http": {
+        "method": "PATCH",
+        "url": "https://ivs.idenfy.com/kyb/forms/:formId",
+        "params": [
+          {
+            "name": "formId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Update form info"
+    },
+    {
+      "info": {
+        "name": "Submit form",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/kyb/forms/:formId/submit",
+        "params": [
+          {
+            "name": "formId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Submit form"
+    },
+    {
+      "info": {
+        "name": "Create AML check",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/aml/checks"
+      },
+      "docs": "Create AML check"
+    },
+    {
+      "info": {
+        "name": "Retrieve AML profile",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/aml/checks/:checkId",
+        "params": [
+          {
+            "name": "checkId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Retrieve AML profile"
+    },
+    {
+      "info": {
+        "name": "Generate AML PDF",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/aml/checks/:checkId/pdf",
+        "params": [
+          {
+            "name": "checkId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Generate AML PDF"
+    },
+    {
+      "info": {
+        "name": "List monitoring",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/aml/monitoring"
+      },
+      "docs": "List monitoring"
+    },
+    {
+      "info": {
+        "name": "Create monitoring",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/aml/monitoring"
+      },
+      "docs": "Create monitoring"
+    },
+    {
+      "info": {
+        "name": "Retrieve monitoring",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId",
+        "params": [
+          {
+            "name": "monitoringId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Retrieve monitoring"
+    },
+    {
+      "info": {
+        "name": "Update monitoring",
+        "type": "http"
+      },
+      "http": {
+        "method": "PATCH",
+        "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId",
+        "params": [
+          {
+            "name": "monitoringId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Update monitoring"
+    },
+    {
+      "info": {
+        "name": "Delete monitoring",
+        "type": "http"
+      },
+      "http": {
+        "method": "DELETE",
+        "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId",
+        "params": [
+          {
+            "name": "monitoringId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Delete monitoring"
+    },
+    {
+      "info": {
+        "name": "Start or stop monitoring",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId/start-stop",
+        "params": [
+          {
+            "name": "monitoringId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Start or stop monitoring"
+    },
+    {
+      "info": {
+        "name": "Create face authentication session",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/face-authentication/sessions"
+      },
+      "docs": "Create face authentication session"
+    },
+    {
+      "info": {
+        "name": "Retrieve face authentication session info",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/face-authentication/sessions/:sessionId",
+        "params": [
+          {
+            "name": "sessionId",
+            "value": "",
+            "type": "path"
+          }
+        ]
+      },
+      "docs": "Retrieve face authentication session info"
+    },
+    {
+      "info": {
+        "name": "Generate bank verification token",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/bank/sessions"
+      },
+      "docs": "Generate bank verification token"
+    },
+    {
+      "info": {
+        "name": "List account transactions",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://ivs.idenfy.com/bank/transactions"
+      },
+      "docs": "List account transactions"
+    },
+    {
+      "info": {
+        "name": "Verify address",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/fraud/address-verification"
+      },
+      "docs": "Verify address"
+    },
+    {
+      "info": {
+        "name": "Validate phone",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/fraud/phone-validation"
+      },
+      "docs": "Validate phone"
+    },
+    {
+      "info": {
+        "name": "Verify phone ownership",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/fraud/phone-verification"
+      },
+      "docs": "Verify phone ownership"
+    },
+    {
+      "info": {
+        "name": "Check proxy or VPN",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/fraud/proxy-check"
+      },
+      "docs": "Check proxy or VPN"
+    },
+    {
+      "info": {
+        "name": "Calculate fraud probability",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://ivs.idenfy.com/fraud/risk-assessment"
+      },
+      "docs": "Calculate fraud probability"
+    }
+  ],
+  "bundled": true
+}
