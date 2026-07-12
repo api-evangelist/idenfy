@@ -103,6 +103,12 @@ apis:
       - type: Documentation
         url: https://documentation.idenfy.com/
 common:
+  - type: TrustCenter
+    url: security/idenfy-trust-center.yml
+  - type: DomainSecurity
+    url: security/idenfy-domain-security.yml
+  - type: Authentication
+    url: authentication/idenfy-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/idenfy
   - type: LinkedIn
@@ -138,6 +144,8 @@ integrations:
   - name: ISO 27001 standard
   - name: iBeta ISO 30107 standard
   - name: Arrow down
+  - url: https://idenfy.com/blog/
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
