@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+  title: iDenfy Aml Kyc API
+  description: 'iDenfy identity verification, business verification (KYB), AML screening,
+
+    face authentication, bank verification, and fraud prevention REST API.
+
+    '
+  version: '2.0'
+  contact:
+    name: iDenfy Support
+    url: https://documentation.idenfy.com/
+servers:
+- url: https://ivs.idenfy.com
+  description: Production
+security:
+- basicAuth: []
+tags:
+- name: Kyc
+paths:
+  /kyc/sessions:
+    post:
+      summary: Create KYC verification session
+      operationId: createKycSession
+      responses:
+        '200':
+          description: Session created
+      tags:
+      - Kyc
+  /kyc/identifications:
+    get:
+      summary: List identifications
+      operationId: listIdentifications
+      responses:
+        '200':
+          description: A list of identifications
+      tags:
+      - Kyc
+  /kyc/identifications/{scanRef}:
+    parameters:
+    - name: scanRef
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve verification data
+      operationId: getIdentification
+      responses:
+        '200':
+          description: Identification details
+      tags:
+      - Kyc
+    delete:
+      summary: Delete verification
+      operationId: deleteIdentification
+      responses:
+        '204':
+          description: Deleted
+      tags:
+      - Kyc
+  /kyc/identifications/{scanRef}/request-update:
+    parameters:
+    - name: scanRef
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Request additional information
+      operationId: requestIdentificationUpdate
+      responses:
+        '200':
+          description: Update requested
+      tags:
+      - Kyc
+  /kyc/pdf:
+    post:
+      summary: Generate PDF report
+      operationId: generateKycPdf
+      responses:
+        '200':
+          description: PDF generated
+      tags:
+      - Kyc
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic auth using API_KEY as username and API_SECRET as password.

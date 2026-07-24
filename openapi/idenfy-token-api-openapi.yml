@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  title: iDenfy Aml Token API
+  description: 'iDenfy identity verification, business verification (KYB), AML screening,
+
+    face authentication, bank verification, and fraud prevention REST API.
+
+    '
+  version: '2.0'
+  contact:
+    name: iDenfy Support
+    url: https://documentation.idenfy.com/
+servers:
+- url: https://ivs.idenfy.com
+  description: Production
+security:
+- basicAuth: []
+tags:
+- name: Token
+paths:
+  /api/v2/token:
+    post:
+      summary: Create verification token
+      operationId: createToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  type: string
+      responses:
+        '200':
+          description: Token created
+      tags:
+      - Token
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic auth using API_KEY as username and API_SECRET as password.

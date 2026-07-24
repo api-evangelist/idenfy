@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: iDenfy Aml API
+  description: 'iDenfy identity verification, business verification (KYB), AML screening,
+
+    face authentication, bank verification, and fraud prevention REST API.
+
+    '
+  version: '2.0'
+  contact:
+    name: iDenfy Support
+    url: https://documentation.idenfy.com/
+servers:
+- url: https://ivs.idenfy.com
+  description: Production
+security:
+- basicAuth: []
+tags:
+- name: Aml
+paths:
+  /aml/checks:
+    post:
+      summary: Create AML check
+      operationId: createAmlCheck
+      responses:
+        '200':
+          description: Check created
+      tags:
+      - Aml
+  /aml/checks/{checkId}:
+    parameters:
+    - name: checkId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve AML profile
+      operationId: getAmlCheck
+      responses:
+        '200':
+          description: Check details
+      tags:
+      - Aml
+  /aml/checks/{checkId}/pdf:
+    parameters:
+    - name: checkId
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Generate AML PDF
+      operationId: generateAmlPdf
+      responses:
+        '200':
+          description: PDF generated
+      tags:
+      - Aml
+  /aml/monitoring:
+    post:
+      summary: Create monitoring
+      operationId: createAmlMonitoring
+      responses:
+        '200':
+          description: Created
+      tags:
+      - Aml
+    get:
+      summary: List monitoring
+      operationId: listAmlMonitoring
+      responses:
+        '200':
+          description: A list of monitoring records
+      tags:
+      - Aml
+  /aml/monitoring/{monitoringId}:
+    parameters:
+    - name: monitoringId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve monitoring
+      operationId: getAmlMonitoring
+      responses:
+        '200':
+          description: Monitoring details
+      tags:
+      - Aml
+    patch:
+      summary: Update monitoring
+      operationId: updateAmlMonitoring
+      responses:
+        '200':
+          description: Updated
+      tags:
+      - Aml
+    delete:
+      summary: Delete monitoring
+      operationId: deleteAmlMonitoring
+      responses:
+        '204':
+          description: Deleted
+      tags:
+      - Aml
+  /aml/monitoring/{monitoringId}/start-stop:
+    parameters:
+    - name: monitoringId
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Start or stop monitoring
+      operationId: startStopAmlMonitoring
+      responses:
+        '200':
+          description: Toggled
+      tags:
+      - Aml
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic auth using API_KEY as username and API_SECRET as password.

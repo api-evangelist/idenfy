@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  title: iDenfy Aml Bank API
+  description: 'iDenfy identity verification, business verification (KYB), AML screening,
+
+    face authentication, bank verification, and fraud prevention REST API.
+
+    '
+  version: '2.0'
+  contact:
+    name: iDenfy Support
+    url: https://documentation.idenfy.com/
+servers:
+- url: https://ivs.idenfy.com
+  description: Production
+security:
+- basicAuth: []
+tags:
+- name: Bank
+paths:
+  /bank/sessions:
+    post:
+      summary: Generate bank verification token
+      operationId: createBankSession
+      responses:
+        '200':
+          description: Session created
+      tags:
+      - Bank
+  /bank/transactions:
+    get:
+      summary: List account transactions
+      operationId: listBankTransactions
+      responses:
+        '200':
+          description: A list of transactions
+      tags:
+      - Bank
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic auth using API_KEY as username and API_SECRET as password.

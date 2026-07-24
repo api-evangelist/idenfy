@@ -1,0 +1,71 @@
+openapi: 3.1.0
+info:
+  title: iDenfy Aml Fraud API
+  description: 'iDenfy identity verification, business verification (KYB), AML screening,
+
+    face authentication, bank verification, and fraud prevention REST API.
+
+    '
+  version: '2.0'
+  contact:
+    name: iDenfy Support
+    url: https://documentation.idenfy.com/
+servers:
+- url: https://ivs.idenfy.com
+  description: Production
+security:
+- basicAuth: []
+tags:
+- name: Fraud
+paths:
+  /fraud/address-verification:
+    post:
+      summary: Verify address
+      operationId: verifyAddress
+      responses:
+        '200':
+          description: Verification result
+      tags:
+      - Fraud
+  /fraud/phone-validation:
+    post:
+      summary: Validate phone
+      operationId: validatePhone
+      responses:
+        '200':
+          description: Validation result
+      tags:
+      - Fraud
+  /fraud/phone-verification:
+    post:
+      summary: Verify phone ownership
+      operationId: verifyPhone
+      responses:
+        '200':
+          description: Verification result
+      tags:
+      - Fraud
+  /fraud/proxy-check:
+    post:
+      summary: Check proxy or VPN
+      operationId: checkProxy
+      responses:
+        '200':
+          description: Check result
+      tags:
+      - Fraud
+  /fraud/risk-assessment:
+    post:
+      summary: Calculate fraud probability
+      operationId: assessRisk
+      responses:
+        '200':
+          description: Risk assessment
+      tags:
+      - Fraud
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic auth using API_KEY as username and API_SECRET as password.
