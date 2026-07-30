@@ -7,7 +7,20 @@ description: >-
   document verification, facial recognition, AML screening, business
   verification, and bank verification services.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/idenfy.png
 tags:
   - AML
   - Compliance
@@ -20,88 +33,147 @@ modified: '2026-04-28'
 url: https://raw.githubusercontent.com/api-evangelist/idenfy/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-  - aid: idenfy:idenfy-verification-api
-    name: iDenfy Identity Verification API
-    description: >-
-      The iDenfy Identity Verification (KYC) API provides document
-      verification, selfie checks, and liveness detection through redirect,
-      iFrame, mobile SDK, or direct API integration.
-    humanURL: https://documentation.idenfy.com/
-    tags:
-      - Identity Verification
-      - KYC
-      - Liveness
-    properties:
-      - type: Documentation
-        url: https://documentation.idenfy.com/
-  - aid: idenfy:idenfy-business-verification-api
-    name: iDenfy Business Verification API
-    description: >-
-      The iDenfy Business Verification (KYB) API enables company verification
-      using registry lookups, ultimate beneficial owner identification, and
-      credit report checks via redirect or iFrame integration.
-    humanURL: https://documentation.idenfy.com/
-    tags:
-      - Business Verification
-      - KYB
-      - UBO
-    properties:
-      - type: Documentation
-        url: https://documentation.idenfy.com/
-  - aid: idenfy:idenfy-aml-screening-api
-    name: iDenfy AML Screening API
-    description: >-
-      The iDenfy AML Screening API screens individuals and companies against
-      sanctions lists, politically exposed persons (PEPs), and adverse media,
-      with one-time and ongoing monitoring options.
-    humanURL: https://documentation.idenfy.com/
-    tags:
-      - AML
-      - Compliance
-      - PEP
-      - Sanctions
-    properties:
-      - type: Documentation
-        url: https://documentation.idenfy.com/
-  - aid: idenfy:idenfy-fraud-api
-    name: iDenfy Fraud Prevention API
-    description: >-
-      The iDenfy Fraud Prevention API provides risk scoring, proxy detection,
-      phone and address verification, and proof of address checks to identify
-      and stop fraudulent activities.
-    humanURL: https://documentation.idenfy.com/fraud/FraudApi/
-    tags:
-      - Fraud Detection
-      - Identity Verification
-      - Risk Scoring
-    properties:
-      - type: Documentation
-        url: https://documentation.idenfy.com/fraud/FraudApi/
-  - aid: idenfy:idenfy-face-authentication-api
-    name: iDenfy Face Authentication API
-    description: >-
-      The iDenfy Face Authentication API re-authenticates returning users by
-      comparing a live facial scan against a previously verified identity.
-    humanURL: https://documentation.idenfy.com/
-    tags:
-      - Biometrics
-      - Face Authentication
-      - Identity Verification
-    properties:
-      - type: Documentation
-        url: https://documentation.idenfy.com/
-  - aid: idenfy:idenfy-bank-verification-api
-    name: iDenfy Bank Verification API
-    description: >-
-      The iDenfy Bank Verification API verifies bank accounts via open banking
-      connections to over 2,500 European banks.
-    humanURL: https://documentation.idenfy.com/
-    tags:
-      - Bank Verification
-      - Open Banking
-    properties:
-      - type: Documentation
-        url: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-verification-api
+  name: iDenfy Identity Verification API
+  description: >-
+    The iDenfy Identity Verification (KYC) API provides document verification, selfie checks, and liveness
+    detection through redirect, iFrame, mobile SDK, or direct API integration.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Identity Verification
+  - KYC
+  - Liveness
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-business-verification-api
+  name: iDenfy Business Verification API
+  description: >-
+    The iDenfy Business Verification (KYB) API enables company verification using registry lookups, ultimate
+    beneficial owner identification, and credit report checks via redirect or iFrame integration.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Business Verification
+  - KYB
+  - UBO
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-aml-screening-api
+  name: iDenfy AML Screening API
+  description: >-
+    The iDenfy AML Screening API screens individuals and companies against sanctions lists, politically
+    exposed persons (PEPs), and adverse media, with one-time and ongoing monitoring options.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - AML
+  - Compliance
+  - PEP
+  - Sanctions
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-fraud-api
+  name: iDenfy Fraud Prevention API
+  description: >-
+    The iDenfy Fraud Prevention API provides risk scoring, proxy detection, phone and address verification,
+    and proof of address checks to identify and stop fraudulent activities.
+  humanURL: https://documentation.idenfy.com/fraud/FraudApi/
+  tags:
+  - Fraud Detection
+  - Identity Verification
+  - Risk Scoring
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/fraud/FraudApi/
+- aid: idenfy:idenfy-face-authentication-api
+  name: iDenfy Face Authentication API
+  description: >-
+    The iDenfy Face Authentication API re-authenticates returning users by comparing a live facial scan
+    against a previously verified identity.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Biometrics
+  - Face Authentication
+  - Identity Verification
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-bank-verification-api
+  name: iDenfy Bank Verification API
+  description: >-
+    The iDenfy Bank Verification API verifies bank accounts via open banking connections to over 2,500
+    European banks.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Bank Verification
+  - Open Banking
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-aml-api
+  name: iDenfy Aml API
+  description: The Aml API from iDenfy — 6 operation(s) for aml.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Aml
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-aml-api-openapi.yml
+- aid: idenfy:idenfy-bank-api
+  name: iDenfy Bank API
+  description: The Bank API from iDenfy — 2 operation(s) for bank.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Bank
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-bank-api-openapi.yml
+- aid: idenfy:idenfy-face-authentication-api
+  name: iDenfy Face Authentication API
+  description: The Face Authentication API from iDenfy — 2 operation(s) for face authentication.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Face Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-face-authentication-api-openapi.yml
+- aid: idenfy:idenfy-fraud-api
+  name: iDenfy Fraud API
+  description: The Fraud API from iDenfy — 5 operation(s) for fraud.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Fraud
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-fraud-api-openapi.yml
+- aid: idenfy:idenfy-kyb-api
+  name: iDenfy Kyb API
+  description: The Kyb API from iDenfy — 7 operation(s) for kyb.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Kyb
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyb-api-openapi.yml
+- aid: idenfy:idenfy-kyc-api
+  name: iDenfy Kyc API
+  description: The Kyc API from iDenfy — 5 operation(s) for kyc.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Kyc
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyc-api-openapi.yml
+- aid: idenfy:idenfy-token-api
+  name: iDenfy Token API
+  description: The Token API from iDenfy — 1 operation(s) for token.
+  humanURL: https://documentation.idenfy.com/
+  tags:
+  - Token
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-token-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/idenfy-agentic-access.yml
