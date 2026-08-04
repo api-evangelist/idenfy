@@ -1,0 +1,26 @@
+{
+  "provider": "idenfy",
+  "sources": [
+    "idenfy-aml-api-openapi.yml",
+    "idenfy-bank-api-openapi.yml",
+    "idenfy-face-authentication-api-openapi.yml",
+    "idenfy-fraud-api-openapi.yml",
+    "idenfy-kyb-api-openapi.yml",
+    "idenfy-kyc-api-openapi.yml",
+    "idenfy-token-api-openapi.yml"
+  ],
+  "outputs": [
+    "idenfy-aml-api-openapi.yml",
+    "idenfy-bank-api-openapi.yml",
+    "idenfy-face-authentication-api-openapi.yml",
+    "idenfy-fraud-api-openapi.yml",
+    "idenfy-kyb-api-openapi.yml",
+    "idenfy-kyc-api-openapi.yml",
+    "idenfy-token-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

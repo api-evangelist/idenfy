@@ -2,13 +2,20 @@
   "repo": "idenfy",
   "feeds": [
     {
+      "source": "https://idenfy.com/blog/rss/",
+      "feed_url": "https://idenfy.com/blog/rss/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://idenfy.com/blog/",
       "feed_url": "https://idenfy.com/blog/rss/",
       "title": "",
-      "saved": 7,
+      "saved": 0,
       "method": "discovered"
     }
   ],
-  "fetched": "2026-07-11T11:50:51Z",
-  "post_count": 27
+  "fetched": "2026-08-01T15:49:00Z",
+  "post_count": 35
 }
