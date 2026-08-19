@@ -1,0 +1,380 @@
+{
+  "item": [
+    {
+      "id": "de04764c-4885-40c3-89cd-f02f567220a0",
+      "name": "Fraud",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4d007d03-13b5-4a8b-89fc-5d2be09bda9a",
+          "name": "Verify address",
+          "request": {
+            "name": "Verify address",
+            "description": {},
+            "url": {
+              "path": [
+                "fraud",
+                "address-verification"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "83c56b30-6eba-464d-956a-16aea0dedcad",
+              "name": "Verification result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fraud",
+                    "address-verification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a83681ce-f815-43b6-9583-5f300231b90a",
+          "name": "Validate phone",
+          "request": {
+            "name": "Validate phone",
+            "description": {},
+            "url": {
+              "path": [
+                "fraud",
+                "phone-validation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3f0fef7b-98b3-4764-93be-ea4623ef807c",
+              "name": "Validation result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fraud",
+                    "phone-validation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb189739-8db2-4721-935f-510d692ad478",
+          "name": "Verify phone ownership",
+          "request": {
+            "name": "Verify phone ownership",
+            "description": {},
+            "url": {
+              "path": [
+                "fraud",
+                "phone-verification"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b43e78d-5862-4a6e-a8cc-222397549a91",
+              "name": "Verification result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fraud",
+                    "phone-verification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab40744e-ab94-47d4-b974-f03775f425da",
+          "name": "Check proxy or VPN",
+          "request": {
+            "name": "Check proxy or VPN",
+            "description": {},
+            "url": {
+              "path": [
+                "fraud",
+                "proxy-check"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "184f9691-0d25-41d1-a872-d16824a05bdc",
+              "name": "Check result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fraud",
+                    "proxy-check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2e6a9ae9-144f-44bf-a0f0-636ce2694910",
+          "name": "Calculate fraud probability",
+          "request": {
+            "name": "Calculate fraud probability",
+            "description": {},
+            "url": {
+              "path": [
+                "fraud",
+                "risk-assessment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "541a4c26-8f20-44aa-9c94-d150b9f889d3",
+              "name": "Risk assessment",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fraud",
+                    "risk-assessment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ivs.idenfy.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2b20f6a2-f588-4ac9-b1a0-1a7723f2c8fa",
+    "name": "iDenfy Aml Fraud API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "iDenfy identity verification, business verification (KYB), AML screening,\nface authentication, bank verification, and fraud prevention REST API.\n\n\nContact Support:\n Name: iDenfy Support",
+      "type": "text/plain"
+    }
+  }
+}

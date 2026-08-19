@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy Aml Bank API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bank",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate bank verification token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/bank/sessions"
+          },
+          "docs": "Generate bank verification token"
+        },
+        {
+          "info": {
+            "name": "List account transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/bank/transactions"
+          },
+          "docs": "List account transactions"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

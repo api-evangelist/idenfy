@@ -1,0 +1,166 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy Aml API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Aml",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create AML check",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/aml/checks"
+          },
+          "docs": "Create AML check"
+        },
+        {
+          "info": {
+            "name": "Retrieve AML profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/aml/checks/:checkId",
+            "params": [
+              {
+                "name": "checkId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve AML profile"
+        },
+        {
+          "info": {
+            "name": "Generate AML PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/aml/checks/:checkId/pdf",
+            "params": [
+              {
+                "name": "checkId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Generate AML PDF"
+        },
+        {
+          "info": {
+            "name": "List monitoring",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/aml/monitoring"
+          },
+          "docs": "List monitoring"
+        },
+        {
+          "info": {
+            "name": "Create monitoring",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/aml/monitoring"
+          },
+          "docs": "Create monitoring"
+        },
+        {
+          "info": {
+            "name": "Retrieve monitoring",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId",
+            "params": [
+              {
+                "name": "monitoringId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve monitoring"
+        },
+        {
+          "info": {
+            "name": "Update monitoring",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId",
+            "params": [
+              {
+                "name": "monitoringId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Update monitoring"
+        },
+        {
+          "info": {
+            "name": "Delete monitoring",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId",
+            "params": [
+              {
+                "name": "monitoringId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete monitoring"
+        },
+        {
+          "info": {
+            "name": "Start or stop monitoring",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/aml/monitoring/:monitoringId/start-stop",
+            "params": [
+              {
+                "name": "monitoringId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Start or stop monitoring"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

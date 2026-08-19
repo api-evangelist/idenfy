@@ -1,0 +1,195 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy Aml Kyb API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Kyb",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create KYB session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyb/sessions"
+          },
+          "docs": "Create KYB session"
+        },
+        {
+          "info": {
+            "name": "List companies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/kyb/companies"
+          },
+          "docs": "List companies"
+        },
+        {
+          "info": {
+            "name": "Retrieve company info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/kyb/companies/:companyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve company info"
+        },
+        {
+          "info": {
+            "name": "Update company",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ivs.idenfy.com/kyb/companies/:companyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Update company"
+        },
+        {
+          "info": {
+            "name": "Delete company",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ivs.idenfy.com/kyb/companies/:companyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete company"
+        },
+        {
+          "info": {
+            "name": "Generate company PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyb/companies/:companyId/pdf",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Generate company PDF"
+        },
+        {
+          "info": {
+            "name": "List KYB forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/kyb/forms"
+          },
+          "docs": "List KYB forms"
+        },
+        {
+          "info": {
+            "name": "Create KYB form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyb/forms"
+          },
+          "docs": "Create KYB form"
+        },
+        {
+          "info": {
+            "name": "Retrieve form info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/kyb/forms/:formId",
+            "params": [
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve form info"
+        },
+        {
+          "info": {
+            "name": "Update form info",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ivs.idenfy.com/kyb/forms/:formId",
+            "params": [
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Update form info"
+        },
+        {
+          "info": {
+            "name": "Submit form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyb/forms/:formId/submit",
+            "params": [
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Submit form"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

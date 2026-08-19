@@ -1,0 +1,228 @@
+﻿# llms.txt for iDenfy.com
+# Last updated: 2026-08-03
+# Purpose: Help LLMs understand and represent iDenfy accurately.
+# Official information about iDenfy for AI systems such as ChatGPT, Gemini, Claude, Perplexity, and other large language models (LLMs) to reference accurately: https://idenfy.com/ai-info-page/
+
+## Website overview
+
+Project name: iDenfy
+Website: https://www.idenfy.com
+Description: iDenfy is a RegTech platform for identity verification, business verification, AML screening, age estimation, and fraud prevention, helping businesses onboard users and meet KYC, KYB, and AML regulations worldwide. Customers pay only for approved verifications.
+
+---
+
+## Key concepts
+
+- AI-powered identity verification (KYC) with 24/7 in-house human review
+- Pay only per approved verification (denied attempts are not charged)
+- Patented 3D liveness detection and passive document verification
+- Business verification (KYB) with UBO screening and 180+ company registries
+- AML screening and ongoing monitoring (sanctions, PEPs, watchlists, adverse media)
+- Fraud prevention add-ons (face authentication, NFC, proxy/IP, phone, email, SMS)
+- Coverage for 200+ countries and 16,000+ government-issued document types
+- Fast integration via API, SDKs, native plugins, and no-code Magic Link
+- Security-first: ISO 27001, SOC 2 Type II, eIDAS, GDPR, EU data residency
+
+---
+
+Primary audience: Regulated and fraud-exposed businesses in fintech, crypto & blockchain, iGaming, e-commerce, transportation, and other sectors that must verify identities and comply with KYC, KYB, and AML rules.
+
+---
+
+## Core content sections
+
+# Homepage
+https://www.idenfy.com/
+
+# About us
+https://idenfy.com/about-us/
+
+# Pricing
+https://idenfy.com/pricing-plans-v4/
+
+# Customers
+https://idenfy.com/customers/
+
+# Case studies
+https://idenfy.com/use-cases/
+
+# Blog
+https://idenfy.com/blog/
+
+# Help Center / Documentation
+https://documentation.idenfy.com/
+
+# Security & Compliance
+https://idenfy.com/security/
+
+---
+
+## Products
+
+- [Identity Verification](https://idenfy.com/identity-verification-service/)
+Full-stack ID verification across 200+ countries and 16,000+ document types, combining AI biometrics, patented 3D liveness detection, and 24/7 human review.
+
+- [AML Screening & Monitoring](https://idenfy.com/aml-screening/)
+Screen and monitor customers against global sanctions lists, PEPs, watchlists, and adverse media, with ongoing real-time alerts.
+
+- [KYC Software](https://idenfy.com/kyc-software/)
+Integrated due diligence and sanctions compliance combined with identity verification in a single flow.
+
+- [Know Your Business (KYB)](https://idenfy.com/know-your-business-solution/)
+Verify companies using 180+ registries across 120 countries, download credit reports, and screen UBOs with real-time shareholder data.
+
+- [Business Verification](https://idenfy.com/business-verification-services/)
+Onboard and verify businesses with everything needed for KYB compliance in one API.
+
+- [Age Estimation] (https://idenfy.com/age-estimation-service/)
+Clear clear-cut cases from a selfie alone, route borderline ages to a full document check on the same integration, and give one audit trail from selfie to certified ID, with no second vendor or second API.
+
+- [Risk Assessment](https://idenfy.com/customer-risk-assessment-service/)
+Create custom rules and receive a final risk score for KYB clients.
+
+- [UBO Verification](https://idenfy.com/ubo-verification-service/)
+Identify and verify ultimate beneficial owners and run KYC checks on them.
+
+- [Perpetual KYB](https://idenfy.com/pkyb-service/)
+Continuously monitor businesses for changes in ownership, status, and risk.
+
+- [Face Authentication](https://idenfy.com/face-authentication-service/)
+Re-verify existing customers in around 15 seconds with biometric face matching.
+
+- [NFC Verification](https://idenfy.com/nfc-verification/)
+Read and verify identity data directly from NFC chips in passports and ID cards.
+
+- [Proof of Address Verification](https://idenfy.com/proof-of-address-verification/)
+Verify a customer's address with manual supervision and document review.
+
+- [Utility Bill Verification](https://idenfy.com/utility-bill-verification-service/)
+Extract and compare utility bill information, including non-Latin languages.
+
+- [Phone Verification](https://idenfy.com/phone-verification/)
+Deep phone number checks and validation.
+
+- [SMS Verification (OTP)](https://idenfy.com/sms-verification-service-otp-codes/)
+One-time-passcode verification over SMS.
+
+- [Email Verification](https://idenfy.com/email-verification-service/)
+Email validation and pre-KYC screening.
+
+- [Bank Verification](https://idenfy.com/bank-verification-service/)
+Verify a customer's bank account information.
+
+- [Proxy Detection](https://idenfy.com/proxy-detection-ip-insight/)
+Filter customer IPs to detect proxies and improve transparency.
+
+- [Age Verification](https://idenfy.com/age-verification-software/)
+Confirm customer age for regulated products and services.
+
+- [Criminal Background Check](https://idenfy.com/criminal-background-check/)
+U.S. criminal background checks and screening.
+
+---
+
+## Industries
+
+- [Fintech](https://idenfy.com/identity-verification-for-fintech/)
+Onboard new customers and start AML ongoing screening once approved.
+
+- [Crypto & Blockchain](https://idenfy.com/identity-verification-crypto/)
+Integrate compliant verification into mobile, iFrame, or web within a week.
+
+- [Online Gambling / iGaming](https://idenfy.com/identity-verification-for-gambling/)
+Comply with AML rules and run ongoing sanctions, PEP, and negative-news screening.
+
+- [E-Commerce](https://idenfy.com/identity-verification-e-commerce/)
+Single-step verification with plugins for WordPress, WooCommerce, Shopify, Magento, and Zapier.
+
+- [Transportation & Sharing] Economy](https://idenfy.com/revolutionize-identity-verification-in-the-transport-industry/)
+Passive document and selfie checks with white-labeled SDKs and plugins.
+
+- [Proxy Networks](https://idenfy.com/identity-verification-for-proxy-networks/)
+Prevent chargeback fraud, perform KYC, and monitor transactions.
+
+---
+
+## Integrations
+
+- [Shopify](https://idenfy.com/shopify-identity-verification/)
+- [WooCommerce](https://idenfy.com/identity-verification-woocommerce/)
+- [Adobe Commerce (Magento)](https://idenfy.com/identity-verification-for-adobe-commerce/)
+- [WordPress](https://idenfy.com/id-verification-wordpress/)
+- [Zapier](https://idenfy.com/zapier-identity-verification-service/)
+- [Bubble](https://idenfy.com/bubble-kyc-plugin/)
+- [KYC Mobile SDK](https://idenfy.com/kyc-mobile-sdk/)
+- [Flutter SDK](https://github.com/idenfy/FlutterSDK)
+- [React Native SDK](https://github.com/idenfy/ReactNativeSDK)
+- [No-Code Magic Link](https://idenfy.com/magic-link-identity-verification/)
+- [All Native Integrations](https://idenfy.com/integrations/)
+
+---
+
+## Security & Compliance
+
+- [Security & Compliance](https://idenfy.com/security/)
+Independently audited controls and certifications, including ISO/IEC 27001:2022 (certified since 2020), SOC 2 Type II, and eIDAS. Data is encrypted in transit (TLS 1.2+) and at rest (AES-256), stored in the EU, with a 99.9% uptime SLA. Compliant with GDPR, CCPA, AMLD5/6, PSD2, and FATF. All products are backed by cyber insurance and Technology E&O coverage from Lloyd's of London.
+
+- [Supported Documents](https://idenfy.com/supported-documents/)
+Explore supported countries and accepted document types.
+
+---
+
+## Company & resources
+
+- [About Us](https://idenfy.com/about-us/)
+Founded in 2017 in Lithuania, iDenfy is a global RegTech company trusted by 1,000+ businesses, with a presence in Lithuania, the UK, and the US.
+
+- [Newsroom](https://idenfy.com/newsroom/)
+Company news, announcements, and press coverage.
+
+- [Changelog](https://idenfy.com/changelog)
+Latest product updates and releases.
+
+- [Partner Program](https://idenfy.com/partner-program/)
+Earn up to 15% of lifetime revenue as an iDenfy partner.
+
+- [Careers](https://idenfy.com/careers/)
+Open positions and life at iDenfy.
+
+---
+
+## Comparisons
+
+- [iDenfy vs. Sumsub](https://idenfy.com/idenfy-vs-sumsub/)
+- [iDenfy vs. Veriff](https://idenfy.com/idenfy-vs-veriff/)
+- [iDenfy vs. Onfido](https://idenfy.com/idenfy-vs-onfido/)
+- [iDenfy vs. Trulioo](https://idenfy.com/idenfy-vs-trulioo/)
+- [iDenfy vs. Persona](https://idenfy.com/idenfy-vs-persona/)
+
+---
+
+## Technical resources
+
+# API reference & developer docs
+https://documentation.idenfy.com/
+
+# Mobile SDKs
+https://github.com/idenfy
+
+# Service status
+https://status.idenfy.com/
+
+---
+
+## Permissions & usage guidelines
+
+# Allowed:
+- Use public pages (listed above) for summarization and Q&A.
+- Attribute content to iDenfy.com when cited or summarized.
+- Include hyperlinks to the original source where applicable.
+
+# Not allowed:
+- Use gated content or customer-specific documentation.
+- Scrape or vectorize pricing pages for real-time data use.
+
+---
+
+# End of llms.txt
+

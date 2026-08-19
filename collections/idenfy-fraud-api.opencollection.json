@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy Aml Fraud API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fraud",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Verify address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/fraud/address-verification"
+          },
+          "docs": "Verify address"
+        },
+        {
+          "info": {
+            "name": "Validate phone",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/fraud/phone-validation"
+          },
+          "docs": "Validate phone"
+        },
+        {
+          "info": {
+            "name": "Verify phone ownership",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/fraud/phone-verification"
+          },
+          "docs": "Verify phone ownership"
+        },
+        {
+          "info": {
+            "name": "Check proxy or VPN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/fraud/proxy-check"
+          },
+          "docs": "Check proxy or VPN"
+        },
+        {
+          "info": {
+            "name": "Calculate fraud probability",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/fraud/risk-assessment"
+          },
+          "docs": "Calculate fraud probability"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

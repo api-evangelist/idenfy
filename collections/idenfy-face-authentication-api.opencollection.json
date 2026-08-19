@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy Aml Face Authentication API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Face Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create face authentication session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/face-authentication/sessions"
+          },
+          "docs": "Create face authentication session"
+        },
+        {
+          "info": {
+            "name": "Retrieve face authentication session info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/face-authentication/sessions/:sessionId",
+            "params": [
+              {
+                "name": "sessionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve face authentication session info"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

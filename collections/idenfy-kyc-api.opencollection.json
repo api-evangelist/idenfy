@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "iDenfy Aml Kyc API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Kyc",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create KYC verification session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyc/sessions"
+          },
+          "docs": "Create KYC verification session"
+        },
+        {
+          "info": {
+            "name": "List identifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/kyc/identifications"
+          },
+          "docs": "List identifications"
+        },
+        {
+          "info": {
+            "name": "Retrieve verification data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ivs.idenfy.com/kyc/identifications/:scanRef",
+            "params": [
+              {
+                "name": "scanRef",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve verification data"
+        },
+        {
+          "info": {
+            "name": "Delete verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ivs.idenfy.com/kyc/identifications/:scanRef",
+            "params": [
+              {
+                "name": "scanRef",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete verification"
+        },
+        {
+          "info": {
+            "name": "Request additional information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyc/identifications/:scanRef/request-update",
+            "params": [
+              {
+                "name": "scanRef",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Request additional information"
+        },
+        {
+          "info": {
+            "name": "Generate PDF report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ivs.idenfy.com/kyc/pdf"
+          },
+          "docs": "Generate PDF report"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
