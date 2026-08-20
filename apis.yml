@@ -116,6 +116,8 @@ apis:
   description: The Aml API from iDenfy — 6 operation(s) for aml.
   humanURL: https://documentation.idenfy.com/
   tags:
+  - AML
+  tags_raw:
   - Aml
   properties:
   - type: OpenAPI
@@ -152,6 +154,8 @@ apis:
   description: The Kyb API from iDenfy — 7 operation(s) for kyb.
   humanURL: https://documentation.idenfy.com/
   tags:
+  - KYB
+  tags_raw:
   - Kyb
   properties:
   - type: OpenAPI
@@ -161,6 +165,8 @@ apis:
   description: The Kyc API from iDenfy — 5 operation(s) for kyc.
   humanURL: https://documentation.idenfy.com/
   tags:
+  - KYC
+  tags_raw:
   - Kyc
   properties:
   - type: OpenAPI
