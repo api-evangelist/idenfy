@@ -165,7 +165,7 @@ apis:
   description: The Kyb API from iDenfy — 7 operation(s) for kyb.
   humanURL: https://documentation.idenfy.com/
   tags:
-  - KYB
+  - Kyb
   tags_raw:
   - Kyb
   properties:
