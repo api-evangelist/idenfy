@@ -1,0 +1,82 @@
+generated: '2026-09-13'
+method: probed
+source: live probes of /.well-known/* on every host in this record
+provider: iDenfy
+providerId: idenfy
+note: >-
+  Probed 2026-09-13 with a browser User-Agent. Of 28 probes across four hosts, exactly one returned
+  a real document: the A2A Agent Card on documentation.idenfy.com. idenfy.com and www.idenfy.com
+  answer /.well-known/* with the WordPress 404 page (status 404, HTML body); ivs.idenfy.com answers
+  with a bare "Not Found" 404; documentation.idenfy.com (Mintlify) answers "Asset not found".
+  No security.txt, no OpenID/OAuth metadata, no api-catalog, no ai-plugin.json anywhere.
+hosts:
+- host: idenfy.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: www.idenfy.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: ivs.idenfy.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: documentation.idenfy.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    file: a2a/idenfy-agent-card.json
+  - path: /.well-known/agent-skills/idenfy/skill.md
+    status: 200
+    content_type: text/markdown
+    file: skills/idenfy-verification-skill.md
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404

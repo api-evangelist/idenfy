@@ -1,0 +1,90 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  https://documentation.idenfy.com/environments, https://documentation.idenfy.com/guides/testing-sandbox,
+  https://documentation.idenfy.com/kyc/dummy-results, https://documentation.idenfy.com/aml/dummy-results,
+  https://documentation.idenfy.com/guides/sample-documents
+provider: iDenfy
+providerId: idenfy
+published: true
+model: same-url-different-keys
+detail: >-
+  iDenfy runs sandbox and production on ONE base URL — https://ivs.idenfy.com. The API key pair
+  decides which mode is active, so switching environments is a credentials swap and needs no code
+  change. Sandbox keys return dummy results, do not process real documents and consume no credits.
+base_url:
+  sandbox: https://ivs.idenfy.com
+  production: https://ivs.idenfy.com
+key_model:
+  discriminator: api-key-pair
+  prefixes_published: false
+  note: >-
+    iDenfy does not publish test/live key PREFIXES (no sk_test_ / sk_live_ equivalent). A key's mode
+    is not readable from the key itself, which means a caller cannot statically assert it is about to
+    hit sandbox rather than production — the only signal is which key pair it loaded.
+environments:
+- name: DEV
+  dummy_results: true
+  note: The only environment in which the dummy-result endpoints work.
+- name: DEMO
+  dummy_results: false
+  error: This endpoint is not available for DEMO partners.
+  note: >-
+    Deliberately excluded. DEMO exists to show the real verification flow to prospects, and dummy
+    shortcuts would misrepresent the product.
+- name: TEST
+  dummy_results: false
+  error: This endpoint is not available for TESTING/PRODUCTION partners.
+- name: PROD
+  dummy_results: false
+  error: This endpoint is not available for TESTING/PRODUCTION partners.
+triggers:
+- name: dummyStatus
+  kind: request-field
+  operation: POST /api/v2/token
+  values:
+  - APPROVED
+  - DENIED
+  - SUSPECTED
+  - EXPIRED
+  requires_environment: DEV
+  requires_funds: true
+  docs: https://documentation.idenfy.com/kyc/dummy-results
+  note: >-
+    Added to an otherwise normal session-creation body. Drives the KYC session straight to the named
+    terminal status so a webhook handler can be exercised against every outcome.
+- name: AML dummy entities
+  kind: predefined-fixture
+  scope: AML screening
+  docs: https://documentation.idenfy.com/aml/dummy-results
+  note: Predefined entities that trigger sanctions, PEP and adverse-media matches.
+fixtures:
+- name: Sample identity documents
+  docs: https://documentation.idenfy.com/guides/sample-documents
+  repository: https://github.com/idenfy/idenfy_sample_documents
+  note: >-
+    Downloadable sample ID document images that simulate approved, denied and suspected outcomes.
+    Distributed as a first-party GitHub repository as well as a docs page.
+- name: Sample verification (dashboard)
+  docs: https://documentation.idenfy.com/guides/dashboard/kyb/verification-sandbox-and-testing
+  note: Dashboard feature that generates a mock verification result with a chosen outcome.
+webhook_testing:
+  documented: true
+  suggested_tools:
+  - https://webhook.site
+  - ngrok
+  docs: https://documentation.idenfy.com/guides/testing-sandbox
+time_simulation:
+  supported: false
+  note: No test clocks or time-travel tooling. Expiry is exercised via the EXPIRED dummyStatus only.
+go_live:
+  checklist: https://documentation.idenfy.com/guides/testing-sandbox#go-live-checklist
+  steps:
+  - Configure production webhook URL in Dashboard -> Settings.
+  - Implement callback signing and IP whitelisting.
+  - Exercise every verification outcome.
+  - Swap sandbox keys for production keys.
+caveat: >-
+  Sandbox requires FUNDS on the environment ("Finances added to your environment" is listed as a
+  requirement for dummy results), so it is not a zero-cost open sandbox in the way a test-mode key
+  usually is.

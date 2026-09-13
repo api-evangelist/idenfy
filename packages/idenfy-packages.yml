@@ -1,0 +1,124 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  https://documentation.idenfy.com/sdks/overview, the per-platform quickstart pages, the
+  github.com/idenfy organisation, and the registry metadata endpoints named on each entry.
+provider: iDenfy
+providerId: idenfy
+summary:
+  total: 7
+  official: 7
+  registries:
+  - npm
+  - pub.dev
+  - jitpack
+  - swift-package-manager
+  - github
+note: >-
+  iDenfy distributes client-side verification SDKs, not API client libraries. There is no official
+  server-side SDK for the REST surface in any language — the authentication page shows raw cURL,
+  Python requests, Node fetch and PHP curl examples instead. The Android and iOS SDKs are the
+  first-party core; React Native, Flutter and Cordova wrap them. Cordova, Magento and WordPress are
+  materially behind the mobile core and are recorded with their real dates for that reason.
+packages:
+- name: '@idenfy/react-native-sdk'
+  registry: npm
+  url: https://www.npmjs.com/package/@idenfy/react-native-sdk
+  repository: https://github.com/idenfy/ReactNativeSDK
+  language: TypeScript
+  platform: React Native
+  official: true
+  version: 2.7.5
+  published: '2026-08-19'
+  version_source: https://registry.npmjs.org/@idenfy/react-native-sdk
+- name: idenfy_sdk_flutter
+  registry: pub.dev
+  url: https://pub.dev/packages/idenfy_sdk_flutter
+  repository: https://github.com/idenfy/FlutterSDK
+  language: Dart
+  platform: Flutter
+  official: true
+  version: 2.7.6
+  published: '2026-09-07'
+  version_source: https://pub.dev/api/packages/idenfy_sdk_flutter
+- name: com.github.idenfy:sdk-api
+  registry: jitpack
+  url: https://jitpack.io/#idenfy/sdk-api
+  repository: https://github.com/idenfy/sdk-api
+  language: Kotlin/Java
+  platform: Android
+  official: true
+  version: 9.1.3
+  published: '2026-09-07'
+  version_source: https://api.github.com/repos/idenfy/sdk-api/tags
+  note: >-
+    Distributed through JitPack from the GitHub tag, not Maven Central — there is no Maven Central
+    coordinate to query, so the version and date are read from the repository tag the install
+    snippet in https://documentation.idenfy.com/sdks/android/quickstart pins
+    (implementation 'com.github.idenfy:sdk-api:9.1.3').
+- name: iDenfySDK
+  registry: swift-package-manager
+  url: https://github.com/idenfy/iDenfySDK-spm
+  repository: https://github.com/idenfy/iDenfySDK-spm
+  language: Swift
+  platform: iOS
+  official: true
+  version: 9.1.1
+  published: '2026-08-18'
+  version_source: https://api.github.com/repos/idenfy/iDenfySDK-spm/tags
+  note: >-
+    Swift Package Manager (and CocoaPods) distribution — no package registry metadata endpoint
+    exists, so version and date come from the repository tag. Feature-tiered siblings share the
+    version line: iDenfyLiveness-spm, iDenfyBlurGlareDetection-spm, iDenfyNFCReading-spm,
+    iDenfyRecognition-spm.
+- name: iDenfy Cordova SDK
+  registry: github
+  url: https://github.com/idenfy/CordovaSDK
+  repository: https://github.com/idenfy/CordovaSDK
+  language: Java/JavaScript
+  platform: Cordova
+  official: true
+  version: 1.6.0
+  published: '2024-11-15'
+  version_source: https://api.github.com/repos/idenfy/CordovaSDK/tags
+  note: >-
+    Not published to npm — three candidate names (idenfy-cordova-sdk, @idenfy/cordova-sdk,
+    cordova-plugin-idenfy) all return 404 from registry.npmjs.org. Installed from the git URL.
+    Last release 2024-11-15, roughly two years behind the Android/iOS core at time of probe.
+- name: idenfy-wordpress
+  registry: github
+  url: https://github.com/idenfy/idenfy-wordpress
+  repository: https://github.com/idenfy/idenfy-wordpress
+  language: PHP
+  platform: WordPress
+  official: true
+  version: v1.0.7
+  published: '2025-09-11'
+  version_source: https://api.github.com/repos/idenfy/idenfy-wordpress/tags
+- name: idenfy/module-customer-verification
+  registry: github
+  url: https://github.com/idenfy/idenfy-magento
+  repository: https://github.com/idenfy/idenfy-magento
+  language: PHP
+  platform: Magento 2 / Adobe Commerce
+  official: true
+  version: 1.0.4
+  published: '2023-03-24'
+  version_source: https://api.github.com/repos/idenfy/idenfy-magento/tags
+  note: >-
+    composer.json declares idenfy/module-customer-verification 1.0.4 but the package is NOT on
+    Packagist (repo.packagist.org returns 404), so there is no registry metadata endpoint; the date
+    is the git tag date. Last released 2023-03-24.
+absent:
+- registry: pypi
+  note: No first-party Python client library found for the iDenfy REST API.
+- registry: maven-central
+  note: >-
+    search.maven.org returns no artefacts for "idenfy"; Android distribution is JitPack only.
+- registry: nuget
+  note: No first-party .NET client library found.
+- registry: rubygems
+  note: No first-party Ruby client library found.
+- registry: packagist
+  note: >-
+    The Magento module carries a Composer name but is not published to Packagist (404).

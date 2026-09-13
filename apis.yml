@@ -1,11 +1,9 @@
 aid: idenfy
 name: iDenfy
-description: >-
-  iDenfy is an identity verification platform providing KYC, KYB, and AML
-  compliance solutions. The iDenfy API enables businesses to verify identities,
-  check for fraud, and comply with regulatory requirements through automated
-  document verification, facial recognition, AML screening, business
-  verification, and bank verification services.
+description: iDenfy is an identity verification platform providing KYC, KYB, and AML compliance solutions.
+  The iDenfy API enables businesses to verify identities, check for fraud, and comply with regulatory
+  requirements through automated document verification, facial recognition, AML screening, business verification,
+  and bank verification services.
 type: Index
 deliveryModel:
   model: unknown
@@ -34,210 +32,307 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/idenfy.png
 tags:
-  - AML
-  - Compliance
-  - Fraud Detection
-  - Identity Verification
-  - KYB
-  - KYC
+- AML
+- Age Verification
+- Bank Verification
+- Biometrics
+- Compliance
+- Fraud Detection
+- Identity Verification
+- KYB
+- KYC
+- MCP
+- Open Banking
+- RegTech
+- Sanctions Screening
+- Webhooks
 created: '2024-11-13'
-modified: '2026-04-28'
+modified: '2026-09-13'
 url: https://raw.githubusercontent.com/api-evangelist/idenfy/refs/heads/main/apis.yml
 specificationVersion: '0.23'
 apis:
-- aid: idenfy:idenfy-verification-api
-  name: iDenfy Identity Verification API
-  description: >-
-    The iDenfy Identity Verification (KYC) API provides document verification, selfie checks, and liveness
-    detection through redirect, iFrame, mobile SDK, or direct API integration.
-  humanURL: https://documentation.idenfy.com/
+- aid: idenfy:idenfy-kyc-api
+  name: iDenfy Identity Verification (KYC) API
+  description: Document verification, selfie capture, liveness detection and AI plus human review. Mint
+    a session token with POST /api/v2/token, hand the returned authToken to a redirect, iFrame or mobile
+    SDK, and receive the result as a signed webhook. Also covers blocklisting, proof-of-address checks
+    and requesting additional information from a client.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
   tags:
   - Identity Verification
   - KYC
   - Liveness
+  - Biometrics
+  - Document Verification
   properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyc-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-kyc-overlay.yaml
   - type: Documentation
-    url: https://documentation.idenfy.com/
-- aid: idenfy:idenfy-business-verification-api
-  name: iDenfy Business Verification API
-  description: >-
-    The iDenfy Business Verification (KYB) API enables company verification using registry lookups, ultimate
-    beneficial owner identification, and credit report checks via redirect or iFrame integration.
-  humanURL: https://documentation.idenfy.com/
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+- aid: idenfy:idenfy-kyb-api
+  name: iDenfy Business Verification (KYB) API
+  description: Company verification across 180+ registries with ultimate beneficial owner identification,
+    KYB form collection, beneficiary and document management, questionnaires, credit bureau reports, government
+    document orders, US Secretary of State filings and registry centre checks. The largest of the published
+    contracts at 49 operations and 8 webhook events.
+  humanURL: https://documentation.idenfy.com/kyb/overview
+  baseURL: https://ivs.idenfy.com
   tags:
   - Business Verification
   - KYB
   - UBO
+  - Compliance
+  - Registry
   properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyb-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-kyb-overlay.yaml
   - type: Documentation
-    url: https://documentation.idenfy.com/
-- aid: idenfy:idenfy-aml-screening-api
-  name: iDenfy AML Screening API
-  description: >-
-    The iDenfy AML Screening API screens individuals and companies against sanctions lists, politically
-    exposed persons (PEPs), and adverse media, with one-time and ongoing monitoring options.
-  humanURL: https://documentation.idenfy.com/
+    url: https://documentation.idenfy.com/kyb/overview
+- aid: idenfy:idenfy-aml-api
+  name: iDenfy AML Screening and Monitoring API
+  description: 'Screens people and companies against sanctions lists, politically exposed persons and
+    adverse media, as a one-time check or as ongoing monitoring that raises an alert when a new match
+    appears. Carries two generations at once: v3 status values alongside the legacy v2 alertStatus in
+    every webhook payload.'
+  humanURL: https://documentation.idenfy.com/aml/overview
+  baseURL: https://ivs.idenfy.com
   tags:
   - AML
   - Compliance
   - PEP
   - Sanctions
+  - Adverse Media
   properties:
+  - type: OpenAPI
+    url: openapi/idenfy-aml-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-aml-overlay.yaml
   - type: Documentation
-    url: https://documentation.idenfy.com/
-- aid: idenfy:idenfy-fraud-api
-  name: iDenfy Fraud Prevention API
-  description: >-
-    The iDenfy Fraud Prevention API provides risk scoring, proxy detection, phone and address verification,
-    and proof of address checks to identify and stop fraudulent activities.
-  humanURL: https://documentation.idenfy.com/fraud/FraudApi/
-  tags:
-  - Fraud Detection
-  - Identity Verification
-  - Risk Scoring
-  properties:
-  - type: Documentation
-    url: https://documentation.idenfy.com/fraud/FraudApi/
-- aid: idenfy:idenfy-face-authentication-api
-  name: iDenfy Face Authentication API
-  description: >-
-    The iDenfy Face Authentication API re-authenticates returning users by comparing a live facial scan
-    against a previously verified identity.
-  humanURL: https://documentation.idenfy.com/
-  tags:
-  - Biometrics
-  - Face Authentication
-  - Identity Verification
-  properties:
-  - type: Documentation
-    url: https://documentation.idenfy.com/
-- aid: idenfy:idenfy-bank-verification-api
+    url: https://documentation.idenfy.com/aml/overview
+- aid: idenfy:idenfy-bank-api
   name: iDenfy Bank Verification API
-  description: >-
-    The iDenfy Bank Verification API verifies bank accounts via open banking connections to over 2,500
-    European banks.
-  humanURL: https://documentation.idenfy.com/
+  description: Verifies bank account ownership through open banking connections to European banks, and
+    exposes the account transaction list behind a completed verification. Two operations and two webhook
+    events.
+  humanURL: https://documentation.idenfy.com/bank-verification/overview
+  baseURL: https://ivs.idenfy.com
   tags:
   - Bank Verification
   - Open Banking
+  - Account Verification
   properties:
+  - type: OpenAPI
+    url: openapi/idenfy-bank-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-bank-overlay.yaml
   - type: Documentation
-    url: https://documentation.idenfy.com/
-- aid: idenfy:idenfy-aml-api
-  name: iDenfy Aml API
-  description: The Aml API from iDenfy — 6 operation(s) for aml.
-  humanURL: https://documentation.idenfy.com/
+    url: https://documentation.idenfy.com/bank-verification/overview
+- aid: idenfy:idenfy-bank-card-api
+  name: iDenfy Bank Card Verification API
+  description: Creates a standalone bank card verification session. Account balance is pre-checked, and
+    an insufficient balance is rejected with 402 rather than 403. One operation and one webhook event.
+  humanURL: https://documentation.idenfy.com/bank-card/create-session
+  baseURL: https://ivs.idenfy.com
   tags:
-  - AML
-  tags_raw:
-  - Aml
+  - Bank Card
+  - Card Verification
+  - Fraud Detection
   properties:
   - type: OpenAPI
-    url: openapi/idenfy-aml-api-openapi.yml
-- aid: idenfy:idenfy-bank-api
-  name: iDenfy Bank API
-  description: The Bank API from iDenfy — 2 operation(s) for bank.
-  humanURL: https://documentation.idenfy.com/
-  tags:
-  - Bank
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-bank-api-openapi.yml
+    url: openapi/idenfy-bank-card-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-bank-card-overlay.yaml
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
 - aid: idenfy:idenfy-face-authentication-api
   name: iDenfy Face Authentication API
-  description: The Face Authentication API from iDenfy — 2 operation(s) for face authentication.
-  humanURL: https://documentation.idenfy.com/
+  description: Re-authenticates a returning user in about thirty seconds by matching a live facial scan
+    against a previously verified identity. The published contract exposes the session list and retrieve
+    operations; token generation is documented separately and is not in the OpenAPI.
+  humanURL: https://documentation.idenfy.com/face-authentication/overview
+  baseURL: https://ivs.idenfy.com
   tags:
   - Face Authentication
+  - Biometrics
+  - Identity Verification
   properties:
   - type: OpenAPI
-    url: openapi/idenfy-face-authentication-api-openapi.yml
-- aid: idenfy:idenfy-fraud-api
-  name: iDenfy Fraud API
-  description: The Fraud API from iDenfy — 5 operation(s) for fraud.
-  humanURL: https://documentation.idenfy.com/
-  tags:
-  - Fraud
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-fraud-api-openapi.yml
-- aid: idenfy:idenfy-kyb-api
-  name: iDenfy Kyb API
-  description: The Kyb API from iDenfy — 7 operation(s) for kyb.
-  humanURL: https://documentation.idenfy.com/
-  tags:
-  - KYB
-  tags_raw:
-  - Kyb
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-kyb-api-openapi.yml
-- aid: idenfy:idenfy-kyc-api
-  name: iDenfy Kyc API
-  description: The Kyc API from iDenfy — 5 operation(s) for kyc.
-  humanURL: https://documentation.idenfy.com/
-  tags:
-  - KYC
-  tags_raw:
-  - Kyc
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-kyc-api-openapi.yml
-- aid: idenfy:idenfy-token-api
-  name: iDenfy Token API
-  description: The Token API from iDenfy — 1 operation(s) for token.
-  humanURL: https://documentation.idenfy.com/
-  tags:
-  - Token
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-token-api-openapi.yml
-common:
-  - type: AgenticAccess
-    url: agentic-access/idenfy-agentic-access.yml
-  - type: TrustCenter
-    url: security/idenfy-trust-center.yml
-  - type: DomainSecurity
-    url: security/idenfy-domain-security.yml
-  - type: Authentication
-    url: authentication/idenfy-authentication.yml
-  - type: GitHubOrganization
-    url: https://github.com/idenfy
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/idenfy
-  - type: Website
-    url: https://www.idenfy.com/
+    url: openapi/idenfy-face-authentication-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-face-authentication-overlay.yaml
   - type: Documentation
-    url: https://documentation.idenfy.com/
-  - type: Support
-    url: https://www.idenfy.com/contact/
-  - type: Integrations
-    url: https://idenfy.com/integrations/
-  - type: LlmsText
-    url: https://idenfy.com/llms.txt
+    url: https://documentation.idenfy.com/face-authentication/overview
+- aid: idenfy:idenfy-age-estimation-api
+  name: iDenfy Age Estimation API
+  description: Estimates age from a selfie and escalates borderline cases to a full document check on
+    the same integration, giving one audit trail from selfie to certified ID. Account balance is pre-checked
+    and an insufficient balance returns 402.
+  humanURL: https://documentation.idenfy.com/age-estimation/create-session
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Age Verification
+  - Age Estimation
+  - Identity Verification
+  - Compliance
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-age-estimation-openapi.yml
+  - type: Overlay
+    url: overlays/idenfy-age-estimation-overlay.yaml
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-fraud-api
+  name: iDenfy Fraud Prevention and Risk API
+  description: AI risk scoring, proxy/VPN/Tor detection, phone validation, SMS phone verification, fraud
+    probability estimation, address verification and AI proof of address, plus configurable risk assessment
+    profiles. Every endpoint is documented with its ivs.idenfy.com path, but iDenfy publishes NO OpenAPI
+    for this surface - it is the one product family with a reference page and no machine-readable contract.
+  humanURL: https://documentation.idenfy.com/fraud-prevention/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Fraud Detection
+  - Risk Scoring
+  - Proxy Detection
+  - Phone Verification
+  - Address Verification
+  properties:
+  - type: Documentation
+    url: https://documentation.idenfy.com/fraud-prevention/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/fraud-prevention/risk-assessment
+- aid: idenfy:idenfy-docs-mcp
+  name: iDenfy Documentation MCP Server
+  description: 'A hosted, unauthenticated remote Model Context Protocol server over the whole public documentation
+    site, including the seven OpenAPI specs. Three live tools: documentation search, a read-only virtual
+    filesystem for reading pages and specs, and documentation feedback submission. Read-only by design
+    - it reaches no dashboard, key or verification data, and cannot call the verification APIs.'
+  humanURL: https://documentation.idenfy.com/resources/mcp
+  baseURL: https://documentation.idenfy.com/mcp
+  tags:
+  - MCP
+  - Model Context Protocol
+  - Documentation
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/idenfy-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/idenfy-tool-crosswalk.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/resources/mcp
+common:
+- type: Website
+  url: https://www.idenfy.com/
+- type: DeveloperPortal
+  url: https://documentation.idenfy.com/
+- type: Documentation
+  url: https://documentation.idenfy.com/
+- type: APIReference
+  url: https://documentation.idenfy.com/api-reference/overview
+- type: GettingStarted
+  url: https://documentation.idenfy.com/quickstart
+- type: Authentication
+  url: authentication/idenfy-authentication.yml
+- type: Conventions
+  url: conventions/idenfy-conventions.yml
+- type: DataModel
+  url: data-model/idenfy-data-model.yml
+- type: ErrorCatalog
+  url: errors/idenfy-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/idenfy-lifecycle.yml
+- type: StatusPage
+  url: https://status.idenfy.com/
+- type: ChangeLog
+  url: changelog/idenfy-changelog.yml
+- type: Conformance
+  url: conformance/idenfy-conformance.yml
+- type: Compliance
+  url: security/idenfy-trust-center.yml
+- type: TrustCenter
+  url: security/idenfy-trust-center.yml
+- type: DomainSecurity
+  url: security/idenfy-domain-security.yml
+- type: Webhooks
+  url: asyncapi/idenfy-webhooks.yml
+- type: Sandbox
+  url: sandbox/idenfy-sandbox.yml
+- type: Components
+  url: components/idenfy-components.yml
+- type: Packages
+  url: packages/idenfy-packages.yml
+- type: SDKs
+  url: packages/idenfy-packages.yml
+- type: Plans
+  url: plans/idenfy-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/idenfy-rate-limits.yml
+- type: AgentCard
+  url: a2a/idenfy-a2a.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/idenfy-well-known.yml
+- type: AgenticAccess
+  url: agentic-access/idenfy-agentic-access.yml
+- type: FinOps
+  url: finops/idenfy-finops.yml
+- type: LlmsText
+  url: https://idenfy.com/llms.txt
+- type: LLMsTxt
+  url: llms/idenfy-docs-llms.txt
+- type: Pricing
+  url: https://idenfy.com/pricing-plans-v4/
+- type: SignUp
+  url: https://idenfy.com/pricing-plans-v4/
+- type: Login
+  url: https://admin.idenfy.com
+- type: Support
+  url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1
+- type: HelpCenter
+  url: https://www.idenfy.com/contact/
+- type: Postman
+  url: https://www.postman.com/idenfy-developers/idenfy-public-api/collection/gwjcqp9/idenfy-api-requests
+- type: GitHubOrganization
+  url: https://github.com/idenfy
+- type: Blog
+  url: https://idenfy.com/blog/
+- type: Integrations
+  url: https://idenfy.com/integrations/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/idenfy
+- type: TermsOfService
+  url: https://idenfy.com/terms-of-service/
+- type: PrivacyPolicy
+  url: https://idenfy.com/privacy-policy/
 integrations:
-  - name: iDenfy
-  - name: Logo of iDenfy
-  - name: Talk to Partnerships
-  - name: Zapier
-  - name: Woocommerce
-  - name: Magento
-  - name: Shopify
-  - name: Bubble integration
-  - name: Wordpress.com
-  - name: Flutter
-  - name: React Native
-  - name: Arrow
-  - name: Image of salesmens
-  - name: LLOYDS
-  - name: GDPR ready badge
-  - name: CCPA compliant badge
-  - name: SOC certificate
-  - name: ISO 27001 standard
-  - name: iBeta ISO 30107 standard
-  - name: Arrow down
-  - url: https://idenfy.com/blog/
-    type: Blog
+- name: Shopify
+  url: https://documentation.idenfy.com/integrations/shopify
+- name: WooCommerce
+  url: https://documentation.idenfy.com/integrations/woocommerce
+- name: WordPress
+  url: https://documentation.idenfy.com/integrations/wordpress
+- name: Adobe Commerce / Magento
+  url: https://documentation.idenfy.com/integrations/adobe-commerce
+- name: Zapier
+  url: https://documentation.idenfy.com/integrations/zapier
+- name: Magic Link
+  url: https://documentation.idenfy.com/integrations/magic-link
+- name: Bubble
+  url: https://idenfy.com/integrations/
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+position: Producing
+x-enrichment:
+  date: '2026-09-13'
+  status: enriched
+  artifacts_added: 39
+  pass: local-v3

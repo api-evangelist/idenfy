@@ -4,115 +4,59 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: iDenfy
 providerId: idenfy
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - AML
-  - Compliance
-  - Fraud Detection
-  - Identity Verification
-  - KYB
-  - KYC
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the iDenfy API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+modified: '2026-09-13'
+generated: '2026-09-13'
+method: searched
+source: https://documentation.idenfy.com/guides/error-handling
+note: >-
+  REPLACED 2026-09-13. This file previously held a scaffold written by the 2026-05-04 bulk sweep
+  (invented 10 rpm / 1,000 per month tiers and a full X-RateLimit-* header set). iDenfy publishes
+  none of that.
+limit_count: 0
+published: false
+detail: >-
+  iDenfy documents that rate limiting EXISTS and says nothing about its shape. The error-handling
+  page lists 429 with the action "Slow down — wait and retry with exponential backoff", and that is
+  the entire published surface. No numeric limit, no window, no burst, no per-key or per-account
+  scope, and no response headers. A live ripgrep across the whole 84-page documentation corpus
+  (through iDenfy's own MCP documentation server) for "rate limit|429|Retry-After" returns the error
+  pages and SDK migration guides only — nothing that states a number. None of the seven published
+  OpenAPI documents declares a 429 response on any of the 73 operations.
+limits: []
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
+  documented: false
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header is documented. A client cannot read its
+    remaining budget; it discovers exhaustion only by being rejected. For an agent this is the worst
+    shape — the runtime signal that would let it pace itself does not exist.
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
   serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - iDenfy Identity Verification API
-      - iDenfy Business Verification API
-      - iDenfy AML Screening API
-      - iDenfy Fraud Prevention API
-      - iDenfy Face Authentication API
-      - iDenfy Bank Verification API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - iDenfy Identity Verification API
-      - iDenfy Business Verification API
-      - iDenfy AML Screening API
-      - iDenfy Fraud Prevention API
-      - iDenfy Face Authentication API
-      - iDenfy Bank Verification API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - iDenfy Identity Verification API
-      - iDenfy Business Verification API
-      - iDenfy AML Screening API
-      - iDenfy Fraud Prevention API
-      - iDenfy Face Authentication API
-      - iDenfy Bank Verification API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - iDenfy Identity Verification API
-      - iDenfy Business Verification API
-      - iDenfy AML Screening API
-      - iDenfy Fraud Prevention API
-      - iDenfy Face Authentication API
-      - iDenfy Bank Verification API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - iDenfy Identity Verification API
-      - iDenfy Business Verification API
-      - iDenfy AML Screening API
-      - iDenfy Fraud Prevention API
-      - iDenfy Face Authentication API
-      - iDenfy Bank Verification API
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+retry_guidance:
+  strategy: exponential backoff
+  retryable:
+  - 429
+  - 500
+  - 502
+  - 503
+  published_example: 1s, 2s, 4s over three attempts
+  idempotency_caveat: >-
+    The published retry loop retries POSTs with no idempotency mechanism behind it (see
+    conventions/idenfy-conventions.yml) — a retried write can create a duplicate billable resource.
+  source: https://documentation.idenfy.com/guides/error-handling
+commercial_limits:
+  note: >-
+    The real consumption ceiling is commercial, not technical: the monthly minimum commitment plus
+    the overdraft allowance on the plan (Basic $135 / $325 overdraft, Premium $325 / $650 overdraft).
+    See plans/idenfy-plans-pricing.yml.
+evidence:
+- url: https://documentation.idenfy.com/guides/error-handling
+  status: 200
+- url: https://documentation.idenfy.com/mcp
+  status: 200
+  note: tools/call query_docs_filesystem "rg -il \"rate limit|429|Retry-After\" /" — no page states a limit.

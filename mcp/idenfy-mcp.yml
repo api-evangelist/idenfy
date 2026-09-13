@@ -1,0 +1,107 @@
+generated: '2026-09-13'
+method: probed
+source: https://documentation.idenfy.com/resources/mcp
+provider: iDenfy
+providerId: idenfy
+name: iDenfy Documentation MCP Server
+status: published
+description: >-
+  iDenfy runs a hosted, remote Model Context Protocol server over the full public documentation
+  site. It is read-only and unauthenticated — it serves published documentation pages and the
+  OpenAPI specs, and it has no access to dashboards, API keys or verification data. It is a
+  DOCUMENTATION server, not a control plane for the verification APIs: nothing in its tool set
+  creates a KYC session or reads a verification result.
+deployment:
+  mode: remote
+  endpoint: https://documentation.idenfy.com/mcp
+  auth: none
+  verified: probed
+x-evidence:
+  fetched: '2026-09-13'
+  initialize:
+    url: https://documentation.idenfy.com/mcp
+    http_status: 200
+    content_type: text/event-stream
+    serverInfo:
+      name: iDenfy Documentation
+      version: 1.0.0
+    protocolVersion: '2025-06-18'
+  tools_list:
+    http_status: 200
+    tool_count: 3
+  docs_page:
+    url: https://documentation.idenfy.com/resources/mcp
+    http_status: 200
+capabilities:
+  tools:
+    listChanged: true
+  resources:
+    listChanged: true
+transports:
+- streamable-http
+clients_documented:
+- Claude Desktop
+- Claude Code
+- Cursor
+- ChatGPT (custom connector)
+- Google Gemini
+- Perplexity
+- Zed
+- Windsurf
+- VS Code
+tools:
+- name: search_i_denfy_documentation
+  title: Search documentation
+  description: >-
+    Search across the iDenfy Documentation knowledge base to find relevant information, code
+    examples, API references and guides. Returns contextual content with titles and direct links.
+  inputSchema:
+    type: object
+    properties:
+      query:
+        type: string
+        description: Search query
+    required:
+    - query
+    additionalProperties: false
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: query_docs_filesystem_i_denfy_documentation
+  description: >-
+    Run a read-only shell-like query (rg, grep, find, tree, ls, cat, head, tail, jq and friends)
+    against a virtualised in-memory filesystem containing ONLY the iDenfy documentation pages and
+    OpenAPI specs. Stateless per call; output truncated to 30KB.
+  inputSchema:
+    type: object
+    properties:
+      command:
+        type: string
+        description: A shell command to run against the virtualized documentation filesystem.
+    required:
+    - command
+    additionalProperties: false
+- name: submit_feedback
+  title: Submit documentation feedback
+  description: Report an incorrect, outdated, confusing or incomplete documentation page to the docs team.
+  inputSchema:
+    type: object
+    properties:
+      path:
+        type: string
+      feedback:
+        type: string
+notes:
+- >-
+  The server is Mintlify-hosted (x-matched-path /_mintlify/mcp/[subdomain]/[transport], served via
+  Vercel) on iDenfy's own documentation.idenfy.com hostname.
+- >-
+  The published docs page names two tools (search_idenfy_documentation and
+  get_page_idenfy_documentation); the live server actually exposes three, and the page-reading tool
+  is now query_docs_filesystem_i_denfy_documentation. The tool list recorded above is the live
+  tools/list response, not the prose.
+- >-
+  No MCP server exists for the verification APIs themselves. An agent that needs to create a KYC
+  session still calls the REST surface at https://ivs.idenfy.com directly.

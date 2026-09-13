@@ -1,0 +1,128 @@
+generated: '2026-09-13'
+method: derived
+source: >-
+  Derived from the seven published OpenAPI 3.1.0 documents under openapi/ and from
+  https://documentation.idenfy.com/authentication, /security/callback-signing, /guides/error-handling,
+  /guides/compliance/overview and https://idenfy.com/llms.txt.
+provider: iDenfy
+providerId: idenfy
+note: >-
+  Cross-cutting standards only where the CONTRACT or the docs actually show them. Marketing claims
+  are recorded separately in security/idenfy-trust-center.yml and are not promoted to conformance
+  here.
+conformance:
+- id: openapi-3.1
+  conforms: true
+  evidence: >-
+    All seven published documents declare openapi: 3.1.0 — https://documentation.idenfy.com/openapi/kyc.yaml
+    and siblings.
+- id: openapi-webhooks
+  conforms: true
+  evidence: >-
+    23 events declared in OpenAPI 3.1 top-level `webhooks` blocks with full request-body schemas,
+    across kyc.yaml (8), kyb.yaml (8), aml.yaml (2), bank.yaml (2), age-estimation.yaml (1),
+    bank-card.yaml (1), face-authentication.yaml (1).
+- id: rfc7617-http-basic
+  conforms: true
+  evidence: >-
+    securitySchemes.apiKeyPair is {type: http, scheme: basic} in all seven specs; the auth page
+    documents Authorization: Basic base64(API_KEY:API_SECRET).
+    https://documentation.idenfy.com/authentication
+- id: rfc6750-bearer
+  conforms: true
+  evidence: >-
+    securitySchemes.kybTokenAuth is {type: http, scheme: bearer} in kyb.yaml, carrying the KYB form
+    tokenString.
+- id: hmac-sha256-webhook-signing
+  conforms: true
+  evidence: >-
+    Idenfy-Signature header carries a hex-encoded HMAC-SHA256 over the raw body; constant-time
+    comparison is documented. https://documentation.idenfy.com/security/callback-signing
+- id: iso-3166-1-alpha-2
+  conforms: true
+  evidence: >-
+    Country parameters are documented as ISO 3166-1 alpha-2 (https://documentation.idenfy.com/guides/error-handling
+    names it explicitly as a 400 cause); ISO-3166-2 subdivision codes appear in the KYB schemas.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 or openIdConnect securityScheme in any spec, and /.well-known/openid-configuration and
+    /.well-known/oauth-authorization-server return 404 on all four hosts.
+- id: oidc
+  conforms: false
+  evidence: Same probe as oauth2. Dashboard social sign-in is human console login, not API auth.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json media type anywhere in the specs; the error envelope is a bespoke
+    {message, identifier, documentation, severity}. See errors/idenfy-problem-types.yml.
+- id: idempotency-key
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header or equivalent. Live ripgrep for "idempoten" across the whole docs
+    corpus returns nothing. See conventions/idenfy-conventions.yml.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation response header and no deprecation policy; the AML migration guide
+    states there is no announced shutdown date for v2. See lifecycle/idenfy-lifecycle.yml.
+- id: rfc9309-ratelimit-headers
+  conforms: false
+  evidence: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header documented; only a bare 429.
+- id: pagination
+  conforms: false
+  evidence: >-
+    Eight list operations exist with no documented, shared pagination convention.
+- id: mcp
+  conforms: true
+  evidence: >-
+    Live remote MCP server at https://documentation.idenfy.com/mcp, initialize returned
+    protocolVersion 2025-06-18 and tools/list returned three tools with real inputSchemas.
+    Documentation scope only. See mcp/idenfy-mcp.yml.
+- id: a2a-agent-card
+  conforms: true
+  evidence: >-
+    https://documentation.idenfy.com/.well-known/agent-card.json returned 200 application/json with
+    a conformant card shape (capabilities object, protocolVersion present, skills array), declaring
+    protocolVersion 0.3. See a2a/idenfy-a2a.yml.
+- id: llms-txt
+  conforms: true
+  evidence: >-
+    Two first-party llms.txt documents — https://idenfy.com/llms.txt (200, marketing/company) and
+    https://documentation.idenfy.com/llms.txt (200, 351-line developer index that also enumerates the
+    seven OpenAPI specs).
+- id: agent-skills
+  conforms: true
+  evidence: >-
+    https://documentation.idenfy.com/.well-known/agent-skills/idenfy/skill.md returned 200
+    text/markdown — a provider-authored Agent Skill with YAML frontmatter.
+domain_standards:
+  note: >-
+    REWARD-ONLY and honestly empty at the contract level. iDenfy sits in identity verification /
+    RegTech, which has no single machine-readable interchange standard of the kind
+    domain_standard_conformance rewards (no SCIM URN, no OData $metadata, no HL7/X12/ISO-20022
+    message type, no OpenRTB or LTI shape). The regimes iDenfy operates under — AMLD5/AMLD6, eIDAS,
+    FATF, GDPR, PSD2 — are legal obligations it satisfies, not wire formats its contract speaks, and
+    nothing in the seven specs declares an identifier for any of them. The only standards
+    identifiers actually present in the contract are ISO 3166-1/3166-2 country codes and MRZ
+    (ICAO 9303 machine-readable-zone) field names in the KYC document schemas. Claiming a domain
+    standard here would be inventing one.
+  contract_signals:
+  - signal: MRZ fields in KYC document schemas
+    standard_hint: ICAO Doc 9303 machine-readable travel documents
+    conforms: null
+    evidence: >-
+      kyc.yaml and kyb.yaml schemas expose Mrz/MRZ field names. The specs do not cite ICAO 9303, so
+      this is recorded as a signal, not an asserted conformance.
+  - signal: AmlD field names
+    standard_hint: EU Anti-Money Laundering Directives
+    conforms: null
+    evidence: >-
+      Eight AmlD-prefixed identifiers in aml.yaml/kyb.yaml. A naming echo of the regime, not a
+      declared conformance.
+compliance_programs:
+  note: >-
+    Published certifications and regimes live in security/idenfy-trust-center.yml — ISO/IEC 27001:2022
+    (certified since 2020), SOC 2 Type II, eIDAS, and compliance with GDPR, CCPA, AMLD5/6, PSD2 and
+    FATF, per https://idenfy.com/llms.txt (200).

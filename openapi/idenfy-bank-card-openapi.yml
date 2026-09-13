@@ -1,0 +1,297 @@
+openapi: 3.1.0
+info:
+  title: iDenfy IVS Core API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+paths:
+  /bank-card/tokens/:
+    post:
+      operationId: bankCardTokenCreate
+      summary: Create session
+      description: Creates a standalone bank card verification session. Your finances
+        are pre-checked; insufficient finances reject the request with `402`.
+      tags:
+      - Bank Card Verification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankCardTokenRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankCardToken'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsufficientFinances'
+          description: Your finances cannot cover a bank card verification. Note that
+            insufficient funds return `402`, not `403`.
+components:
+  schemas:
+    BankCardNoMatchReasonEnum:
+      enum:
+      - NAME_MISMATCH
+      - NUMBER_MISMATCH
+      - NAME_NOT_FOUND
+      - NUMBER_NOT_FOUND
+      - LIVENESS_FAILED
+      type: string
+    BankCardToken:
+      type: object
+      properties:
+        tokenString:
+          type: string
+          readOnly: true
+          description: Token string identifying the bank card verification session.
+        expiration:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time when this token will become expired.
+        isValid:
+          type: boolean
+          readOnly: true
+          description: Indicates whether this token is valid.
+        sessionUrl:
+          type: string
+          format: uri
+          readOnly: true
+          description: The URL to send your end user to in order to complete the card
+            check.
+        mobileCode:
+          type: string
+          nullable: true
+          readOnly: true
+          description: Eight-digit code the end user can enter in the iDenfy mobile
+            app to open this session. Returned only when `generateMobileCode` was
+            set.
+      required:
+      - expiration
+      - isValid
+      - sessionUrl
+      - tokenString
+    BankCardTokenRequest:
+      type: object
+      properties:
+        expectedName:
+          type: string
+          description: The cardholder name the card is compared against.
+        expectedLastFour:
+          type: string
+          nullable: true
+          minLength: 4
+          maxLength: 4
+          description: The expected last four digits of the card number. When omitted,
+            only the cardholder name is compared.
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of bank card verification token validity.
+            This clock starts when the session is created.
+        sessionLength:
+          type: integer
+          maximum: 60
+          minimum: 1
+          nullable: true
+          description: The capture countdown in minutes. This clock is independent
+            of `lifetime` and starts at the capture step, not when the link is opened.
+        theme:
+          type: string
+          nullable: true
+          description: Name of a personalisation theme configured on your account.
+        generateMobileCode:
+          type: boolean
+          default: false
+          description: When `true`, the response includes a `mobileCode` the end user
+            can enter in the iDenfy mobile app.
+        successUrl:
+          type: string
+          format: uri
+          nullable: true
+          description: Where the end user is redirected after a successful check.
+        failUrl:
+          type: string
+          format: uri
+          nullable: true
+          description: Where the end user is redirected after an unsuccessful check.
+            An expired session never redirects.
+      required:
+      - expectedName
+    BankCardVerificationStatusEnum:
+      enum:
+      - NOT_COMPARED
+      - MATCH
+      - NO_MATCH
+      type: string
+    BankCardVerificationWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/BankCardVerificationStatusEnum'
+        noMatchReason:
+          allOf:
+          - $ref: '#/components/schemas/BankCardNoMatchReasonEnum'
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        firstSix:
+          type: string
+          nullable: true
+        lastFour:
+          type: string
+          nullable: true
+        expiryDate:
+          type: string
+          format: date
+          nullable: true
+        nameMatch:
+          type: boolean
+          nullable: true
+        lastFourMatch:
+          type: boolean
+          nullable: true
+      required:
+      - expiryDate
+      - firstSix
+      - id
+      - lastFour
+      - lastFourMatch
+      - name
+      - nameMatch
+      - noMatchReason
+      - status
+    InsufficientFinances:
+      type: object
+      properties:
+        message:
+          type: string
+          examples:
+          - Action not allowed due to lack of funds or exceeded limit.
+        code:
+          type: string
+          examples:
+          - insufficient_finances
+        detail:
+          $ref: '#/components/schemas/InsufficientFinancesDetail'
+    InsufficientFinancesDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        missing_limits:
+          type: array
+          items: {}
+        missing_additional_step_limits:
+          type: array
+          items: {}
+        missing_funds:
+          nullable: true
+          description: General account funds only. Stays `null` when feature-specific
+            finances are exhausted, so do not read it to detect that.
+        missing_pool_funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissingPoolFund'
+          description: Identifies which finances are short.
+        expired_expenses:
+          type: array
+          items: {}
+    MissingPoolFund:
+      type: object
+      properties:
+        fund_pool:
+          type: string
+          description: Identifies which finances are short.
+        missing:
+          type: number
+          format: float
+          description: Shortfall in your account currency. `0` when no finances are
+            configured for the feature at all, because nothing has been priced yet.
+      required:
+      - fund_pool
+      - missing
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is
+        *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API
+        secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales
+        team*.'
+x-tagGroups:
+- name: Bank Card Verification
+  tags:
+  - Bank Card Verification
+- name: General
+  tags:
+  - Webhooks
+tags:
+- name: Bank Card Verification
+  description: Bank card verification endpoints.
+- name: Webhooks
+  description: Webhooks.
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation
+    page.
+  url: https://documentation.idenfy.com
+webhooks:
+  bankCardVerificationCompleted:
+    post:
+      operationId: bankCardVerificationCompleted
+      description: This notification is sent when a bank card verification is completed.
+      summary: Bank card verification completed
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - BANK_CARD_VERIFICATION_COMPLETED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankCardVerificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.

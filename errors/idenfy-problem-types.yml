@@ -1,0 +1,113 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  https://documentation.idenfy.com/guides/error-handling and
+  https://documentation.idenfy.com/kyc/id-error-messages, cross-checked against the 4xx/5xx
+  responses declared in openapi/ (iDenfy's own published OpenAPI 3.1.0 documents).
+provider: iDenfy
+providerId: idenfy
+format: custom
+format_note: >-
+  NOT RFC 9457. iDenfy returns a bespoke JSON envelope on error — no application/problem+json media
+  type appears anywhere in the published specs, and no `type` URI is minted per error class. The
+  envelope is documented on the identification-deletion and error-message pages as
+  {message, identifier, documentation, severity}.
+envelope:
+  media_type: application/json
+  fields:
+  - name: message
+    description: Human-readable description of the problem.
+  - name: identifier
+    description: Machine-readable error identifier, e.g. PARTNER_ERROR.
+  - name: documentation
+    description: Optional link to the relevant documentation page. Frequently an empty string.
+  - name: severity
+    description: Severity marker, e.g. NOT_SEVERE.
+  example:
+    message: Token has not expired yet.
+    identifier: PARTNER_ERROR
+    documentation: ''
+    severity: NOT_SEVERE
+spec_coverage:
+  note: >-
+    Error coverage in the published contracts is thin — of 73 operations only four declare any 4xx
+    response at all. The narrative documentation is the authoritative error reference, not the spec.
+  declared_in_spec:
+  - status: 401
+    occurrences: 1
+    content_types:
+    - application/json
+  - status: 402
+    occurrences: 3
+    content_types:
+    - application/json
+    note: >-
+      Insufficient account funds. Explicitly called out in the specs as 402 rather than 403 for
+      bank-card verification and age-estimation session creation.
+problem_types:
+- status: 400
+  title: Bad request
+  meaning: Missing or invalid request parameters.
+  remediation: >-
+    Check the required fields for the operation. Common causes are an empty clientId and a country
+    code that is not ISO 3166-1 alpha-2.
+  source: https://documentation.idenfy.com/guides/error-handling
+- status: 401
+  title: Unauthorized
+  meaning: Wrong API key or secret, or sandbox keys used against production (or the reverse).
+  remediation: >-
+    Verify the key pair in Dashboard -> Settings -> API Keys and confirm the Authorization header is
+    Basic base64(API_KEY:API_SECRET).
+  source: https://documentation.idenfy.com/guides/error-handling
+- status: 402
+  title: Insufficient funds
+  meaning: >-
+    The account balance cannot cover the requested verification. Declared in the OpenAPI for
+    bank-card verification and age estimation.
+  remediation: Top up the account balance or raise the overdraft allowance on the plan.
+  source: openapi/idenfy-bank-card-openapi.yml
+- status: 403
+  title: Forbidden
+  meaning: The account does not have access to this endpoint or feature.
+  remediation: Contact iDenfy to enable the product on the account.
+  source: https://documentation.idenfy.com/guides/error-handling
+- status: 404
+  title: Not found
+  meaning: Invalid endpoint URL, or the resource does not exist.
+  remediation: Check the path (most iDenfy paths carry a trailing slash) and the resource identifier.
+  source: https://documentation.idenfy.com/guides/error-handling
+- status: 409
+  title: Conflict
+  meaning: Duplicate clientId — this customer already has an active verification session.
+  remediation: >-
+    Use a unique clientId per verification attempt, or wait for the previous session to expire
+    before re-issuing.
+  source: https://documentation.idenfy.com/guides/error-handling
+  note: >-
+    This is a uniqueness constraint, not idempotent replay. Retrying the same clientId returns 409
+    rather than the original session.
+- status: 429
+  title: Rate limited
+  meaning: Too many requests.
+  remediation: >-
+    Back off and retry with exponential backoff (the docs show 1s/2s/4s over three attempts). No
+    numeric limit and no RateLimit-* or Retry-After header is documented.
+  source: https://documentation.idenfy.com/guides/error-handling
+- status: 500
+  title: Server error
+  meaning: An iDenfy-side failure.
+  remediation: Retry after a short delay; contact support if it persists.
+  source: https://documentation.idenfy.com/guides/error-handling
+retry_policy:
+  retryable_statuses:
+  - 429
+  - 500
+  - 502
+  - 503
+  strategy: exponential backoff
+  published_example: 1s, 2s, 4s over three attempts
+  source: https://documentation.idenfy.com/guides/error-handling
+references:
+- https://documentation.idenfy.com/kyc/id-error-messages
+- https://documentation.idenfy.com/guides/dashboard/kyc/user-feedback-messages
+- https://documentation.idenfy.com/kyc/suspected-status

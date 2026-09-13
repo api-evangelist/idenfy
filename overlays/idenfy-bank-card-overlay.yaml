@@ -1,0 +1,48 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for iDenfy Bank Card Verification API
+  version: 1.0.0
+extends: https://documentation.idenfy.com/openapi/bank-card.yaml
+x-generated: '2026-09-13'
+x-method: generated
+x-source: Overlay of API Evangelist enrichment onto iDenfy's own published OpenAPI. The underlying document
+  is unmodified; every enhancement lives here.
+actions:
+- target: $.info
+  update:
+    title: iDenfy Bank Card Verification API
+    x-provider: iDenfy
+    x-provider-id: idenfy
+    x-apis-io: https://apis.io/provider/idenfy/
+    x-artifact-index: apis.yml
+    description: The published document declares info.title "iDenfy IVS Core API" and info.version "0.0.0"
+      for all seven products, so neither field identifies this contract. This overlay names the product
+      and records the artifacts that describe its runtime semantics.
+- target: $.info
+  update:
+    x-runtime-semantics:
+      authentication: authentication/idenfy-authentication.yml
+      conventions: conventions/idenfy-conventions.yml
+      errors: errors/idenfy-problem-types.yml
+      rate-limits: rate-limits/idenfy-rate-limits.yml
+      lifecycle: lifecycle/idenfy-lifecycle.yml
+      sandbox: sandbox/idenfy-sandbox.yml
+      webhooks: asyncapi/idenfy-webhooks.yml
+      plans: plans/idenfy-plans-pricing.yml
+      data-model: data-model/idenfy-data-model.yml
+- target: $.servers
+  update:
+  - url: https://ivs.idenfy.com
+    description: Single host for BOTH sandbox and production. The API key pair decides which mode is active,
+      not the URL. See https://documentation.idenfy.com/environments
+- target: $.info
+  update:
+    x-idempotency:
+      supported: false
+      coverage: none
+      note: No Idempotency-Key mechanism exists. A retried POST can create a duplicate billable resource;
+        409 on a duplicate clientId is a uniqueness constraint, not replay protection.
+    x-reversibility:
+      grade: documented
+      note: Reversal paths (delete, stop, blocklist removal, status change) are documented; no reversal
+        WINDOW is stated by the provider for any of them.

@@ -1,0 +1,48 @@
+generated: '2026-09-13'
+method: probed
+source: https://documentation.idenfy.com/.well-known/agent-card.json
+provider: iDenfy
+providerId: idenfy
+name: iDenfy Documentation
+description: >-
+  A2A Agent Card served by iDenfy from its own documentation host. Discovered by probing
+  /.well-known/agent-card.json across every host this record knows (idenfy.com, www.idenfy.com,
+  ivs.idenfy.com, documentation.idenfy.com); only documentation.idenfy.com returned a document.
+card: a2a/idenfy-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: documentation.idenfy.com
+x-evidence:
+  fetched: '2026-09-13'
+  url: https://documentation.idenfy.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+grade: conformant
+grade_basis: >-
+  Graded against A2A 1.0.0 hard checks — capabilities is an OBJECT, protocolVersion is present,
+  skills is an ARRAY. All three pass. The optional fields preferredTransport, defaultInputModes
+  and defaultOutputModes are also present.
+deviations:
+- field: protocolVersion
+  value: '0.3'
+  note: >-
+    Declares protocol version 0.3 rather than 1.0.0. Not a hard failure — the field is present and
+    parses — but consumers pinning to 1.0 should expect a pre-1.0 card shape.
+- field: skills[0].tags
+  value: []
+  note: The single skill declares an empty tags array, so the card carries no routing keywords.
+- field: url
+  value: https://documentation.idenfy.com/
+  note: >-
+    The card's url points at the documentation site root, not at an A2A JSON-RPC endpoint. The
+    agent surface iDenfy actually serves is the MCP server at https://documentation.idenfy.com/mcp
+    (see mcp/idenfy-mcp.yml); this card advertises documentation, not a task-executing A2A agent.
+skills:
+- id: idenfy
+  name: Idenfy
+  url: https://documentation.idenfy.com/.well-known/agent-skills/idenfy/skill.md
+  saved: skills/idenfy-verification-skill.md
+capabilities:
+  streaming: false
+  pushNotifications: false

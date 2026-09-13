@@ -1,0 +1,346 @@
+openapi: 3.1.0
+info:
+  title: iDenfy IVS Core API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+paths:
+  /age-estimation/token/:
+    post:
+      operationId: ageEstimationTokenCreate
+      summary: Create session
+      description: Creates an age estimation session. Your Age Estimation finances
+        are pre-checked; insufficient finances reject the request with `402`.
+      tags:
+      - Age Estimation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgeEstimationTokenRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgeEstimationToken'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsufficientFinances'
+          description: Age Estimation finances cannot cover the session. Note that
+            insufficient funds return `402`, not `403`.
+components:
+  schemas:
+    AgeEstimationEscalationEnum:
+      enum:
+      - DOC
+      - NONE
+      type: string
+    AgeEstimationStatusEnum:
+      enum:
+      - PENDING
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      - EXPIRED
+      type: string
+    AgeEstimationOutcomeEnum:
+      enum:
+      - SUCCESS
+      - UNDERAGE
+      - UNCERTAIN
+      - FACE_MISMATCH
+      - ATTEMPTS_EXCEEDED
+      type: string
+    AgeEstimationWebhookStatusEnum:
+      enum:
+      - COMPLETED
+      - FAILED
+      type: string
+    AgeEstimationTokenRequest:
+      type: object
+      properties:
+        min_age:
+          type: integer
+          minimum: 1
+          maximum: 120
+          description: Minimum age the end user must meet.
+        confidence_threshold:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Minimum model confidence to accept an estimate without a
+            step-up.
+        buffer:
+          type: integer
+          default: 0
+          minimum: 0
+          maximum: 20
+          description: Age band (in years) around `min_age` that triggers a step-up
+            instead of an immediate decision. Must not exceed `min_age`. Applies to
+            the AI estimate only, never to a document-derived age.
+        escalation:
+          allOf:
+          - $ref: '#/components/schemas/AgeEstimationEscalationEnum'
+          default: DOC
+          description: Action when the estimate is uncertain. `DOC` = document
+            step-up; `NONE` = resolve as `UNCERTAIN`.
+        retry_limit:
+          type: integer
+          default: 3
+          minimum: 1
+          maximum: 3
+          description: Max estimation attempts before the session locks.
+        save_photo:
+          type: boolean
+          default: true
+          description: Whether the analysed selfie is stored for sessions from this
+            token.
+        expiry_minutes:
+          type: integer
+          default: 60
+          minimum: 5
+          maximum: 1440
+          description: Token validity window in minutes from creation.
+        success_redirect:
+          type: string
+          format: uri
+          maxLength: 2048
+          default: ''
+          description: Redirect after a `SUCCESS` outcome (blank = built-in result
+            screen).
+        underage_redirect:
+          type: string
+          format: uri
+          maxLength: 2048
+          default: ''
+          description: Redirect after an `UNDERAGE` outcome.
+        uncertain_redirect:
+          type: string
+          format: uri
+          maxLength: 2048
+          default: ''
+          description: Redirect after a terminal `UNCERTAIN` outcome.
+        webhook_url:
+          type: string
+          format: uri
+          maxLength: 2048
+          default: ''
+          description: Per-session override for where the result notification is
+            sent. Blank = use your account's default Age Estimation webhook
+            notification.
+        client_id:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: Your own identifier for the end user; echoed back in the
+            result webhook for correlation.
+      required:
+      - min_age
+      - confidence_threshold
+    AgeEstimationToken:
+      type: object
+      properties:
+        token:
+          type: string
+          readOnly: true
+          description: Opaque session credential used by the capture page.
+        session_url:
+          type: string
+          format: uri
+          readOnly: true
+          description: URL to send the end user to.
+        expires_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Absolute UTC expiry.
+        min_age:
+          type: integer
+        confidence_threshold:
+          type: number
+          format: float
+        buffer:
+          type: integer
+        escalation:
+          $ref: '#/components/schemas/AgeEstimationEscalationEnum'
+        retry_limit:
+          type: integer
+        save_photo:
+          type: boolean
+        expiry_minutes:
+          type: integer
+        client_id:
+          type: string
+          nullable: true
+      required:
+      - token
+      - session_url
+      - expires_at
+      - min_age
+      - confidence_threshold
+    AgeEstimationWebhook:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          description: The step-up scan reference, or the token id when there is
+            no scan ref.
+        status:
+          $ref: '#/components/schemas/AgeEstimationWebhookStatusEnum'
+        outcome:
+          allOf:
+          - $ref: '#/components/schemas/AgeEstimationOutcomeEnum'
+          nullable: true
+        verdict:
+          type: string
+          nullable: true
+          description: Model verdict (e.g. `ADULT`).
+        estimatedAge:
+          type: integer
+          nullable: true
+          description: The established age. When a document step-up produced an
+            age, that exact document age is reported; otherwise it is the AI
+            face-estimated age.
+        confidence:
+          type: number
+          format: float
+          nullable: true
+        clientId:
+          type: string
+          nullable: true
+        occurredAt:
+          type: string
+          format: date-time
+      required:
+      - scanRef
+      - status
+      - occurredAt
+    MissingPoolFund:
+      type: object
+      properties:
+        fund_pool:
+          type: string
+          description: Identifies which finances are short, e.g. `AGE_ESTIMATION`.
+        missing:
+          type: number
+          format: float
+          description: Shortfall in your account currency. `0` when no finances are
+            configured for the feature at all, because nothing has been priced yet.
+      required:
+      - fund_pool
+      - missing
+    InsufficientFinancesDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        missing_limits:
+          type: array
+          items: {}
+        missing_additional_step_limits:
+          type: array
+          items: {}
+        missing_funds:
+          nullable: true
+          description: General account funds only. Stays `null` when feature-specific
+            finances are exhausted, so do not read it to detect that.
+        missing_pool_funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissingPoolFund'
+          description: Identifies which finances are short. This is the field to read
+            for an Age Estimation shortfall.
+        expired_expenses:
+          type: array
+          items: {}
+    InsufficientFinances:
+      type: object
+      properties:
+        message:
+          type: string
+          examples:
+          - Action not allowed due to lack of funds or exceeded limit.
+        code:
+          type: string
+          examples:
+          - insufficient_finances
+        detail:
+          $ref: '#/components/schemas/InsufficientFinancesDetail'
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is
+        *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API
+        secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales
+        team*.'
+x-tagGroups:
+- name: Age Estimation
+  tags:
+  - Age Estimation
+- name: General
+  tags:
+  - Webhooks
+tags:
+- name: Age Estimation
+  description: Age estimation session endpoints.
+- name: Webhooks
+  description: Webhooks.
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation
+    page.
+  url: https://documentation.idenfy.com
+webhooks:
+  ageEstimationResult:
+    post:
+      operationId: ageEstimationResult
+      description: This notification is sent when an age estimation session reaches
+        a terminal state (either the estimate resolved, or a document step-up
+        concluded).
+      summary: Age estimation result
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - AGE_ESTIMATION
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgeEstimationWebhook'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.

@@ -1,0 +1,3295 @@
+openapi: 3.1.0
+info:
+  title: iDenfy IVS Core API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+paths:
+  /api/v2/token:
+    post:
+      operationId: kycTokensCreate
+      summary: Generate KYC token
+      description: Creates a KYC verification session token. Pass the returned `authToken`
+        to your frontend or SDK to launch the verification flow.
+      tags:
+      - KYC Token
+      security:
+      - apiKeyPair: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - clientId
+              - tokenType
+              properties:
+                clientId:
+                  type: string
+                  maxLength: 100
+                  description: A unique string identifying the client on your side.
+                tokenType:
+                  type: string
+                  enum:
+                  - IDENTIFICATION
+                  - DOCUMENT
+                  description: '- `IDENTIFICATION` — document scan + selfie (default)
+
+                    - `DOCUMENT` — document scan only'
+                externalRef:
+                  type: string
+                  nullable: true
+                  maxLength: 40
+                  description: Optional internal reference. Returned as-is in webhooks.
+                generateDigitString:
+                  type: boolean
+                  default: false
+                  description: If `true`, generates an 8-digit mobile app code returned
+                    as `digitString`.
+                expiryTime:
+                  type: integer
+                  minimum: 0
+                  maximum: 2592000
+                  description: Token validity in seconds. Maximum 2,592,000 (30 days).
+                locale:
+                  type: string
+                  nullable: true
+                  maxLength: 7
+                  description: UI language code (e.g. `en`, `de`, `ko`).
+                country:
+                  type: string
+                  nullable: true
+                  description: Restrict accepted document-issuing country (ISO alpha-2).
+                sessionLength:
+                  type: integer
+                  minimum: 60
+                  maximum: 3600
+                  description: Seconds the user has to complete verification once
+                    started.
+                documents:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                  description: Restrict accepted document types (e.g. `PASSPORT`,
+                    `ID_CARD`).
+                firstName:
+                  type: string
+                  nullable: true
+                  maxLength: 100
+                  description: Pre-fill client first name. Mismatch triggers `SUSPECTED`
+                    status.
+                lastName:
+                  type: string
+                  nullable: true
+                  maxLength: 100
+                  description: Pre-fill client last name. Mismatch triggers `SUSPECTED`
+                    status.
+                dateOfBirth:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Pre-fill client date of birth.
+                nationality:
+                  type: string
+                  nullable: true
+                  description: Pre-fill client nationality.
+                documentNumber:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                  description: Pre-fill document number.
+                personalNumber:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                  description: Pre-fill personal/national ID number.
+                sex:
+                  type: string
+                  nullable: true
+                  enum:
+                  - M
+                  - F
+                  description: Pre-fill client sex.
+                dateOfExpiry:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Pre-fill document expiry date.
+                dateOfIssue:
+                  type: string
+                  nullable: true
+                  description: Pre-fill document issue date.
+                address:
+                  type: string
+                  nullable: true
+                  description: Client address for Proof of Address verification.
+                successUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Redirect URL on successful verification.
+                errorUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Redirect URL on failed verification.
+                unverifiedUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Redirect URL when verification result is unverified.
+                callbackUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Override webhook callback URL for this session only.
+                showInstructions:
+                  type: boolean
+                reviewSuccessful:
+                  type: boolean
+                  description: Enable manual review for successful verifications.
+                reviewFailed:
+                  type: boolean
+                  description: Enable manual review for failed verifications.
+                questionnaire:
+                  type: string
+                  nullable: true
+                  description: Questionnaire `key` for this session. Pass `null` to
+                    disable.
+                questionnaireRequired:
+                  type: boolean
+                  default: true
+                riskAssessmentProfile:
+                  type: string
+                  format: uuid
+                  nullable: true
+                theme:
+                  type: string
+                  format: uuid
+                  nullable: true
+                registryCentersCountries:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                verifyEmail:
+                  type: boolean
+                verifyPhone:
+                  type: boolean
+                verifyBank:
+                  type: boolean
+                verifyBankAccounts:
+                  type: boolean
+                verifyBankBalances:
+                  type: boolean
+                verifyBankTransactions:
+                  type: boolean
+                bankCardVerification:
+                  type: boolean
+                bankCardPdfUpload:
+                  type: boolean
+                verifyAddress:
+                  type: boolean
+                checkAml:
+                  type: boolean
+                checkCriminal:
+                  type: boolean
+                checkLiveness:
+                  type: boolean
+                checkFaceBlacklist:
+                  type: boolean
+                checkDocFaceBlacklist:
+                  type: boolean
+                checkPersonBlacklist:
+                  type: boolean
+                checkDuplicateFaces:
+                  type: boolean
+                checkDuplicateDocFaces:
+                  type: boolean
+                checkDuplicatePersonalData:
+                  type: boolean
+                checkDriverLicense:
+                  type: boolean
+                checkLid:
+                  type: boolean
+                checkIpProxy:
+                  type: boolean
+                allowBsnMasking:
+                  type: boolean
+                nfcRequired:
+                  type: boolean
+                autoAmlMonitoring:
+                  type: boolean
+                driverLicenseBack:
+                  type: boolean
+                faceMatchingThresholdModifier:
+                  type: number
+                additionalSteps:
+                  type: object
+                  description: Request extra document steps. See Additional Steps
+                    documentation.
+                additionalData:
+                  type: object
+                  description: Data for COMPARE-type additional steps.
+                utilityBill:
+                  type: boolean
+                  nullable: true
+                nfcOptional:
+                  type: boolean
+                ageLimit:
+                  type: integer
+                  description: Minimum required age. Below this triggers `SUSPECTED`
+                    status.
+                ageMax:
+                  type: integer
+                  description: Maximum allowed age. Above this triggers `SUSPECTED`
+                    status.
+      responses:
+        '201':
+          description: Token created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - authToken
+                - scanRef
+                - tokenType
+                properties:
+                  message:
+                    type: string
+                    readOnly: true
+                  authToken:
+                    type: string
+                    readOnly: true
+                    description: Pass this to the frontend, SDK, or redirect URL to
+                      start verification.
+                  redirectUrl:
+                    type: string
+                    readOnly: true
+                    nullable: true
+                    description: Direct URL to the hosted verification flow. Redirect
+                      the user here or embed in an iFrame.
+                  scanRef:
+                    type: string
+                    readOnly: true
+                    description: Unique session ID. Store this to correlate with webhook
+                      results.
+                  clientId:
+                    type: string
+                    nullable: true
+                  personScanRef:
+                    type: string
+                    nullable: true
+                  firstName:
+                    type: string
+                    nullable: true
+                  lastName:
+                    type: string
+                    nullable: true
+                  successUrl:
+                    type: string
+                    nullable: true
+                  errorUrl:
+                    type: string
+                    nullable: true
+                  unverifiedUrl:
+                    type: string
+                    nullable: true
+                  callbackUrl:
+                    type: string
+                    nullable: true
+                  locale:
+                    type: string
+                    nullable: true
+                  country:
+                    type: string
+                    nullable: true
+                  expiryTime:
+                    type: integer
+                    description: Token expiry time in seconds.
+                  sessionLength:
+                    type: integer
+                  documents:
+                    type: array
+                    items:
+                      type: string
+                  allowedDocuments:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                  dateOfBirth:
+                    type: string
+                    nullable: true
+                  dateOfExpiry:
+                    type: string
+                    nullable: true
+                  dateOfIssue:
+                    type: string
+                    nullable: true
+                  nationality:
+                    type: string
+                    nullable: true
+                  personalNumber:
+                    type: string
+                    nullable: true
+                  documentNumber:
+                    type: string
+                    nullable: true
+                  sex:
+                    type: string
+                    nullable: true
+                  address:
+                    type: string
+                    nullable: true
+                  showInstructions:
+                    type: boolean
+                  tokenType:
+                    type: string
+                    enum:
+                    - IDENTIFICATION
+                    - DOCUMENT
+                  utilityBill:
+                    nullable: true
+                  additionalSteps:
+                    type: object
+                  additionalData:
+                    type: object
+                  externalRef:
+                    type: string
+                    nullable: true
+                  questionnaire:
+                    type: string
+                    nullable: true
+                  registryCentersCountries:
+                    type: array
+                    items:
+                      type: string
+                  riskAssessmentProfile:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  theme:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  allowBsnMasking:
+                    type: boolean
+                  verifyBankTransactions:
+                    type: boolean
+                  bankCardVerification:
+                    type: boolean
+                  bankCardPdfUpload:
+                    type: boolean
+                  checkLid:
+                    type: boolean
+                  checkDriverLicense:
+                    type: boolean
+                  verifyAddress:
+                    type: boolean
+                  checkFaceBlacklist:
+                    type: boolean
+                  verifyEmail:
+                    type: boolean
+                  checkPersonBlacklist:
+                    type: boolean
+                  checkDuplicateDocFaces:
+                    type: boolean
+                  reviewSuccessful:
+                    type: boolean
+                  reviewFailed:
+                    type: boolean
+                  verifyBank:
+                    type: boolean
+                  autoAmlMonitoring:
+                    type: boolean
+                  verifyPhone:
+                    type: boolean
+                  faceMatchingThresholdModifier:
+                    type: number
+                  checkCriminal:
+                    type: boolean
+                  checkAml:
+                    type: boolean
+                  checkDuplicateFaces:
+                    type: boolean
+                  driverLicenseBack:
+                    type: boolean
+                  verifyBankAccounts:
+                    type: boolean
+                  checkDuplicatePersonalData:
+                    type: boolean
+                  verifyBankBalances:
+                    type: boolean
+                  nfcRequired:
+                    type: boolean
+                  checkIpProxy:
+                    type: boolean
+                  checkDocFaceBlacklist:
+                    type: boolean
+                  checkLiveness:
+                    type: boolean
+                  digitString:
+                    type: string
+                    nullable: true
+                    readOnly: true
+                    description: 8-digit mobile code. Only present when `generateDigitString`
+                      was `true`.
+  /kyc/identifications/:
+    get:
+      operationId: kycIdentificationsList
+      summary: List identifications
+      parameters:
+      - in: query
+        name: clientId
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: perPage
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - KYC Verifications
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartnerIdentificationListList'
+          description: ''
+  /kyc/identifications/{scanRef}/request-information/:
+    post:
+      operationId: kycIdentificationsRequestInformationCreate
+      summary: Request additional information from client
+      parameters:
+      - in: path
+        name: scanRef
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYC Verifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationRequestInformationRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentificationRequestInformation'
+          description: ''
+  /kyc/identifications/{scanRef}/blocklists/{blocklistSource}/:
+    post:
+      operationId: kycIdentificationsBlocklistsCreate
+      summary: Add identification to blocklist
+      tags:
+      - KYC Blocklist
+      parameters:
+      - in: path
+        name: blocklistSource
+        schema:
+          type: string
+          enum:
+          - DOCUMENT
+          - DOCUMENT_INFO
+          - SELFIE
+        required: true
+      - in: path
+        name: scanRef
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationBlacklistRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentificationBlacklistEntry'
+          description: ''
+    delete:
+      operationId: kycIdentificationsBlocklistsDestroy
+      summary: Remove identification from blocklist
+      tags:
+      - KYC Blocklist
+      parameters:
+      - in: path
+        name: blocklistSource
+        schema:
+          type: string
+          enum:
+          - DOCUMENT
+          - DOCUMENT_INFO
+          - SELFIE
+        required: true
+      - in: path
+        name: scanRef
+        schema:
+          type: string
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+  /api/v2/poa-checks/:
+    post:
+      operationId: apiV2PoaChecksCreate
+      summary: Create POA check
+      tags:
+      - POA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PoaCheckDetailRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PoaCheckDetail'
+          description: ''
+components:
+  schemas:
+    AdditionalStepStatusEnum:
+      description: |-
+        Result of an additional step document (e.g. proof of address). See [Verification Statuses → Additional Step Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#additional-step-statuses) for what each value means.
+      enum:
+      - VALID
+      - INVALID
+      - NOT_FOUND
+      type: string
+    AddressVerificationQualityEnum:
+      enum:
+      - EXCELLENT
+      - GOOD
+      - AVERAGE
+      - POOR
+      - BAD
+      type: string
+    AddressVerificationStatusEnum:
+      enum:
+      - VERIFIED
+      - PARTIALLY_VERIFIED
+      - UNVERIFIED
+      type: string
+    AddressVerificationWebhook:
+      type: object
+      properties:
+        address:
+          type: string
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/AddressVerificationStatusEnum'
+          readOnly: true
+        accuracy:
+          type: integer
+          readOnly: true
+          nullable: true
+        quality:
+          allOf:
+          - $ref: '#/components/schemas/AddressVerificationQualityEnum'
+          readOnly: true
+          nullable: true
+      required:
+      - accuracy
+      - address
+      - quality
+      - status
+    AdverseMediaData:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AmlArticleTypeEnum'
+          nullable: true
+        checkDate:
+          type: string
+        publishDate:
+          type: string
+          nullable: true
+      required:
+      - checkDate
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AgeGroupEnum:
+      enum:
+      - UNDER_13
+      - UNDER_8
+      - OVER_8
+      - OVER_13
+      - OVER_16
+      - OVER_18
+      - OVER_21
+      - OVER_22
+      - OVER_25
+      - OVER_30
+      type: string
+    AmlArticleTypeEnum:
+      enum:
+      - NEGATIVE
+      type: string
+    AmlCheckSuspicionEnum:
+      enum:
+      - SUSPECTED
+      - NOT_SUSPECTED
+      type: string
+    AmlCheckV3Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        overallStatus:
+          type: string
+          nullable: true
+        statusSetBy:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        statusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlV3AdverseMediaDataWebhook'
+          nullable: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlV3CheckDataWebhook'
+          nullable: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - id
+      - overallStatus
+      - statusSetAt
+      - statusSetBy
+    AmlCompanyNameResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        surname:
+          type: string
+          nullable: true
+        nationality:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        suspicion:
+          allOf:
+          - $ref: '#/components/schemas/AmlSuspicionTypeEnum'
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        listNumber:
+          type: string
+          nullable: true
+        listName:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        lastUpdate:
+          type: string
+          nullable: true
+        exitDate:
+          type: string
+          nullable: true
+        isPerson:
+          type: boolean
+          nullable: true
+        isActive:
+          type: boolean
+          nullable: true
+        linkedDocument:
+          type: string
+          format: uri
+          nullable: true
+        pepLevel:
+          type: integer
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        otherInformation:
+          type: string
+          nullable: true
+        checkDate:
+          type: string
+          nullable: true
+        whitelisted:
+          type: boolean
+      required:
+      - category
+      - checkDate
+      - dob
+      - exitDate
+      - isActive
+      - isPerson
+      - lastUpdate
+      - linkedDocument
+      - listName
+      - listNumber
+      - name
+      - nationality
+      - otherInformation
+      - pepLevel
+      - reason
+      - score
+      - surname
+      - suspicion
+    AmlNameResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlNewsResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlResults:
+      oneOf:
+      - $ref: '#/components/schemas/AmlNameResults'
+      - $ref: '#/components/schemas/AmlNameResults'
+      - $ref: '#/components/schemas/AmlCompanyNameResults'
+      - $ref: '#/components/schemas/AmlNewsResults'
+      - $ref: '#/components/schemas/AmlNewsResults'
+      discriminator:
+        propertyName: serviceName
+        mapping:
+          AML_NAMES_CHECK: '#/components/schemas/AmlNameResults'
+          AML_OPEN_SANCTIONS: '#/components/schemas/AmlNameResults'
+          COMPANY_CHECK: '#/components/schemas/AmlCompanyNameResults'
+          AML_NEWS: '#/components/schemas/AmlNewsResults'
+          INHOUSE_ADVERSE_MEDIA: '#/components/schemas/AmlNewsResults'
+    AmlSuspicionTypeEnum:
+      enum:
+      - SANCTION
+      - INTERPOL
+      - PEPS
+      - ADVERSE_MEDIA
+      - OTHER
+      type: string
+    AmlV3AddressWebhook:
+      type: object
+      properties:
+        city:
+          type: string
+          nullable: true
+        geography:
+          type: string
+          nullable: true
+      required:
+      - city
+      - geography
+    AmlV3AdverseMediaDataWebhook:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        publishDate:
+          type: string
+          nullable: true
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AmlV3CheckDataWebhook:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlV3AddressWebhook'
+          nullable: true
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        nationalities:
+          type: array
+          items:
+            type: string
+          nullable: true
+        match:
+          type: string
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          nullable: true
+        countries:
+          type: array
+          items:
+            type: string
+          nullable: true
+        datasets:
+          type: array
+          items:
+            type: string
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          nullable: true
+        version:
+          type: integer
+        pepTier:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        profileImage:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        resourceId:
+          type: string
+      required:
+      - addresses
+      - countries
+      - currentSanBodyIds
+      - datasets
+      - datesOfBirth
+      - formerSanBodyIds
+      - gender
+      - match
+      - name
+      - nationalities
+      - resourceId
+      - score
+      - version
+    BankAccountWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+          maxLength: 128
+        iban:
+          type: string
+          nullable: true
+          maxLength: 34
+        currency:
+          type: string
+          maxLength: 3
+        balancesOverview:
+          allOf:
+          - $ref: '#/components/schemas/BankBalancesOverviewWebhook'
+          nullable: true
+        transactionsCount:
+          type: integer
+          nullable: true
+      required:
+      - balancesOverview
+      - currency
+      - iban
+      - id
+      - name
+      - transactionsCount
+    BankBalancesOverviewWebhook:
+      type: object
+      properties:
+        bookedBalance:
+          type: number
+          format: double
+          nullable: true
+        availableBalance:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - availableBalance
+      - bookedBalance
+    BankCardNoMatchReasonEnum:
+      enum:
+      - NAME_MISMATCH
+      - NUMBER_MISMATCH
+      - NAME_NOT_FOUND
+      - NUMBER_NOT_FOUND
+      - LIVENESS_FAILED
+      type: string
+    BankCardVerificationStatusEnum:
+      enum:
+      - NOT_COMPARED
+      - MATCH
+      - NO_MATCH
+      type: string
+    BankCardVerificationWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/BankCardVerificationStatusEnum'
+        noMatchReason:
+          allOf:
+          - $ref: '#/components/schemas/BankCardNoMatchReasonEnum'
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        firstSix:
+          type: string
+          nullable: true
+        lastFour:
+          type: string
+          nullable: true
+        expiryDate:
+          type: string
+          format: date
+          nullable: true
+        nameMatch:
+          type: boolean
+          nullable: true
+        lastFourMatch:
+          type: boolean
+          nullable: true
+      required:
+      - expiryDate
+      - firstSix
+      - id
+      - lastFour
+      - lastFourMatch
+      - name
+      - nameMatch
+      - noMatchReason
+      - status
+    BankVerificationWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccountWebhook'
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+      required:
+      - accounts
+      - bank
+      - country
+      - id
+      - riskLevel
+    CompanyAmlData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        surname:
+          type: string
+          nullable: true
+        nationality:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        suspicion:
+          allOf:
+          - $ref: '#/components/schemas/AmlSuspicionTypeEnum'
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        listNumber:
+          type: string
+          nullable: true
+        listName:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        lastUpdate:
+          type: string
+          nullable: true
+        isPerson:
+          type: boolean
+          nullable: true
+        isActive:
+          type: boolean
+          nullable: true
+        linkedDocument:
+          type: string
+          format: uri
+          nullable: true
+        pepLevel:
+          type: integer
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        otherInformation:
+          type: string
+          nullable: true
+        checkDate:
+          type: string
+          nullable: true
+        whitelisted:
+          type: boolean
+      required:
+      - category
+      - checkDate
+      - dob
+      - isActive
+      - isPerson
+      - lastUpdate
+      - linkedDocument
+      - listName
+      - listNumber
+      - name
+      - nationality
+      - otherInformation
+      - pepLevel
+      - reason
+      - score
+      - surname
+      - suspicion
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - CD
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - XK
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VA
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+    CriminalCheckData:
+      type: object
+      properties:
+        offenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriminalCheckOffense'
+        fullName:
+          type: string
+          nullable: true
+        county:
+          type: string
+          nullable: true
+        region:
+          allOf:
+          - $ref: '#/components/schemas/RegionEnum'
+          nullable: true
+      required:
+      - county
+      - fullName
+      - offenses
+      - region
+    CriminalCheckOffense:
+      type: object
+      properties:
+        offense:
+          type: string
+          nullable: true
+        offenseClass:
+          type: string
+          nullable: true
+        offenseDescription:
+          type: string
+          nullable: true
+        offenseLevel:
+          type: string
+          nullable: true
+        sentenceDate:
+          type: string
+          nullable: true
+        courtName:
+          type: string
+          nullable: true
+        courtCaseNumber:
+          type: string
+          nullable: true
+        releaseDate:
+          type: string
+          nullable: true
+      required:
+      - courtCaseNumber
+      - courtName
+      - offense
+      - offenseClass
+      - offenseDescription
+      - offenseLevel
+      - releaseDate
+      - sentenceDate
+    CriminalCheckResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriminalCheckData'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+          default: CRIMINAL_CHECK
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+      required:
+      - data
+      - errorMessage
+      - serviceName
+      - status
+      - uid
+    DeviceTypeEnum:
+      enum:
+      - PC
+      - MOBILE
+      - TABLET
+      - MOBILE_APP
+      - MOBILE_SDK
+      - OTHER
+      type: string
+    DocumentExpirationEnum:
+      enum:
+      - DOCUMENT_EXPIRES_WITHIN_30_DAYS
+      - DOCUMENT_EXPIRES_WITHIN_7_DAYS
+      - DOCUMENT_EXPIRES_WITHIN_1_DAY
+      - DOCUMENT_EXPIRED
+      type: string
+    DocumentExpirationWebhook:
+      type: object
+      properties:
+        scanRef:
+          type: string
+        clientId:
+          type: string
+        expirationThreshold:
+          $ref: '#/components/schemas/DocumentExpirationEnum'
+        documentExpiration:
+          type: string
+      required:
+      - clientId
+      - documentExpiration
+      - expirationThreshold
+      - scanRef
+    DocumentStatusEnum:
+      description: |-
+        Automated or manual document check result. See [Verification Statuses → Document Status Values](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#document-status-values) for what each value means.
+      enum:
+      - DOC_VALIDATED
+      - DOC_INFO_MISMATCH
+      - DOC_NOT_FOUND
+      - DOC_NOT_FULLY_VISIBLE
+      - DOC_FACE_NOT_FOUND
+      - DOC_TOO_BLURRY
+      - DOC_GLARED
+      - DOC_FACE_GLARED
+      - MRZ_NOT_FOUND
+      - MRZ_OCR_READING_ERROR
+      - BARCODE_NOT_FOUND
+      - DOC_EXPIRED
+      - DOC_NOT_SUPPORTED
+      - COUNTRY_NOT_SUPPORTED
+      - COUNTRY_MISMATCH
+      - DOC_TYPE_MISMATCH
+      - DOC_SUBTYPE_MISMATCH
+      - DOC_SIDE_MISMATCH
+      - DOC_DAMAGED
+      - DOC_FAKE
+      - DOC_PERSONAL_CODE_INVALID
+      - DOC_NOT_ALLOWED
+      - DOC_NAME_ERROR
+      - DOC_SURNAME_ERROR
+      - DOC_EXPIRY_ERROR
+      - DOC_DOB_ERROR
+      - DOC_PERSONAL_NUMBER_ERROR
+      - DOC_NUMBER_ERROR
+      - DOC_DATE_OF_ISSUE_ERROR
+      - DOC_SEX_ERROR
+      - DOC_NATIONALITY_ERROR
+      - DOC_NOT_ANALYSED
+      - DOC_ERROR
+      - AUTO_UNVERIFIABLE
+      - DOC_SPOOF_DETECTED
+      - MRZ_INVALID
+      - EID_FAILED
+      - NFC_INIT_FAILED
+      - NFC_FAILED
+      - NFC_TIMEOUT
+      type: string
+    DriverLicenseCheckWebhook:
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        state:
+          type: string
+          maxLength: 2
+        gender:
+          type: string
+          nullable: true
+          maxLength: 1
+        dateOfIssue:
+          type: string
+          format: date
+          nullable: true
+        dateOfExpiry:
+          type: string
+          format: date
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+        nameMatch:
+          type: boolean
+          nullable: true
+        surnameMatch:
+          type: boolean
+          nullable: true
+        dateOfBirthMatch:
+          type: boolean
+          nullable: true
+        dateOfIssueMatch:
+          type: boolean
+          nullable: true
+        dateOfExpiryMatch:
+          type: boolean
+          nullable: true
+        documentNumberMatch:
+          type: boolean
+          nullable: true
+        genderMatch:
+          type: boolean
+          nullable: true
+      required:
+      - dateOfBirth
+      - dateOfBirthMatch
+      - dateOfExpiry
+      - dateOfExpiryMatch
+      - dateOfIssue
+      - dateOfIssueMatch
+      - documentNumber
+      - documentNumberMatch
+      - gender
+      - genderMatch
+      - name
+      - nameMatch
+      - state
+      - surname
+      - surnameMatch
+    EmailVerificationWebhook:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        emailVerified:
+          type: boolean
+      required:
+      - email
+      - emailVerified
+    FaceStatusEnum:
+      description: |-
+        Automated or manual face-match check result. See [Verification Statuses → Face Status Values](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#face-status-values) for what each value means.
+      enum:
+      - FACE_MATCH
+      - FACE_NOT_CHECKED
+      - FACE_MISMATCH
+      - NO_FACE_FOUND
+      - TOO_MANY_FACES
+      - FACE_TOO_BLURRY
+      - FACE_GLARED
+      - FACE_UNCERTAIN
+      - FACE_NOT_ANALYSED
+      - FACE_ERROR
+      - AUTO_UNVERIFIABLE
+      - FAKE_FACE
+      type: string
+    FraudStatus:
+      type: object
+      properties:
+        serviceSuspected:
+          type: boolean
+        serviceUsed:
+          type: boolean
+        serviceFound:
+          type: boolean
+        checkSuccessful:
+          type: boolean
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckSuspicionEnum'
+      required:
+      - checkSuccessful
+      - overallStatus
+      - serviceFound
+      - serviceSuspected
+      - serviceUsed
+    FraudTagsEnum:
+      description: |-
+        Fraud indicators that can trigger a `SUSPECTED` status. See [Verification Statuses → Fraud Tags](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#fraud-tags) for what each value means, and [Suspected Status](https://documentation.idenfy.com/kyc/suspected-status) for worked examples and how to resolve them.
+      enum:
+      - FACE_IN_BLACKLIST
+      - DOC_FACE_IN_BLACKLIST
+      - DATA_BLACKLISTED
+      - DATA_IN_BLACKLIST
+      - DUPLICATE_FACE
+      - DUPLICATE_DOC_FACE
+      - DUPLICATE_PERSONAL_DATA
+      - VIRTUAL_CAMERA
+      - ADDRESS_UNVERIFIED
+      - PORTRAIT_SUBSTITUTION
+      - FACE_SUSPECTED
+      - FACE_BLACKLISTED
+      - DOC_FACE_BLACKLISTED
+      - DOC_MOBILE_PHOTO
+      - DEV_TOOLS_OPENED
+      - DOC_PRINT_SPOOFED
+      - FAKE_PHOTO
+      - AML_SUSPECTION
+      - AML_FAILED
+      - LID_SUSPECTION
+      - LID_FAILED
+      - SANCTIONS_SUSPECTION
+      - SANCTIONS_FAILED
+      - CRIMINAL_SUSPECTED
+      - CRIMINAL_CHECK_FAILED
+      - RC_FAILED
+      - DL_FAILED
+      - AUTO_UNVERIFIABLE
+      type: string
+    HungaryRegistryCenterWebhook:
+      type: object
+      properties:
+        checkedMrz:
+          type: string
+          maxLength: 100
+        firstName:
+          type: string
+          nullable: true
+          maxLength: 100
+        lastName:
+          type: string
+          nullable: true
+          maxLength: 100
+        maidenName:
+          type: string
+          nullable: true
+          maxLength: 100
+        mothersMaidenName:
+          type: string
+          nullable: true
+          maxLength: 100
+        birthDate:
+          type: string
+          format: date
+          nullable: true
+        birthPlace:
+          type: string
+          nullable: true
+          maxLength: 100
+        address:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        residentialAddress:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        idCard:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        passport:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        additionalData:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        resourceType:
+          $ref: '#/components/schemas/ResourceTypeEnum'
+      required:
+      - additionalData
+      - address
+      - birthDate
+      - birthPlace
+      - checkedMrz
+      - firstName
+      - idCard
+      - lastName
+      - maidenName
+      - mothersMaidenName
+      - nationality
+      - passport
+      - residentialAddress
+      - resourceType
+    IdentificationBlacklist:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The `scan_ref` of the blocklisted face image; use it as the
+            `id` path parameter.
+        reason:
+          type: string
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        faceImageUrl:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - created
+      - faceImageUrl
+      - id
+    IdentificationBlacklistEntry:
+      oneOf:
+      - $ref: '#/components/schemas/IdentificationBlacklist'
+      - $ref: '#/components/schemas/IdentificationDataBlacklistResponse'
+    IdentificationBlacklistRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          nullable: true
+    IdentificationDataBlacklistResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The database `id` of the blocklisted data record; use it
+            as the `id` path parameter.
+        fullName:
+          type: string
+          readOnly: true
+        dateOfBirth:
+          type: string
+          format: date
+          readOnly: true
+        personalNumber:
+          type: string
+          readOnly: true
+        documentNumber:
+          type: string
+          readOnly: true
+        nationality:
+          type: string
+          readOnly: true
+        reason:
+          type: string
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - dateOfBirth
+      - documentNumber
+      - fullName
+      - id
+      - nationality
+      - personalNumber
+      - reason
+    IdentificationDataWebhook:
+      type: object
+      properties:
+        docFirstName:
+          type: string
+          nullable: true
+          maxLength: 100
+        docLastName:
+          type: string
+          nullable: true
+          maxLength: 100
+        docNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        docPersonalCode:
+          type: string
+          nullable: true
+          maxLength: 30
+        docExpiry:
+          type: string
+          nullable: true
+          maxLength: 100
+        docDob:
+          type: string
+          nullable: true
+          maxLength: 100
+        docDateOfIssue:
+          type: string
+          nullable: true
+          maxLength: 100
+        docType:
+          allOf:
+          - $ref: '#/components/schemas/KycDocumentTypeEnum'
+          nullable: true
+        docSex:
+          allOf:
+          - $ref: '#/components/schemas/SexEnum'
+          nullable: true
+        docNationality:
+          type: string
+          nullable: true
+          maxLength: 2
+        docIssuingCountry:
+          type: string
+          nullable: true
+          maxLength: 2
+        birthPlace:
+          type: string
+          nullable: true
+          maxLength: 60
+        authority:
+          type: string
+          nullable: true
+          maxLength: 60
+        address:
+          type: string
+          nullable: true
+          maxLength: 100
+        docTemporaryAddress:
+          type: string
+          nullable: true
+          maxLength: 100
+        mothersMaidenName:
+          type: string
+          nullable: true
+          maxLength: 80
+        docBirthName:
+          type: string
+          nullable: true
+          maxLength: 100
+        docPatronymic:
+          type: string
+          nullable: true
+          maxLength: 100
+        driverLicenseCategory:
+          type: string
+          nullable: true
+          maxLength: 30
+        manuallyDataChanged:
+          type: boolean
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+          maxLength: 201
+        selectedCountry:
+          type: string
+          nullable: true
+          maxLength: 2
+        orgFirstName:
+          type: string
+          nullable: true
+          maxLength: 255
+        orgLastName:
+          type: string
+          nullable: true
+          maxLength: 255
+        orgNationality:
+          type: string
+          nullable: true
+          maxLength: 255
+        orgBirthPlace:
+          type: string
+          nullable: true
+          maxLength: 500
+        orgAuthority:
+          type: string
+          nullable: true
+          maxLength: 500
+        orgAddress:
+          type: string
+          nullable: true
+          maxLength: 500
+        orgTemporaryAddress:
+          type: string
+          nullable: true
+          maxLength: 500
+        orgMothersMaidenName:
+          type: string
+          nullable: true
+          maxLength: 500
+        orgPatronymic:
+          type: string
+          nullable: true
+          maxLength: 500
+        orgBirthName:
+          type: string
+          nullable: true
+          maxLength: 500
+        ageEstimate:
+          allOf:
+          - $ref: '#/components/schemas/AgeGroupEnum'
+          nullable: true
+        clientIpProxyRiskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+        duplicateFaces:
+          type: array
+          items:
+            type: string
+            maxLength: 36
+          nullable: true
+        duplicateDocFaces:
+          type: array
+          items:
+            type: string
+            maxLength: 36
+          nullable: true
+        additionalData:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - ageEstimate
+      - clientIpProxyRiskLevel
+      - docDateOfIssue
+      - docDob
+      - docExpiry
+      - docFirstName
+      - docIssuingCountry
+      - docLastName
+      - docNationality
+      - docNumber
+      - docPersonalCode
+      - docSex
+      - docType
+      - duplicateDocFaces
+      - duplicateFaces
+      - fullName
+      - manuallyDataChanged
+      - orgAddress
+      - orgAuthority
+      - orgBirthName
+      - orgBirthPlace
+      - orgFirstName
+      - orgLastName
+      - orgMothersMaidenName
+      - orgNationality
+      - orgPatronymic
+      - orgTemporaryAddress
+      - selectedCountry
+    IdentificationRequestInformation:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          format: uri
+          readOnly: true
+        tokenString:
+          type: string
+          readOnly: true
+      required:
+      - sessionUrl
+      - tokenString
+    IdentificationRequestInformationRequest:
+      type: object
+      properties:
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 86400
+        questionnaire:
+          type: string
+          minLength: 1
+          writeOnly: true
+        riskAssessmentProfile:
+          type: string
+          format: uuid
+          writeOnly: true
+        additionalStepUploadRequired:
+          type: boolean
+          writeOnly: true
+        bankCardVerification:
+          type: boolean
+          writeOnly: true
+        bankCardExpectedLastFour:
+          type: string
+          writeOnly: true
+          nullable: true
+          minLength: 4
+          maxLength: 4
+    IdentificationStatusEnum:
+      description: |-
+        Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
+      enum:
+      - APPROVED
+      - DENIED
+      - SUSPECTED
+      - REVIEWING
+      - EXPIRED
+      - ACTIVE
+      - DELETED
+      - ARCHIVED
+      type: string
+    IdentificationStatusWebhook:
+      type: object
+      properties:
+        overall:
+          $ref: '#/components/schemas/IdentificationStatusEnum'
+        fraudTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/FraudTagsEnum'
+        mismatchTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfoMismatchEnum'
+        autoFace:
+          $ref: '#/components/schemas/FaceStatusEnum'
+        manualFace:
+          $ref: '#/components/schemas/FaceStatusEnum'
+        autoDocument:
+          $ref: '#/components/schemas/DocumentStatusEnum'
+        manualDocument:
+          $ref: '#/components/schemas/DocumentStatusEnum'
+        additionalSteps:
+          allOf:
+          - $ref: '#/components/schemas/AdditionalStepStatusEnum'
+          nullable: true
+      required:
+      - additionalSteps
+      - autoDocument
+      - autoFace
+      - fraudTags
+      - manualDocument
+      - manualFace
+      - mismatchTags
+      - overall
+    IdentificationWebhook:
+      type: object
+      properties:
+        final:
+          type: boolean
+        platform:
+          $ref: '#/components/schemas/DeviceTypeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/IdentificationStatusWebhook'
+          description: |-
+            See [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with `overall`, and especially how to handle a `SUSPECTED` result using `fraudTags`/`mismatchTags`.
+        data:
+          $ref: '#/components/schemas/IdentificationDataWebhook'
+        fileUrls:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        additionalStepPdfUrls:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        AML:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlResults'
+          nullable: true
+          description: Legacy (v2) object structure. If enabled, use `amlCheck` (v3),
+            which better aligns with our new schema.
+        amlCheck:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckV3Webhook'
+          nullable: true
+        LID:
+          type: array
+          items:
+            $ref: '#/components/schemas/LidResults'
+          nullable: true
+        CRIMINAL_CHECK:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriminalCheckResults'
+          nullable: true
+        scanRef:
+          type: string
+          maxLength: 36
+        externalRef:
+          type: string
+          nullable: true
+          maxLength: 40
+        clientId:
+          type: string
+          maxLength: 100
+        companyId:
+          type: string
+          maxLength: 36
+        beneficiaryId:
+          type: string
+          maxLength: 36
+        startTime:
+          type: integer
+        finishTime:
+          type: integer
+        clientIp:
+          type: string
+          nullable: true
+          maxLength: 39
+        clientIpCountry:
+          type: string
+          nullable: true
+          maxLength: 2
+        clientLocation:
+          type: string
+          nullable: true
+          maxLength: 100
+        gdcMatch:
+          type: boolean
+          nullable: true
+        manualAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        manualAddressMatch:
+          type: boolean
+        registryCenterCheck:
+          allOf:
+          - $ref: '#/components/schemas/RegistryCenterCheckWebhook'
+          nullable: true
+        addressVerification:
+          allOf:
+          - $ref: '#/components/schemas/AddressVerificationWebhook'
+          nullable: true
+        questionnaireAnswers:
+          allOf:
+          - $ref: '#/components/schemas/QuestionnaireAnswersWebhook'
+          nullable: true
+        riskAssessment:
+          allOf:
+          - $ref: '#/components/schemas/RiskAssessmentWebhook'
+          nullable: true
+        bankVerification:
+          allOf:
+          - $ref: '#/components/schemas/BankVerificationWebhook'
+          nullable: true
+        emailVerification:
+          allOf:
+          - $ref: '#/components/schemas/EmailVerificationWebhook'
+          nullable: true
+        phoneVerification:
+          allOf:
+          - $ref: '#/components/schemas/PhoneVerificationWebhook'
+          nullable: true
+        driverLicenseCheck:
+          allOf:
+          - $ref: '#/components/schemas/DriverLicenseCheckWebhook'
+          nullable: true
+        bankCardVerification:
+          allOf:
+          - $ref: '#/components/schemas/BankCardVerificationWebhook'
+          nullable: true
+        additionalSteps:
+          type: object
+          additionalProperties:
+            enum:
+            - UPLOAD
+            - COMPARE
+            - EXTRACT
+            - null
+            type: string
+            nullable: true
+          nullable: true
+      required:
+      - beneficiaryId
+      - clientId
+      - clientIp
+      - clientIpCountry
+      - clientLocation
+      - companyId
+      - data
+      - fileUrls
+      - final
+      - finishTime
+      - platform
+      - scanRef
+      - startTime
+      - status
+    InfoMismatchEnum:
+      description: |-
+        Data mismatches between the information submitted at session creation and the document. See [Verification Statuses → Mismatch Tags](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#mismatch-tags) for what each value means, and [Suspected Status](https://documentation.idenfy.com/kyc/suspected-status) for worked examples and how to resolve them.
+      enum:
+      - NAME
+      - SURNAME
+      - DOCUMENT_NUMBER
+      - PERSONAL_CODE
+      - EXPIRY_DATE
+      - DATE_OF_BIRTH
+      - DATE_OF_ISSUE
+      - NATIONALITY
+      - SEX
+      - FULL_NAME
+      - DOC_INFO_MISMATCH
+      - UNDER_AGE
+      - OVER_AGE
+      - UNKNOWN_AGE
+      - UTILITY_ADDRESS
+      - UTILITY_NAME
+      - EXPIRED_UTILITY_BILL
+      - INVALID_ADDITIONAL_STEP
+      - ADDITIONAL_STEP_NOT_FOUND
+      - ADDITIONAL_STEP_INFORMATION_MISMATCH
+      - EXPIRED_ADDITIONAL_STEP_INFORMATION
+      - REGISTRY_CENTER_INFO_MISMATCH
+      - DRIVER_LICENSE_INFO_MISMATCH
+      - NOT_SUPPORTED_POA_DOCUMENT_TYPE
+      - NOT_SUPPORTED_POA_DOCUMENT_COUNTRY
+      - POA_COUNTRIES_MISMATCH
+      - POA_SCREENSHOT_DETECTED
+      type: string
+    KycDocumentTypeEnum:
+      enum:
+      - ID_CARD
+      - PASSPORT
+      - RESIDENCE_PERMIT
+      - DRIVER_LICENSE
+      - PAN_CARD
+      - AADHAAR
+      - VISA
+      - NATIONAL_PASSPORT
+      - PROVISIONAL_DRIVER_LICENSE
+      - OLD_ID_CARD
+      - MILITARY_CARD
+      - ADDRESS_CARD
+      - SMART_ID
+      - CLEAR
+      - ONE_ID
+      - BANK_ID_SE
+      - BANK_ID_NO
+      - BANK_ID_CZ
+      - FTN
+      - MIT_ID
+      - VERIMI
+      - LA_WALLET
+      - SAMSUNG_WALLET
+      - MOJE_ID_CZ
+      - YOTI_ID
+      - OTHER
+      - BORDER_CROSSING
+      - ASYLUM
+      - PHOTO_CARD
+      - PROOF_OF_AGE_CARD
+      - TRAVEL_CARD
+      - SOCIAL_SECURITY_CARD
+      - VOTER_CARD
+      - DIPLOMATIC_ID
+      - WORK_PERMIT
+      type: string
+    LidData:
+      type: object
+      properties:
+        documentNumber:
+          type: string
+        documentType:
+          type: string
+          nullable: true
+        valid:
+          type: boolean
+        expiryDate:
+          type: string
+        checkDate:
+          type: string
+      required:
+      - checkDate
+      - documentNumber
+      - documentType
+      - expiryDate
+      - valid
+    LidResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LidData'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+          default: LID
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+      required:
+      - data
+      - errorMessage
+      - serviceName
+      - status
+      - uid
+    LithuaniaRegistryCenterWebhook:
+      type: object
+      properties:
+        checkedPersonalNumber:
+          type: string
+          maxLength: 30
+        checkedDocumentType:
+          type: string
+          maxLength: 2
+        personalNumber:
+          type: string
+          nullable: true
+          maxLength: 30
+        name:
+          type: string
+          nullable: true
+          maxLength: 100
+        surname:
+          type: string
+          nullable: true
+          maxLength: 100
+        documentNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        documentExpiration:
+          type: string
+          format: date
+          nullable: true
+        facePhoto:
+          type: string
+          format: uri
+          nullable: true
+        resourceType:
+          $ref: '#/components/schemas/ResourceTypeEnum'
+      required:
+      - checkedDocumentType
+      - checkedPersonalNumber
+      - documentExpiration
+      - documentNumber
+      - facePhoto
+      - name
+      - personalNumber
+      - resourceType
+      - surname
+    PaginatedPartnerIdentificationListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerIdentificationList'
+    PartnerIdentificationList:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/IdentificationStatusEnum'
+          readOnly: true
+        suspected:
+          type: boolean
+          readOnly: true
+      required:
+      - scanRef
+      - status
+      - suspected
+    PhoneVerificationWebhook:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+        phoneVerified:
+          type: boolean
+      required:
+      - phone
+      - phoneVerified
+    QuestionnaireAnswersDisplayQuestions:
+      type: object
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestionsTypeEnum'
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+          - type: boolean
+          nullable: true
+          readOnly: true
+      required:
+      - key
+      - title
+      - type
+      - value
+    QuestionnaireAnswersDisplayQuestionsTypeEnum:
+      enum:
+      - CHECKBOX
+      - COLOR
+      - COUNTRY
+      - COUNTRY_MULTI
+      - DATE
+      - DATETIME
+      - EMAIL
+      - FILE
+      - FILE_MULTI
+      - FLOAT
+      - LIST
+      - INTEGER
+      - PASSWORD
+      - RADIO
+      - SELECT
+      - SELECT_MULTI
+      - TEL
+      - TEXT
+      - TEXT_AREA
+      - TIME
+      - URL
+      type: string
+    QuestionnaireAnswersDisplaySections:
+      type: object
+      properties:
+        title:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
+      required:
+      - questions
+      - title
+    QuestionnaireAnswersWebhook:
+      type: object
+      properties:
+        title:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplaySections'
+      required:
+      - sections
+      - title
+    RegionEnum:
+      enum:
+      - AL
+      - AZ
+      - AR
+      - CA
+      - CO
+      - CT
+      - DE
+      - DC
+      - FL
+      - GA
+      - ID
+      - IL
+      - IN
+      - IA
+      - KS
+      - KY
+      - LA
+      - ME
+      - MD
+      - MA
+      - MI
+      - MN
+      - MS
+      - MO
+      - MT
+      - NE
+      - NV
+      - NH
+      - NJ
+      - NM
+      - NY
+      - NC
+      - ND
+      - OH
+      - OK
+      - OR
+      - PA
+      - RI
+      - SC
+      - SD
+      - TN
+      - TX
+      - UT
+      - VT
+      - VA
+      - WA
+      - WV
+      - WI
+      - WY
+      - AK
+      - HI
+      type: string
+    RegistryCenterCheckWebhook:
+      oneOf:
+      - $ref: '#/components/schemas/HungaryRegistryCenterWebhook'
+      - $ref: '#/components/schemas/LithuaniaRegistryCenterWebhook'
+      - $ref: '#/components/schemas/Us15RegistryCenterWebhook'
+      discriminator:
+        propertyName: resourceType
+        mapping:
+          HungaryRegistryCenterCheck: '#/components/schemas/HungaryRegistryCenterWebhook'
+          LithuaniaRegistryCenterCheck: '#/components/schemas/LithuaniaRegistryCenterWebhook'
+          Us15RegistryCenterCheck: '#/components/schemas/Us15RegistryCenterWebhook'
+    ResourceTypeEnum:
+      enum:
+      - HungaryRegistryCenterCheck
+      - LithuaniaRegistryCenterCheck
+      - Us15RegistryCenterCheck
+      type: string
+    RiskAssessmentWebhook:
+      type: object
+      properties:
+        riskScore:
+          type: integer
+          maximum: 100
+          minimum: 0
+          nullable: true
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+      required:
+      - riskLevel
+      - riskScore
+    RiskLevelEnum:
+      enum:
+      - VERY_LOW
+      - LOW
+      - MEDIUM
+      - HIGH
+      - VERY_HIGH
+      - NOT_CHECKED
+      type: string
+    SexEnum:
+      enum:
+      - MALE
+      - FEMALE
+      - UNDEFINED
+      type: string
+    SoftKycMatchStatusEnum:
+      enum:
+      - MATCH
+      - NO_MATCH
+      - PARTIAL_MATCH
+      - NO_DATA
+      - NO_INPUT
+      - INVALID
+      type: string
+    Us15RegistryCenterWebhook:
+      type: object
+      properties:
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        middleName:
+          type: string
+          nullable: true
+          maxLength: 100
+        dob:
+          type: string
+          format: date
+          nullable: true
+        yob:
+          type: integer
+          nullable: true
+        address1:
+          type: string
+          nullable: true
+          maxLength: 255
+        address2:
+          type: string
+          nullable: true
+          maxLength: 255
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        state:
+          type: string
+          nullable: true
+          maxLength: 2
+        zip:
+          type: string
+          nullable: true
+          maxLength: 10
+        idNum:
+          type: string
+          nullable: true
+          maxLength: 9
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        firstNameStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        lastNameStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        middleNameStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        dobStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        yobStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        address1Status:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        address2Status:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        cityStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        stateStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        zipStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        idNumStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        phoneStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        emailStatus:
+          allOf:
+          - $ref: '#/components/schemas/SoftKycMatchStatusEnum'
+          nullable: true
+        resourceType:
+          $ref: '#/components/schemas/ResourceTypeEnum'
+      required:
+      - address1
+      - address1Status
+      - address2
+      - address2Status
+      - city
+      - cityStatus
+      - dob
+      - dobStatus
+      - email
+      - emailStatus
+      - firstName
+      - firstNameStatus
+      - idNum
+      - idNumStatus
+      - lastName
+      - lastNameStatus
+      - middleName
+      - middleNameStatus
+      - phone
+      - phoneStatus
+      - resourceType
+      - state
+      - stateStatus
+      - yob
+      - yobStatus
+      - zip
+      - zipStatus
+    PoaCheckDetail:
+      type: object
+      properties:
+        file:
+          type: string
+          format: uri
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`,
+            `webp`, `heic`, `heif`, `pdf` files.'
+        providedName:
+          type: string
+          nullable: true
+          maxLength: 255
+        providedAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        issueDate:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        documentType:
+          type: string
+          readOnly: true
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          readOnly: true
+          nullable: true
+        hasLogo:
+          type: boolean
+          readOnly: true
+          nullable: true
+        isScreenshot:
+          type: boolean
+          readOnly: true
+          nullable: true
+        nameMatch:
+          type: boolean
+          readOnly: true
+          nullable: true
+        addressMatch:
+          type: boolean
+          readOnly: true
+          nullable: true
+        dateValid:
+          type: boolean
+          readOnly: true
+          nullable: true
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/PoaCheckStatusEnum'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+          nullable: true
+        address:
+          type: string
+          readOnly: true
+          nullable: true
+        orgName:
+          type: string
+          readOnly: true
+          nullable: true
+        orgAddress:
+          type: string
+          readOnly: true
+          nullable: true
+        documentTypeSupported:
+          type: boolean
+          readOnly: true
+          nullable: true
+        countrySupported:
+          type: boolean
+          readOnly: true
+          nullable: true
+      required:
+      - address
+      - addressMatch
+      - country
+      - countrySupported
+      - created
+      - dateValid
+      - documentType
+      - documentTypeSupported
+      - file
+      - hasLogo
+      - id
+      - isScreenshot
+      - issueDate
+      - name
+      - nameMatch
+      - orgAddress
+      - orgName
+      - overallStatus
+    PoaCheckDetailRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: byte
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`,
+            `webp`, `heic`, `heif`, `pdf` files.'
+        providedName:
+          type: string
+          nullable: true
+          maxLength: 255
+        providedAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - file
+    PoaCheckStatusEnum:
+      enum:
+      - MATCH
+      - NO_MATCH
+      - NOT_COMPARED
+      type: string
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is
+        *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API
+        secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales
+        team*.'
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYC
+  tags:
+  - KYC Blocklist
+  - KYC Token
+  - KYC Verifications
+  - POA
+tags:
+- name: KYC Blocklist
+  description: Endpoints for managing face, document-face and document-info blocklist
+    entries.
+- name: KYC Token
+  description: Endpoints for creating KYC verification session tokens.
+- name: KYC Verifications
+  description: Endpoints for actions with KYC verifications.
+- name: POA
+  description: Endpoints for standalone proof of address (POA) checks.
+- name: Webhooks
+  description: Webhooks.
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation
+    page.
+  url: https://documentation.idenfy.com
+webhooks:
+  identification:
+    post:
+      operationId: identification
+      description: This notification is sent when a client completes an identity verification.
+        Legacy, use `ID_VERIFICATION_AUTO_FINISHED`, `ID_VERIFICATION_MANUAL_FINISHED`,
+        `ID_VERIFICATION_EXPIRED` and `ID_VERIFICATION_CANCELLED` instead.
+      summary: Identification
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - IDENTIFICATION
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  identificationAutoFinished:
+    post:
+      operationId: identificationAutoFinished
+      description: This notification is sent when an identity verification is completed.
+      summary: Identification auto finished
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - IDENTIFICATION_AUTO_FINISHED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  identificationManualFinished:
+    post:
+      operationId: identificationManualFinished
+      description: This notification is sent when an identity verification is manually
+        approved or denied.
+      summary: Identification manual finished
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - IDENTIFICATION_MANUAL_FINISHED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  identificationExpired:
+    post:
+      operationId: identificationExpired
+      description: This notification is sent when an identity verification expires.
+      summary: Identification expired
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - IDENTIFICATION_EXPIRED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  identificationCancelled:
+    post:
+      operationId: identificationCancelled
+      description: This notification is sent when an identity verification is cancelled
+        by the user or the system.
+      summary: Identification cancelled
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - IDENTIFICATION_CANCELLED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  identificationResubmitted:
+    post:
+      operationId: identificationResubmitted
+      description: This notification is sent when a client resubmits an identity verification.
+      summary: Identification resubmitted
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - IDENTIFICATION_RESUBMITTED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  documentExpiration:
+    post:
+      operationId: documentExpiration
+      description: This notification is sent when a client's identity verification
+        document is nearing expiration or expires
+      summary: Document expiration
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - DOCUMENT_EXPIRATION
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentExpirationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  videoCallFinished:
+    post:
+      operationId: videoCallFinished
+      description: This notification is sent when a video call is finished.
+      summary: Video call finished
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - VIDEO_CALL_FINISHED
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.

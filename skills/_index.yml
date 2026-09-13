@@ -1,0 +1,44 @@
+generated: '2026-09-13'
+method: searched
+source: https://documentation.idenfy.com/.well-known/agent-skills/idenfy/skill.md
+provider: iDenfy
+providerId: idenfy
+note: >-
+  iDenfy PUBLISHES its own Agent Skill. It is advertised from the A2A Agent Card at
+  https://documentation.idenfy.com/.well-known/agent-card.json (skills[0].url) and served as
+  markdown with YAML frontmatter. It is saved here verbatim — nothing in this directory was
+  authored by API Evangelist, which is the correct outcome: a provider-written skill always beats
+  a derived one.
+skills:
+- id: idenfy
+  name: Idenfy
+  file: skills/idenfy-verification-skill.md
+  method: searched
+  source: https://documentation.idenfy.com/.well-known/agent-skills/idenfy/skill.md
+  x-evidence:
+    fetched: '2026-09-13'
+    http_status: 200
+    content_type: text/markdown; charset=utf-8
+    bytes: 10343
+  description: >-
+    Use when building identity verification (KYC), business verification (KYB), AML screening, or
+    fraud prevention workflows — integrating customer verification APIs, configuring verification
+    sessions, handling webhook callbacks, testing verification flows, or troubleshooting failures.
+  api: https://ivs.idenfy.com
+  frontmatter:
+    name: Idenfy
+    version: '1.0'
+    mintlify-proj: idenfy
+  covers:
+  - KYC session creation and parameters
+  - KYB company verification and UBO screening
+  - AML sanctions / PEP / adverse-media screening and monitoring
+  - Fraud prevention and risk scoring
+  - Webhook handling and HMAC signature verification
+  - Sandbox testing with dummy results
+  - Verification status interpretation (APPROVED / DENIED / SUSPECTED / EXPIRED)
+caveat: >-
+  The skill is written against the product docs and carries at least one endpoint that does not
+  match iDenfy's own published OpenAPI: it lists "Create KYB session POST /kyb/generate-token" and
+  "Create AML check POST /aml/" where the specs declare POST /kyb/tokens/ and POST /aml/checks/.
+  Recorded verbatim as published; the specs under openapi/ are the authority on paths.

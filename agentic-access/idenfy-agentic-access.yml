@@ -1,24 +1,26 @@
-generated: '2026-07-15'
+generated: '2026-09-13'
 method: generated
-source: openapi/idenfy-openapi.yml
+source: openapi/idenfy-age-estimation-openapi.yml, openapi/idenfy-aml-openapi.yml, openapi/idenfy-bank-card-openapi.yml,
+  openapi/idenfy-bank-openapi.yml, openapi/idenfy-face-authentication-openapi.yml, openapi/idenfy-kyb-openapi.yml,
+  openapi/idenfy-kyc-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 36
+  operations: 73
   by_action_class:
-    acting: 25
-    connected: 11
+    acting: 45
+    connected: 28
   by_consequence:
-    write: 23
-    read: 11
+    write: 42
+    read: 28
     safety-critical: 1
-    physical: 1
+    physical: 2
   human_in_the_loop_required: 1
 operations:
-- path: /api/v2/token
+- path: /age-estimation/token/
   method: post
-  operationId: createToken
+  operationId: ageEstimationTokenCreate
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -32,9 +34,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /kyc/sessions
+- path: /aml/checks/
   method: post
-  operationId: createKycSession
+  operationId: amlChecksCreate
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -48,9 +50,25 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /kyc/identifications
+- path: /aml/checks/{id}/pdf/
+  method: post
+  operationId: amlChecksPdfCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /aml/checks/{id}/profiles/{profileId}/
   method: get
-  operationId: listIdentifications
+  operationId: amlChecksProfilesRetrieve
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -58,9 +76,25 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /kyc/identifications/{scanRef}
+- path: /aml/checks/{id}/profiles/{profileId}/pdf/
+  method: post
+  operationId: amlChecksProfilesPdfCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /aml/monitorings/
   method: get
-  operationId: getIdentification
+  operationId: amlMonitoringsList
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -68,25 +102,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /kyc/identifications/{scanRef}
-  method: delete
-  operationId: deleteIdentification
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /kyc/identifications/{scanRef}/request-update
+- path: /aml/monitorings/
   method: post
-  operationId: requestIdentificationUpdate
+  operationId: amlMonitoringsCreate
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -100,41 +118,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /kyc/pdf
-  method: post
-  operationId: generateKycPdf
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /kyb/sessions
-  method: post
-  operationId: createKybSession
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /kyb/companies
+- path: /aml/monitorings/{id}/
   method: get
-  operationId: listCompanies
+  operationId: amlMonitoringsRetrieve
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -142,19 +128,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /kyb/companies/{companyId}
-  method: get
-  operationId: getCompany
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /kyb/companies/{companyId}
+- path: /aml/monitorings/{id}/
   method: patch
-  operationId: updateCompany
+  operationId: amlMonitoringsPartialUpdate
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -168,9 +144,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /kyb/companies/{companyId}
+- path: /aml/monitorings/{id}/
   method: delete
-  operationId: deleteCompany
+  operationId: amlMonitoringsDestroy
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -184,203 +160,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /kyb/companies/{companyId}/pdf
+- path: /aml/monitorings/{id}/{action}/
   method: post
-  operationId: generateCompanyPdf
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /kyb/forms
-  method: get
-  operationId: listForms
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /kyb/forms
-  method: post
-  operationId: createForm
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /kyb/forms/{formId}
-  method: get
-  operationId: getForm
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /kyb/forms/{formId}
-  method: patch
-  operationId: updateForm
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /kyb/forms/{formId}/submit
-  method: post
-  operationId: submitForm
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /aml/checks
-  method: post
-  operationId: createAmlCheck
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /aml/checks/{checkId}
-  method: get
-  operationId: getAmlCheck
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /aml/checks/{checkId}/pdf
-  method: post
-  operationId: generateAmlPdf
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /aml/monitoring
-  method: post
-  operationId: createAmlMonitoring
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /aml/monitoring
-  method: get
-  operationId: listAmlMonitoring
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /aml/monitoring/{monitoringId}
-  method: get
-  operationId: getAmlMonitoring
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /aml/monitoring/{monitoringId}
-  method: patch
-  operationId: updateAmlMonitoring
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /aml/monitoring/{monitoringId}
-  method: delete
-  operationId: deleteAmlMonitoring
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /aml/monitoring/{monitoringId}/start-stop
-  method: post
-  operationId: startStopAmlMonitoring
+  operationId: amlMonitoringsStartStopCreate
   x-agentic-access:
     action-class: acting
     consequence: safety-critical
@@ -394,9 +176,9 @@ operations:
     escalation:
       human-in-the-loop: required
     audit: required
-- path: /face-authentication/sessions
+- path: /aml/monitorings/{id}/pdf/
   method: post
-  operationId: createFaceAuthSession
+  operationId: amlMonitoringsPdfCreate
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -410,9 +192,57 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /face-authentication/sessions/{sessionId}
+- path: /aml/monitorings/{id}/profiles/{profileId}/
+  method: delete
+  operationId: amlMonitoringsProfilesDestroy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bank-card/tokens/
+  method: post
+  operationId: bankCardTokenCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bank/tokens/
+  method: post
+  operationId: bankTokensCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bank/verifications/{verificationId}/accounts/{accountId}/transactions/
   method: get
-  operationId: getFaceAuthSession
+  operationId: bankVerificationsAccountsTransactionsList
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -420,25 +250,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /bank/sessions
-  method: post
-  operationId: createBankSession
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /bank/transactions
+- path: /api/v2/facial-authentication-sessions/
   method: get
-  operationId: listBankTransactions
+  operationId: faceAuthSessionsList
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -446,41 +260,49 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /fraud/address-verification
-  method: post
-  operationId: verifyAddress
+- path: /api/v2/facial-authentication-sessions/{tokenString}/
+  method: get
+  operationId: faceAuthSessionsRetrieve
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /fraud/phone-validation
-  method: post
-  operationId: validatePhone
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/gov-ordered-documents/
+  method: get
+  operationId: apiV2GovOrderedDocumentsList
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /fraud/phone-verification
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/gov-ordered-documents/{id}/
+  method: get
+  operationId: apiV2GovOrderedDocumentsRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/gov-ordered-documents/available-documents/
+  method: get
+  operationId: apiV2GovOrderedDocumentsAvailableDocumentsRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/gov-ordered-documents/document-order/
   method: post
-  operationId: verifyPhone
+  operationId: apiV2GovOrderedDocumentsDocumentOrderCreate
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -496,9 +318,67 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /fraud/proxy-check
+- path: /api/v2/sos-filing-documents/
+  method: get
+  operationId: apiV2SosFilingDocumentsList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/sos-filing-documents/
   method: post
-  operationId: checkProxy
+  operationId: apiV2SosFilingDocumentsCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v2/sos-filing-documents/{id}/
+  method: get
+  operationId: apiV2SosFilingDocumentsRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/companies/
+  method: get
+  operationId: kybCompaniesList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/companies/{id}/
+  method: get
+  operationId: kybCompaniesRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/companies/{id}/
+  method: delete
+  operationId: kybCompaniesDestroy
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -512,9 +392,623 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /fraud/risk-assessment
+- path: /kyb/companies/{id}/change-status/
   method: post
-  operationId: assessRisk
+  operationId: kybCompaniesChangeStatusCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/companies/{id}/pdf/
+  method: post
+  operationId: kybCompaniesPdfCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/
+  method: get
+  operationId: kybFormsList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/
+  method: post
+  operationId: kybFormsCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/
+  method: get
+  operationId: kybFormsBeneficiariesList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/beneficiaries/
+  method: post
+  operationId: kybFormsBeneficiariesCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/
+  method: get
+  operationId: kybFormsBeneficiariesDocumentsList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/
+  method: post
+  operationId: kybFormsBeneficiariesDocumentsCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/{id}/
+  method: get
+  operationId: kybFormsBeneficiariesDocumentsRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/{id}/
+  method: put
+  operationId: kybFormsBeneficiariesDocumentsUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/{id}/
+  method: patch
+  operationId: kybFormsBeneficiariesDocumentsPartialUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/{id}/
+  method: delete
+  operationId: kybFormsBeneficiariesDocumentsDestroy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{id}/
+  method: get
+  operationId: kybFormsBeneficiariesRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/beneficiaries/{id}/
+  method: put
+  operationId: kybFormsBeneficiariesUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{id}/
+  method: patch
+  operationId: kybFormsBeneficiariesPartialUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/beneficiaries/{id}/
+  method: delete
+  operationId: kybFormsBeneficiariesDestroy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/documents/
+  method: get
+  operationId: kybFormsDocumentsList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/documents/
+  method: post
+  operationId: kybFormsDocumentsCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/documents/{id}/
+  method: get
+  operationId: kybFormsDocumentsRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/documents/{id}/
+  method: put
+  operationId: kybFormsDocumentsUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/documents/{id}/
+  method: patch
+  operationId: kybFormsDocumentsPartialUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/documents/{id}/
+  method: delete
+  operationId: kybFormsDocumentsDestroy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/questionnaires/
+  method: get
+  operationId: kybFormsQuestionnairesList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/questionnaires/{id}/
+  method: get
+  operationId: kybFormsQuestionnairesRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/questionnaires/{id}/answers/
+  method: get
+  operationId: kybFormsQuestionnairesAnswersRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{companyId}/questionnaires/{id}/answers/
+  method: put
+  operationId: kybFormsQuestionnairesAnswersUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/questionnaires/{id}/answers/
+  method: delete
+  operationId: kybFormsQuestionnairesAnswersDestroy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{companyId}/questionnaires/answers/detail/
+  method: get
+  operationId: kybFormsQuestionnairesAnswersDetailList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{id}/
+  method: get
+  operationId: kybFormsRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/forms/{id}/
+  method: put
+  operationId: kybFormsUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{id}/
+  method: patch
+  operationId: kybFormsPartialUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/forms/{id}/submit/
+  method: post
+  operationId: kybFormsSubmitCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/info/
+  method: get
+  operationId: kybInfoRetrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyb/tokens/
+  method: post
+  operationId: kybTokensCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/tokens/{tokenString}/
+  method: put
+  operationId: kybTokensUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/tokens/{tokenString}/
+  method: patch
+  operationId: kybTokensPartialUpdate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyb/companies/{id}/automation/
+  method: post
+  operationId: kybCompaniesAutomationCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v2/registry-center-checks/
+  method: get
+  operationId: registryCenterChecksList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/registry-center-checks/
+  method: post
+  operationId: registryCenterChecksCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v2/token
+  method: post
+  operationId: kycTokensCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyc/identifications/
+  method: get
+  operationId: kycIdentificationsList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /kyc/identifications/{scanRef}/request-information/
+  method: post
+  operationId: kycIdentificationsRequestInformationCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyc/identifications/{scanRef}/blocklists/{blocklistSource}/
+  method: post
+  operationId: kycIdentificationsBlocklistsCreate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /kyc/identifications/{scanRef}/blocklists/{blocklistSource}/
+  method: delete
+  operationId: kycIdentificationsBlocklistsDestroy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v2/poa-checks/
+  method: post
+  operationId: apiV2PoaChecksCreate
   x-agentic-access:
     action-class: acting
     consequence: write

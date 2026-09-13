@@ -1,0 +1,163 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  https://documentation.idenfy.com/authentication, /environments, /guides/error-handling,
+  /guides/webhooks-overview, /security/callback-signing, /security/ip-whitelisting, /kyc/deletion,
+  /aml/migration-guide, plus the seven published OpenAPI 3.1.0 documents under openapi/.
+provider: iDenfy
+providerId: idenfy
+base_url: https://ivs.idenfy.com
+auth:
+  style: http-basic
+  detail: >-
+    Basic auth over the API key pair for every server-side call (username = API key, password = API
+    secret). A second bearer scheme, kybTokenAuth, carries the KYB form token. Client-side surfaces
+    (iFrame, redirect, mobile SDKs) use a short-lived authToken minted by POST /api/v2/token.
+  see: authentication/idenfy-authentication.yml
+idempotency:
+  supported: false
+  coverage: none
+  header: null
+  scope: []
+  retention: null
+  detail: >-
+    No replay protection exists. There is no Idempotency-Key header, no idempotency-key request
+    field and no documented safe-retry semantics anywhere in the 84-page documentation tree or in
+    any of the 73 published operations. The closest thing is a uniqueness constraint: reissuing a
+    KYC token for a clientId that already has an active session returns 409 Conflict rather than
+    replaying the original session. That protects iDenfy from duplicate sessions; it does not let a
+    caller safely retry a request whose response it never saw. The published retry guidance for
+    429/500 is a bare exponential backoff with no idempotency guarantee attached, which means an
+    agent retrying a POST /aml/checks/ or a POST /kyb/tokens/ can create a duplicate billable
+    resource.
+  evidence:
+  - url: https://documentation.idenfy.com/guides/error-handling
+    status: 200
+    note: Documents 409 as "Duplicate clientId", and the retry strategy with no idempotency mention.
+  - url: https://documentation.idenfy.com/mcp
+    status: 200
+    note: >-
+      Live ripgrep over the whole docs corpus ("rg -il idempoten /") through iDenfy's own MCP
+      documentation server returned no page containing the word.
+reversibility:
+  grade: documented
+  detail: >-
+    Reversal paths exist across most of the write surface and are documented, but iDenfy states no
+    window for any of them. A caller can find out HOW to undo an action and cannot find out HOW LONG
+    it has to do so. Graded `documented` (0.4) rather than `verified` for exactly that reason — no
+    window is asserted here because the provider asserts none.
+  write_surfaces:
+  - surface: KYC verification data
+    reversal: >-
+      POST /api/v2/delete removes the client's document and face photos, parsed document data and
+      personal data for a scanRef. Documented as the GDPR erasure path.
+    operationId: null
+    operation_note: >-
+      Documented at https://documentation.idenfy.com/kyc/deletion but NOT declared in any published
+      OpenAPI document — the KYC spec carries 6 operations and this is not one of them.
+    window: null
+    window_note: >-
+      No retention or deletion window is stated. The only timing constraint published is the failure
+      message "Token has not expired yet." — the verification must have expired before it can be
+      deleted, and how long that takes is not documented here.
+    docs: https://documentation.idenfy.com/kyc/deletion
+  - surface: KYC blocklist entry
+    reversal: Remove an identification from a blocklist.
+    operationId: kycIdentificationsBlocklistsDestroy
+    window: null
+    docs: https://documentation.idenfy.com/api-reference/kyc-blocklist/remove-identification-from-blocklist
+  - surface: AML ongoing monitoring
+    reversal: >-
+      Stop a monitoring (start/stop action), or delete it outright. Both are first-class operations.
+    operationId:
+    - amlMonitoringsStartStopCreate
+    - amlMonitoringsDestroy
+    window: null
+    docs: https://documentation.idenfy.com/aml/monitoring-manage
+  - surface: AML monitoring profile match
+    reversal: Remove a matched profile from a monitoring.
+    operationId: amlMonitoringsProfilesDestroy
+    window: null
+  - surface: KYB company record
+    reversal: >-
+      Delete the company, or change its status. Status cannot be changed out of PENDING or
+      PROCESSING, which is a state gate rather than a time window.
+    operationId:
+    - kybCompaniesDestroy
+    - kybCompaniesChangeStatusCreate
+    window: null
+    docs: https://documentation.idenfy.com/api-reference/companies/change-company-status
+  - surface: KYB form documents, beneficiaries, questionnaire answers
+    reversal: Full DELETE on each resource.
+    operationId:
+    - kybFormsDocumentsDestroy
+    - kybFormsBeneficiariesDestroy
+    - kybFormsBeneficiariesDocumentsDestroy
+    - kybFormsQuestionnairesAnswersDestroy
+    window: null
+  irreversible:
+  - surface: Verification consumption
+    note: >-
+      A completed production verification consumes a credit. Nothing in the docs describes reversing
+      a charge for a verification that was run; the refund policy at /resources/billing/refunds is a
+      subscription-level review process, not a per-call reversal.
+  - surface: Submitted KYB form
+    note: >-
+      kybFormsSubmitCreate submits a filled form for review; no un-submit operation is published.
+dry_run_mode:
+  supported: true
+  detail: >-
+    Not a per-request dry-run flag, but a full parallel mode: the sandbox key pair runs the entire
+    surface against the same base URL with dummy results and no credit consumption. See
+    sandbox/idenfy-sandbox.yml.
+pagination:
+  style: undocumented
+  detail: >-
+    Several list operations exist (kycIdentificationsList, kybCompaniesList, kybFormsList,
+    amlMonitoringsList, faceAuthSessionsList, apiV2GovOrderedDocumentsList,
+    apiV2SosFilingDocumentsList, registryCenterChecksList) but no pagination convention is documented
+    and no shared page/cursor parameter set is declared across them. Per-operation parameters in the
+    specs are the only guide.
+versioning:
+  style: partial path prefix
+  detail: >-
+    /api/v2 on some resources, unversioned product roots on others, and an independent AML v2/v3
+    generation. info.version is "0.0.0" in all seven specs.
+  see: lifecycle/idenfy-lifecycle.yml
+error_envelope:
+  format: custom
+  shape: '{message, identifier, documentation, severity}'
+  rfc9457: false
+  see: errors/idenfy-problem-types.yml
+rate_limit_signaling:
+  headers_documented: false
+  status_on_exhaustion: 429
+  retry_after: false
+  detail: >-
+    429 is documented as a status with exponential-backoff guidance. No RateLimit-*, X-RateLimit-* or
+    Retry-After header is documented, so a client cannot read its remaining budget — it can only
+    discover exhaustion by being rejected.
+  see: rate-limits/idenfy-rate-limits.yml
+request_id_tracing:
+  supported: false
+  detail: >-
+    No request-id or correlation header is documented. The customer-supplied clientId is the only
+    correlation key across a verification, and scanRef is the server-assigned identifier returned
+    once a verification exists.
+metadata:
+  supported: partial
+  detail: >-
+    clientId is a caller-controlled string carried through the whole verification lifecycle and
+    echoed in every webhook. There is no general-purpose metadata bag on resources.
+field_expansion:
+  supported: false
+webhooks:
+  see: asyncapi/idenfy-webhooks.yml
+  signature_header: Idenfy-Signature
+  algorithm: HMAC-SHA256 over the raw body, hex encoded
+  ip_whitelisting: https://documentation.idenfy.com/security/ip-whitelisting
+path_convention:
+  detail: >-
+    Most iDenfy paths carry a TRAILING SLASH (/aml/checks/, /kyb/tokens/, /kyc/identifications/) and a
+    few do not (/api/v2/token, /fraud/proxy-check, /fraud/validate-phone). The inconsistency is real
+    and is a common source of 404s; follow the spec path exactly.

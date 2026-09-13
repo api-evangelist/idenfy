@@ -1,13 +1,64 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/idenfy-openapi.yml
+generated: '2026-09-13'
+method: searched
+source: https://documentation.idenfy.com/authentication plus the securitySchemes declared in iDenfy's
+  own published OpenAPI 3.1.0 documents under openapi/
 summary:
   types:
   - http
 schemes:
-- name: basicAuth
+- name: apiKeyPair
   type: http
   scheme: basic
-  description: HTTP Basic auth using API_KEY as username and API_SECRET as password.
+  description: 'The request must contain basic auth headers where username is *API key* and password is
+    *API secret*.<br>
+
+    In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+    Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
   sources:
-  - openapi/idenfy-openapi.yml
+  - openapi/idenfy-age-estimation-openapi.yml
+  - openapi/idenfy-aml-openapi.yml
+  - openapi/idenfy-bank-card-openapi.yml
+  - openapi/idenfy-bank-openapi.yml
+  - openapi/idenfy-face-authentication-openapi.yml
+  - openapi/idenfy-kyb-openapi.yml
+  - openapi/idenfy-kyc-openapi.yml
+- name: kybTokenAuth
+  type: http
+  scheme: bearer
+  description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+    Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+  sources:
+  - openapi/idenfy-kyb-openapi.yml
+docs: https://documentation.idenfy.com/authentication
+base_url: https://ivs.idenfy.com
+environments_note: 'One base URL serves both sandbox and production — the API KEY PAIR decides which mode
+  is active, not the host. Sandbox keys return dummy results and consume no credits. Source: https://documentation.idenfy.com/environments'
+header_format: 'Authorization: Basic base64(API_KEY:API_SECRET)'
+key_management:
+  where: Dashboard -> Settings -> API Keys
+  dashboard: https://admin.idenfy.com
+  docs: https://documentation.idenfy.com/guides/dashboard/settings/api-keys
+  rotation_policy_published: false
+  note: Keys are generated in the dashboard. No documented expiry, rotation policy or scoping.
+client_side_auth:
+  mechanism: authToken
+  issued_by: POST https://ivs.idenfy.com/api/v2/token
+  used_by:
+  - iFrame
+  - redirect
+  - Android SDK
+  - iOS SDK
+  - React Native SDK
+  - Flutter SDK
+  note: Short-lived session token. The API key pair is server-side only and must never reach the browser
+    or a mobile binary. A second bearer scheme, kybTokenAuth, carries the KYB form token (tokenString)
+    for operations a company performs on its own KYB form.
+oauth2: false
+oauth2_note: No OAuth 2.0, OIDC or mTLS anywhere in the surface — /.well-known/openid-configuration and
+  /.well-known/oauth-authorization-server return 404 on every host. Dashboard LOGIN supports Google and
+  Microsoft Entra ID social sign-in, but that is human sign-in to the console, not API auth.
+transport_security:
+  ip_whitelisting: https://documentation.idenfy.com/security/ip-whitelisting
+  webhook_signing: https://documentation.idenfy.com/security/callback-signing

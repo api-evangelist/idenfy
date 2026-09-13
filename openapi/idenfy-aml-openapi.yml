@@ -1,0 +1,3753 @@
+openapi: 3.1.0
+info:
+  title: iDenfy IVS Core API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+paths:
+  /aml/checks/:
+    post:
+      operationId: amlChecksCreate
+      summary: Create AML check
+      tags:
+      - AML Checks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlCheckRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlCheck'
+          description: ''
+  /aml/checks/{id}/pdf/:
+    post:
+      operationId: amlChecksPdfCreate
+      summary: Generate AML check PDF
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML check.
+        required: true
+      tags:
+      - AML Checks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlCheckPdfRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /aml/checks/{id}/profiles/{profileId}/:
+    get:
+      operationId: amlChecksProfilesRetrieve
+      summary: Retrieve AML check profile
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML check.
+        required: true
+      - in: path
+        name: profileId
+        schema:
+          type: string
+        description: '`resourceId` from AML database search result.'
+        required: true
+      tags:
+      - AML Checks
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlCheckProfileDetail'
+          description: ''
+  /aml/checks/{id}/profiles/{profileId}/pdf/:
+    post:
+      operationId: amlChecksProfilesPdfCreate
+      summary: Generate AML check profile PDF
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML check.
+        required: true
+      - in: path
+        name: profileId
+        schema:
+          type: string
+        description: '`resourceId` from AML database search result.'
+        required: true
+      tags:
+      - AML Checks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlCheckPdfRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /aml/monitorings/:
+    get:
+      operationId: amlMonitoringsList
+      summary: List AML monitorings
+      parameters:
+      - in: query
+        name: country
+        schema:
+          type: string
+          maxLength: 2
+        description: 2-letter country code.
+      - in: query
+        name: created
+        schema:
+          type: array
+          items:
+            type: string
+            format: date-time
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: expiration
+        schema:
+          type: array
+          items:
+            type: string
+            format: date-time
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: isExpired
+        schema:
+          type: boolean
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: orderBy
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - -created
+            - -expiration
+            - created
+            - expiration
+        description: Ordering
+        explode: false
+        style: form
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: perPage
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ALERT
+          - PENDING
+          - STOPPED
+      - in: query
+        name: tags
+        schema:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+              minLength: 1
+        explode: false
+        style: form
+      - in: query
+        name: userType
+        schema:
+          type: string
+          enum:
+          - COMPANY
+          - PERSON
+      tags:
+      - AML Monitorings
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAmlMonitoringListList'
+          description: ''
+    post:
+      operationId: amlMonitoringsCreate
+      summary: Create AML monitoring
+      tags:
+      - AML Monitorings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlMonitoringRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlMonitoring'
+          description: ''
+  /aml/monitorings/{id}/:
+    get:
+      operationId: amlMonitoringsRetrieve
+      summary: Retrieve AML monitoring
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML monitoring.
+        required: true
+      tags:
+      - AML Monitorings
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlMonitoring'
+          description: ''
+    patch:
+      operationId: amlMonitoringsPartialUpdate
+      summary: Partially update AML monitoring
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML monitoring.
+        required: true
+      tags:
+      - AML Monitorings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAmlMonitoringUpdateRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlMonitoring'
+          description: ''
+    delete:
+      operationId: amlMonitoringsDestroy
+      summary: Delete AML monitoring
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML monitoring.
+        required: true
+      tags:
+      - AML Monitorings
+      security:
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+  /aml/monitorings/{id}/{action}/:
+    post:
+      operationId: amlMonitoringsStartStopCreate
+      summary: Start/Stop AML monitoring
+      parameters:
+      - in: path
+        name: action
+        schema:
+          type: string
+          enum:
+          - start
+          - stop
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML monitoring.
+        required: true
+      tags:
+      - AML Monitorings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlMonitoringStartStopRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlMonitoring'
+          description: ''
+  /aml/monitorings/{id}/pdf/:
+    post:
+      operationId: amlMonitoringsPdfCreate
+      summary: Generate AML Monitoring PDF
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML monitoring.
+        required: true
+      tags:
+      - AML Monitorings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlMonitoringPdfRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /aml/monitorings/{id}/profiles/{profileId}/:
+    delete:
+      operationId: amlMonitoringsProfilesDestroy
+      summary: Delete AML check profile
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this AML monitoring.
+        required: true
+      - in: path
+        name: profileId
+        schema:
+          type: string
+        description: '`resourceId` from AML database search result.'
+        required: true
+      tags:
+      - AML Monitorings
+      security:
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AdverseMediaData:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AmlArticleTypeEnum'
+          nullable: true
+        checkDate:
+          type: string
+        publishDate:
+          type: string
+          nullable: true
+      required:
+      - checkDate
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AdverseMediaSearchResult:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+          format: uri
+        text:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AmlArticleTypeEnum'
+          nullable: true
+        publishDate:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AdverseMediaSearchResultRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        url:
+          type: string
+          format: uri
+          minLength: 1
+        text:
+          type: string
+          nullable: true
+          minLength: 1
+        score:
+          type: integer
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AmlArticleTypeEnum'
+          nullable: true
+        publishDate:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AmlAdverseMediaData:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        publishDate:
+          type: string
+          nullable: true
+        status:
+          type: string
+        comment:
+          $ref: '#/components/schemas/AmlComment'
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AmlArticleTypeEnum:
+      enum:
+      - NEGATIVE
+      type: string
+    AmlCheck:
+      oneOf:
+      - $ref: '#/components/schemas/PersonAmlCheck'
+      - $ref: '#/components/schemas/CompanyAmlCheck'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/PersonAmlCheck'
+          COMPANY: '#/components/schemas/CompanyAmlCheck'
+    AmlCheckMonitoring:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/MonitoringStatusEnum'
+        isSubscribed:
+          type: boolean
+        expiration:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer
+            than 32 characters.
+          maxItems: 5
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - id
+    AmlCheckMonitoringRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/MonitoringStatusEnum'
+        isSubscribed:
+          type: boolean
+        expiration:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer
+            than 32 characters.
+          maxItems: 5
+    AmlCheckPdfRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 1
+    AmlCheckProfileDetail:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualProfileSchema'
+      - $ref: '#/components/schemas/BusinessProfileSchema'
+    AmlCheckRequest:
+      oneOf:
+      - $ref: '#/components/schemas/PersonAmlCheckRequest'
+      - $ref: '#/components/schemas/CompanyAmlCheckRequest'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/PersonAmlCheckRequest'
+          COMPANY: '#/components/schemas/CompanyAmlCheckRequest'
+    AmlCheckStatusEnum:
+      enum:
+      - NOT_CHECKED
+      - NO_FLAGS
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE
+      - FLAGS_FOUND
+      type: string
+    AmlCheckSuspicionEnum:
+      enum:
+      - SUSPECTED
+      - NOT_SUSPECTED
+      type: string
+    AmlCheckV3BusinessData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckStatusEnum'
+        statusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          nullable: true
+        statusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlAdverseMediaData'
+          nullable: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchResult'
+          nullable: true
+      required:
+      - id
+    AmlCheckV3Data:
+      oneOf:
+      - $ref: '#/components/schemas/AmlCheckV3IndividualData'
+      - $ref: '#/components/schemas/AmlCheckV3BusinessData'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/AmlCheckV3IndividualData'
+          COMPANY: '#/components/schemas/AmlCheckV3BusinessData'
+    AmlCheckV3IndividualData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckStatusEnum'
+        statusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          nullable: true
+        statusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlAdverseMediaData'
+          nullable: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualSearchResult'
+          nullable: true
+      required:
+      - id
+    AmlComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        manager:
+          $ref: '#/components/schemas/ManagerAccount'
+        content:
+          type: string
+          maxLength: 10000
+        type:
+          $ref: '#/components/schemas/AmlCommentTypeEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - created
+      - id
+      - manager
+      - type
+    AmlCommentTypeEnum:
+      enum:
+      - ADVERSE_MEDIA
+      - AML_PROFILE
+      type: string
+    AmlCompanyNameResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        surname:
+          type: string
+          nullable: true
+        nationality:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        suspicion:
+          allOf:
+          - $ref: '#/components/schemas/AmlSuspicionTypeEnum'
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        listNumber:
+          type: string
+          nullable: true
+        listName:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        lastUpdate:
+          type: string
+          nullable: true
+        exitDate:
+          type: string
+          nullable: true
+        isPerson:
+          type: boolean
+          nullable: true
+        isActive:
+          type: boolean
+          nullable: true
+        linkedDocument:
+          type: string
+          format: uri
+          nullable: true
+        pepLevel:
+          type: integer
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        otherInformation:
+          type: string
+          nullable: true
+        checkDate:
+          type: string
+          nullable: true
+        whitelisted:
+          type: boolean
+      required:
+      - category
+      - checkDate
+      - dob
+      - exitDate
+      - isActive
+      - isPerson
+      - lastUpdate
+      - linkedDocument
+      - listName
+      - listNumber
+      - name
+      - nationality
+      - otherInformation
+      - pepLevel
+      - reason
+      - score
+      - surname
+      - suspicion
+    AmlMonitoring:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        isSubscribed:
+          type: boolean
+          description: Should the expiration of this AML monitoring be automatically
+            extended or not.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/MonitoringStatusEnum'
+          readOnly: true
+        expiration:
+          type: string
+          format: date-time
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        amlCheck:
+          $ref: '#/components/schemas/AmlMonitoringAmlCheck'
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer
+            than 32 characters.
+          maxItems: 5
+      required:
+      - amlCheck
+      - created
+      - expiration
+      - id
+      - isSubscribed
+      - status
+    AmlMonitoringAmlCheck:
+      oneOf:
+      - $ref: '#/components/schemas/AmlMonitoringPersonAmlCheck'
+      - $ref: '#/components/schemas/AmlMonitoringCompanyAmlCheck'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/AmlMonitoringPersonAmlCheck'
+          COMPANY: '#/components/schemas/AmlMonitoringCompanyAmlCheck'
+    AmlMonitoringAmlCheckCreateRequest:
+      oneOf:
+      - $ref: '#/components/schemas/AmlMonitoringPersonAmlCheckCreateRequest'
+      - $ref: '#/components/schemas/AmlMonitoringCompanyAmlCheckCreateRequest'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/AmlMonitoringPersonAmlCheckCreateRequest'
+          COMPANY: '#/components/schemas/AmlMonitoringCompanyAmlCheckCreateRequest'
+    AmlMonitoringAmlCheckRequest:
+      oneOf:
+      - $ref: '#/components/schemas/AmlMonitoringPersonAmlCheckRequest'
+      - $ref: '#/components/schemas/AmlMonitoringCompanyAmlCheckRequest'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/AmlMonitoringPersonAmlCheckRequest'
+          COMPANY: '#/components/schemas/AmlMonitoringCompanyAmlCheckRequest'
+    AmlMonitoringCompanyAmlCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        checkedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInput'
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/CompanyAmlCheckFilter'
+          readOnly: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchResult'
+          readOnly: true
+          nullable: true
+          description: AML database search result.
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaSearchResult'
+          readOnly: true
+          nullable: true
+          description: Adverse media database search result.
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          readOnly: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - checkedAt
+      - clientId
+      - created
+      - filter
+      - id
+      - input
+      - overallStatus
+      - userType
+    AmlMonitoringCompanyAmlCheckCreateRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInputRequest'
+      required:
+      - clientId
+      - input
+      - userType
+    AmlMonitoringCompanyAmlCheckRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInputRequest'
+      required:
+      - clientId
+      - input
+      - userType
+    AmlMonitoringExpirationWebhook:
+      type: object
+      properties:
+        usersToExtend:
+          type: integer
+        usersToExpire:
+          type: integer
+      required:
+      - usersToExpire
+      - usersToExtend
+    AmlMonitoringList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        status:
+          $ref: '#/components/schemas/MonitoringStatusEnum'
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        isSubscribed:
+          type: boolean
+        checkedAt:
+          type: string
+          format: date-time
+        expiration:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer
+            than 32 characters.
+          maxItems: 5
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - checkedAt
+      - created
+      - id
+      - name
+      - userType
+    AmlMonitoringPdfRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 1
+    AmlMonitoringPersonAmlCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        checkedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInput'
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/PersonAmlCheckFilter'
+          readOnly: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualSearchResult'
+          readOnly: true
+          nullable: true
+          description: AML database search result.
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaSearchResult'
+          readOnly: true
+          nullable: true
+          description: Adverse media database search result.
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          readOnly: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - checkedAt
+      - clientId
+      - created
+      - filter
+      - id
+      - input
+      - overallStatus
+      - userType
+    AmlMonitoringPersonAmlCheckCreateRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInputRequest'
+      required:
+      - clientId
+      - input
+      - userType
+    AmlMonitoringPersonAmlCheckRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInputRequest'
+      required:
+      - clientId
+      - input
+      - userType
+    AmlMonitoringRequest:
+      type: object
+      properties:
+        isSubscribed:
+          type: boolean
+          description: Should the expiration of this AML monitoring be automatically
+            extended or not.
+        amlCheck:
+          $ref: '#/components/schemas/AmlMonitoringAmlCheckRequest'
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer
+            than 32 characters.
+          maxItems: 5
+      required:
+      - amlCheck
+      - isSubscribed
+    AmlMonitoringStartStopRequest:
+      type: object
+      properties:
+        comment:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 10000
+    AmlMonitoringWebhook:
+      type: object
+      properties:
+        monitoringId:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        nationality:
+          type: string
+        dob:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        expiration:
+          type: string
+          nullable: true
+        scanRefList:
+          type: array
+          items:
+            type: string
+        alertStatus:
+          allOf:
+          - $ref: '#/components/schemas/MonitoringAlertTypeEnum'
+          description: AML monitoring v2 status
+          deprecated: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/MonitoringStatusEnum'
+          description: AML monitoring v3 status
+        pepsStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          nullable: true
+        sanctionsStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          nullable: true
+        adverseMediaStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlResults'
+        amlCheck:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckV3Data'
+          nullable: true
+      required:
+      - adverseMediaStatus
+      - alertStatus
+      - amlCheck
+      - dob
+      - expiration
+      - isActive
+      - monitoringId
+      - name
+      - nationality
+      - pepsStatus
+      - results
+      - sanctionsStatus
+      - scanRefList
+      - status
+      - surname
+    AmlNameResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlNewsResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlResults:
+      oneOf:
+      - $ref: '#/components/schemas/AmlNameResults'
+      - $ref: '#/components/schemas/AmlNameResults'
+      - $ref: '#/components/schemas/AmlCompanyNameResults'
+      - $ref: '#/components/schemas/AmlNewsResults'
+      - $ref: '#/components/schemas/AmlNewsResults'
+      discriminator:
+        propertyName: serviceName
+        mapping:
+          AML_NAMES_CHECK: '#/components/schemas/AmlNameResults'
+          AML_OPEN_SANCTIONS: '#/components/schemas/AmlNameResults'
+          COMPANY_CHECK: '#/components/schemas/AmlCompanyNameResults'
+          AML_NEWS: '#/components/schemas/AmlNewsResults'
+          INHOUSE_ADVERSE_MEDIA: '#/components/schemas/AmlNewsResults'
+    AmlSuspicionTypeEnum:
+      enum:
+      - SANCTION
+      - INTERPOL
+      - PEPS
+      - ADVERSE_MEDIA
+      - OTHER
+      type: string
+    BusinessAddressSchema:
+      type: object
+      properties:
+        line1:
+          type: string
+          description: The first line of the address.
+        line2:
+          type: string
+          description: The second line of the address.
+        postcode:
+          type: string
+          description: The postcode of the address.
+        city:
+          type: string
+          description: The city of the address.
+        county:
+          type: string
+          description: The county of the address.
+        countyAbbrev:
+          type: string
+          description: The abbreviation of the country if appropriate.
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          description: The country code of the address.
+        addressType:
+          allOf:
+          - $ref: '#/components/schemas/BusinessAddressTypeEnum'
+          description: Indicated the type of address.
+      required:
+      - addressType
+      - country
+    BusinessAddressTypeEnum:
+      enum:
+      - REGISTERED
+      - OPERATING
+      - PREVIOUS
+      - BRANCH_OFFICE
+      - REPRESENTATIVE_OFFICE
+      - HEADQUARTERS
+      type: string
+    BusinessAlias:
+      type: object
+      properties:
+        alias:
+          type: string
+        type:
+          allOf:
+          - $ref: '#/components/schemas/BusinessAliasTypeEnum'
+          description: This field indicates the type of the alias.
+      required:
+      - alias
+      - type
+    BusinessAliasTypeEnum:
+      enum:
+      - ORIGINAL_SCRIPT_NAME
+      - NAME_SPELLING_VARIATION
+      - NAME_ABBREVIATION
+      - PREVIOUS_NAME
+      - BRAND_NAME
+      - FAKE_NAME
+      type: string
+    BusinessContactCategoryEnum:
+      enum:
+      - TELEPHONE
+      - FAX
+      - WEBSITE
+      type: string
+    BusinessDatasetEnum:
+      enum:
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE_CURRENT
+      - SOE_FORMER
+      - GRI
+      type: string
+    BusinessEvidenceDatasetEnum:
+      enum:
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE_CURRENT
+      - SOE_FORMER
+      - GRI
+      - ID
+      - CORP
+      - PEP_CURRENT
+      type: string
+    BusinessEvidenceSchema:
+      type: object
+      properties:
+        evidenceId:
+          type: string
+          description: The unique ID of the evidence.
+        originalUrl:
+          type: string
+          description: The original URL of the evidence source.
+        isCopyrighted:
+          type: boolean
+          default: false
+          description: This indicates whether or not the evidence is protected under
+            copyright laws.
+        title:
+          type: string
+          description: The title captured from the article.
+        credibility:
+          $ref: '#/components/schemas/CredibilityEnum'
+        language:
+          type: string
+          description: The ISO 639-3 code for the language of the evidence.
+        summary:
+          type: string
+          description: For copyrighted evidence, a text snippet from the evidence
+            will be provided.
+        keywords:
+          type: string
+          description: Key words associated with the evidence.
+        captureDate:
+          type: string
+          description: The ISO date that the evidence was captured into the system.
+        publicationDate:
+          type: string
+          description: The ISO date that the evidence was originally published.
+        assetUrl:
+          type: string
+          description: The URL link to the PDF version of the evidence. This is only
+            available for non-copyright sources.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessEvidenceDatasetEnum'
+          description: "The evidence datasets\n * SAN_CURRENT - Only current Sanctions\n\
+            \ * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE -\
+            \ Reputational Risk Exposure\n * POI - Profile Of Interest\n * REL - Regulatory\
+            \ Enforcement List\n * SOE_CURRENT - Only current SOE\n * SOE_FORMER -\
+            \ Only former SOE\n * GRI - Gambling Risk Intelligence\n * ID - Identity\n\
+            \ * CORP - Corporate/Business\n * PEP_CURRENT - (Deprecated - ignore).\n"
+      required:
+      - datasets
+      - evidenceId
+      - originalUrl
+    BusinessProfileSchema:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a
+            profile has changed.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the business.
+        name:
+          type: string
+          description: The full name of the Business profile.
+        description:
+          type: string
+          description: Additional information related to the nature of the business.
+        isDeleted:
+          type: boolean
+          default: false
+          description: A true value indicates that the Business has been deleted by
+            our research team.
+        deletionReason:
+          $ref: '#/components/schemas/DeletionReason'
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessAlias'
+          description: Defines a list of aliases for the business.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessAddressSchema'
+        profileImages:
+          type: array
+          items:
+            type: string
+          description: Contains a list of URLs to profiles images for the Business.
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotesSchema'
+        contactEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactEntriesBusinessSchema'
+        businessTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessTypeEnum'
+          description: Indicated the type of business profile.
+        activities:
+          type: array
+          items:
+            type: string
+          description: The list of business activities.
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentifierSchema'
+        evidences:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessEvidenceSchema'
+        sanEntries:
+          $ref: '#/components/schemas/SanEntries'
+        relEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelSchema'
+        rreEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RreSchema'
+        poiEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PoiSchema'
+        insEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/InsSchema'
+        individualLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedIndividualSchema'
+        businessLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedBusinessSchema'
+        griEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/GriSchema'
+        soeEntry:
+          $ref: '#/components/schemas/SoeSchema'
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessDatasetEnum'
+          description: "The profile datasets\n * PEP_LINKED - Only linked PEPs (PEP\
+            \ by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER\
+            \ - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational\
+            \ Risk Exposure\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement\
+            \ List\n * SOE_CURRENT - Only current SOE\n * SOE_FORMER - Only former\
+            \ SOE\n * GRI - Gambling Risk Intelligence.\n"
+      required:
+      - activities
+      - addresses
+      - aliases
+      - businessLinks
+      - businessTypes
+      - contactEntries
+      - datasets
+      - evidences
+      - griEntries
+      - identifiers
+      - individualLinks
+      - insEntries
+      - name
+      - notes
+      - poiEntries
+      - profileImages
+      - relEntries
+      - resourceId
+      - rreEntries
+      - sanEntries
+      - version
+    BusinessSearchDatasetEnum:
+      enum:
+      - PEP
+      - PEP_LINKED
+      - SAN
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE
+      - SOE_CURRENT
+      - SOE_FORMER
+      type: string
+    BusinessSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a
+            profile has been changed by our research team.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the business.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchDatasetEnum'
+          description: "The profile datasets\n * PEP - (Deprecated - ignore)\n * PEP_LINKED\
+            \ - Only linked PEPs (PEP by Association)\n * SAN - (Deprecated - ignore)\n\
+            \ * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former\
+            \ Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n\
+            \ * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n\
+            \ * SOE - (Deprecated - ignore)\n * SOE_CURRENT - Only current SOE\n *\
+            \ SOE_FORMER - Only former SOE.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently
+            sanctioning the given profile. The full list of supported sanction bodies
+            and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning
+            the given profile in the past, but do not currently sanction them. The
+            full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies
+            endpoint.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - formerSanBodyIds
+      - match
+      - name
+      - resourceId
+      - score
+    BusinessSearchResultRequest:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a
+            profile has been changed by our research team.
+        resourceId:
+          type: string
+          minLength: 1
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the business.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          minLength: 1
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          minLength: 1
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddressRequest'
+          description: The list of profile addresses.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchDatasetEnum'
+          description: "The profile datasets\n * PEP - (Deprecated - ignore)\n * PEP_LINKED\
+            \ - Only linked PEPs (PEP by Association)\n * SAN - (Deprecated - ignore)\n\
+            \ * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former\
+            \ Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n\
+            \ * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n\
+            \ * SOE - (Deprecated - ignore)\n * SOE_CURRENT - Only current SOE\n *\
+            \ SOE_FORMER - Only former SOE.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently
+            sanctioning the given profile. The full list of supported sanction bodies
+            and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning
+            the given profile in the past, but do not currently sanction them. The
+            full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies
+            endpoint.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - formerSanBodyIds
+      - match
+      - name
+      - resourceId
+      - score
+    BusinessTypeEnum:
+      enum:
+      - VESSEL
+      - AIRCRAFT
+      - TERRORIST_ORGANISATION
+      - ORGANISED_CRIME_GROUP
+      - MILITANT_GROUP
+      - SHELL_CORPORATION
+      - SOVEREIGN_WEALTH_FUND
+      - GOVERNMENT_BODY
+      - POLITICAL_PARTY
+      - CIVIC_MOVEMENT
+      - INTERNATIONAL_ORGANISATION
+      - OTHER_INTERNATIONAL_ORGANISATIONS
+      - NON_GOVERNMENT_ORGANISATION
+      - CHARITABLE_ORGANISATION
+      - PROFESSIONAL_ORGANISATION
+      - PRIVATELY_HELD_COMPANY
+      - PUBLICLY_TRADED_COMPANY
+      - TRUST_FUND
+      - BANK
+      - CRYPTOCURRENCY_BUSINESS
+      - GAMING_BUSINESS
+      - NON_BANK_FINANCIAL_INSTITUTION
+      - DESIGNATED_PROFESSIONAL_ORGANISATION
+      - WEBSITE
+      - FAKE_ENTITY_CLONE_COMPANY
+      - APPS_APPLICATIONS
+      type: string
+    CompanyAmlCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        checkedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInput'
+        filter:
+          $ref: '#/components/schemas/CompanyAmlCheckFilter'
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchResult'
+          readOnly: true
+          nullable: true
+          description: AML database search result.
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaSearchResult'
+          readOnly: true
+          nullable: true
+          description: Adverse media database search result.
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          readOnly: true
+        monitoring:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckMonitoring'
+          readOnly: true
+          nullable: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - checkedAt
+      - clientId
+      - created
+      - filter
+      - id
+      - input
+      - monitoring
+      - overallStatus
+      - userType
+    CompanyAmlCheckFilter:
+      type: object
+      properties:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlCheckFilterDatasetsEnum'
+          description: Required. Specifies which screening datasets to include in
+            the check.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning
+            bodies that should be included when screening `SAN` dataset. The full
+            list of supported sanction bodies and their values are provided by the
+            API info endpoint. If none sanction bodies are provided the system will
+            search sanctions issued by any sanctioning body.
+    CompanyAmlCheckFilterDatasetsEnum:
+      enum:
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE_CURRENT
+      - SOE_FORMER
+      type: string
+    CompanyAmlCheckFilterRequest:
+      type: object
+      properties:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlCheckFilterDatasetsEnum'
+          description: Required. Specifies which screening datasets to include in
+            the check.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning
+            bodies that should be included when screening `SAN` dataset. The full
+            list of supported sanction bodies and their values are provided by the
+            API info endpoint. If none sanction bodies are provided the system will
+            search sanctions issued by any sanctioning body.
+    CompanyAmlCheckInput:
+      type: object
+      properties:
+        companyName:
+          type: string
+          maxLength: 200
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - companyName
+    CompanyAmlCheckInputRequest:
+      type: object
+      properties:
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - companyName
+    CompanyAmlCheckRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInputRequest'
+        filter:
+          $ref: '#/components/schemas/CompanyAmlCheckFilterRequest'
+      required:
+      - clientId
+      - filter
+      - input
+      - userType
+    CompanyAmlData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        surname:
+          type: string
+          nullable: true
+        nationality:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        suspicion:
+          allOf:
+          - $ref: '#/components/schemas/AmlSuspicionTypeEnum'
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        listNumber:
+          type: string
+          nullable: true
+        listName:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        lastUpdate:
+          type: string
+          nullable: true
+        isPerson:
+          type: boolean
+          nullable: true
+        isActive:
+          type: boolean
+          nullable: true
+        linkedDocument:
+          type: string
+          format: uri
+          nullable: true
+        pepLevel:
+          type: integer
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        otherInformation:
+          type: string
+          nullable: true
+        checkDate:
+          type: string
+          nullable: true
+        whitelisted:
+          type: boolean
+      required:
+      - category
+      - checkDate
+      - dob
+      - isActive
+      - isPerson
+      - lastUpdate
+      - linkedDocument
+      - listName
+      - listNumber
+      - name
+      - nationality
+      - otherInformation
+      - pepLevel
+      - reason
+      - score
+      - surname
+      - suspicion
+    ContactEntriesBusinessSchema:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/BusinessContactCategoryEnum'
+        value:
+          type: string
+      required:
+      - category
+      - value
+    ContactEntriesIndividualSchema:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/IndividualContactCategoryEnum'
+        value:
+          type: string
+      required:
+      - category
+      - value
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - CD
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - XK
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VA
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+    CredibilityEnum:
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      type: string
+    DateOfBirthMatchingEnum:
+      enum:
+      - EXACT
+      - SAME_YEAR
+      - WITHIN_ONE_YEAR
+      - WITHIN_TWO_YEARS
+      - WITHIN_THREE_YEARS
+      - WITHIN_FOUR_YEARS
+      - WITHIN_FIVE_YEARS
+      type: string
+    DdSchema:
+      type: object
+      description: Serializer for a Disqualified Director (DD) entry.
+      properties:
+        caseReference:
+          type: string
+          description: The unique Companies House ID number of the disqualification.
+        reason:
+          type: string
+          description: The reason for the disqualification.
+        conduct:
+          type: string
+          description: The name of the company that the person was acting for.
+        dateFrom:
+          type: string
+          description: Start date of the disqualification.
+        dateTo:
+          type: string
+          description: End date of the disqualification.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of supporting evidence.
+      required:
+      - evidenceIds
+      - reason
+    DeletionReason:
+      type: object
+      properties:
+        reason:
+          allOf:
+          - $ref: '#/components/schemas/DeletionReasonEnum'
+          description: The reason for the profile to be deleted.
+        otherReason:
+          type: string
+          description: This value is populated when the reason enum is "Other".
+      required:
+      - reason
+    DeletionReasonEnum:
+      enum:
+      - GOVERNMENT_POSITION_OUT_OF_SCOPE
+      - ADVERSE_MEDIA_CATEGORY_OUT_OF_SCOPE
+      - DUPLICATE_PROFILE
+      - REDUNDANT_PROFILE
+      - EXPIRED_RISK_RELEVANCE
+      - OTHER
+      type: string
+    FraudStatus:
+      type: object
+      properties:
+        serviceSuspected:
+          type: boolean
+        serviceUsed:
+          type: boolean
+        serviceFound:
+          type: boolean
+        checkSuccessful:
+          type: boolean
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckSuspicionEnum'
+      required:
+      - checkSuccessful
+      - overallStatus
+      - serviceFound
+      - serviceSuspected
+      - serviceUsed
+    FullPepTierEnum:
+      enum:
+      - PEP_TIER_1
+      - PEP_TIER_2
+      - PEP_TIER_3
+      - PEP_BY_ASSOCIATION
+      type: string
+    GriSchema:
+      type: object
+      description: Serializer for a Gambling Risk Intelligence (GRI) entry.
+      properties:
+        evidenceId:
+          type: string
+          description: The ID of supporting evidence.
+        title:
+          type: string
+          description: The title of the GRI report.
+        summary:
+          type: string
+          description: The description of the GRI report.
+        keywords:
+          type: string
+          description: Keywords associated with the report.
+      required:
+      - evidenceId
+      - keywords
+      - summary
+      - title
+    IdentifierSchema:
+      type: object
+      properties:
+        category:
+          type: string
+        value:
+          type: string
+      required:
+      - category
+      - value
+    IndividualAddressSchema:
+      type: object
+      properties:
+        line1:
+          type: string
+          description: The first line of the address.
+        line2:
+          type: string
+          description: The second line of the address.
+        postcode:
+          type: string
+          description: The postcode of the address.
+        city:
+          type: string
+          description: The city of the address.
+        county:
+          type: string
+          description: The county of the address.
+        countyAbbrev:
+          type: string
+          description: The abbreviation of the country if appropriate.
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          description: The country code of the address.
+        addressType:
+          allOf:
+          - $ref: '#/components/schemas/IndividualAddressTypeEnum'
+          description: Indicated the type of address.
+      required:
+      - addressType
+      - country
+    IndividualAddressTypeEnum:
+      enum:
+      - PLACE_OF_BIRTH
+      - RESIDENTIAL
+      - BUSINESS
+      - PREVIOUS_RESIDENTIAL
+      - PREVIOUS_BUSINESS
+      type: string
+    IndividualAlias:
+      type: object
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        type:
+          allOf:
+          - $ref: '#/components/schemas/IndividualAliasTypeEnum'
+          description: This field indicates the type of the alias.
+      required:
+      - type
+    IndividualAliasTypeEnum:
+      enum:
+      - ORIGINAL_SCRIPT_NAME
+      - NAME_SPELLING_VARIATION
+      - SHORTENED_NAME
+      - MAIDEN_NAME
+      - NICKNAME
+      - PREVIOUS_NAME
+      - FAKE_NAME
+      type: string
+    IndividualContactCategoryEnum:
+      enum:
+      - TELEPHONE
+      - FAX
+      - MOBILE
+      - EMAIL
+      type: string
+    IndividualDatasetEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      - GRI
+      type: string
+    IndividualEvidenceDatasetEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      - GRI
+      - ID
+      - CORP
+      type: string
+    IndividualEvidenceSchema:
+      type: object
+      properties:
+        evidenceId:
+          type: string
+          description: The unique ID of the evidence.
+        originalUrl:
+          type: string
+          description: The original URL of the evidence source.
+        isCopyrighted:
+          type: boolean
+          default: false
+          description: This indicates whether or not the evidence is protected under
+            copyright laws.
+        title:
+          type: string
+          description: The title captured from the article.
+        credibility:
+          $ref: '#/components/schemas/CredibilityEnum'
+        language:
+          type: string
+          description: The ISO 639-3 code for the language of the evidence.
+        summary:
+          type: string
+          description: For copyrighted evidence, a text snippet from the evidence
+            will be provided.
+        keywords:
+          type: string
+          description: Key words associated with the evidence.
+        captureDate:
+          type: string
+          description: The ISO date that the evidence was captured into the system.
+        publicationDate:
+          type: string
+          description: The ISO date that the evidence was originally published.
+        assetUrl:
+          type: string
+          description: The URL link to the PDF version of the evidence. This is only
+            available for non-copyright sources.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualEvidenceDatasetEnum'
+          description: "The evidence datasets\n * PEP_CURRENT - Only current PEPs\n\
+            \ * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP\
+            \ by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER\
+            \ - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational\
+            \ Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n\
+            \ * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence\n\
+            \ * ID - Identity\n * CORP - Corporate/Business.\n"
+      required:
+      - datasets
+      - evidenceId
+      - originalUrl
+    IndividualProfileSchema:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a
+            profile has been changed by our research team.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the individual.
+        firstName:
+          type: string
+          description: The first name of the individual.
+        middleName:
+          type: string
+          description: The middle name of the individual.
+        lastName:
+          type: string
+          description: The last name of the individual.
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          description: The gender of the individual.
+        isDeleted:
+          type: boolean
+          default: false
+          description: A true value indicates that the individual has been deleted
+            by our research team.
+        deletionReason:
+          $ref: '#/components/schemas/DeletionReason'
+        isDeceased:
+          type: boolean
+          default: false
+          description: A true value indicates that the individual is deceased.
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualAlias'
+          description: Defines a list of aliases for the individual.
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+          description: The list of birth dates for the individual.
+        datesOfDeath:
+          type: array
+          items:
+            type: string
+          description: The list of death dates for the individual.
+        nationalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          description: List of the individual's nationalities.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualAddressSchema'
+          description: The list of the individual's addresses.
+        profileImages:
+          type: array
+          items:
+            type: string
+          description: Contains a list of URLs to profiles images for the individual.
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotesSchema'
+        contactEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactEntriesIndividualSchema'
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentifierSchema'
+        evidences:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualEvidenceSchema'
+        sanEntries:
+          $ref: '#/components/schemas/SanEntries'
+        relEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelSchema'
+        rreEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RreSchema'
+        poiEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PoiSchema'
+        insEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/InsSchema'
+        ddEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DdSchema'
+        pepEntries:
+          $ref: '#/components/schemas/PepEntries'
+        pepByAssociationEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PepAssociationSchema'
+        individualLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedIndividualSchema'
+        businessLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedBusinessSchema'
+        griEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/GriSchema'
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n\
+            \ * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP\
+            \ by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER\
+            \ - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational\
+            \ Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n\
+            \ * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
+      required:
+      - addresses
+      - aliases
+      - businessLinks
+      - contactEntries
+      - datasets
+      - datesOfBirth
+      - datesOfDeath
+      - ddEntries
+      - evidences
+      - griEntries
+      - identifiers
+      - individualLinks
+      - insEntries
+      - lastName
+      - nationalities
+      - notes
+      - pepByAssociationEntries
+      - pepEntries
+      - poiEntries
+      - profileImages
+      - relEntries
+      - resourceId
+      - rreEntries
+      - sanEntries
+      - version
+    IndividualSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a
+            profile has changed.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the Individual.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses and nationalities.
+        nationalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          description: List of the individual's nationalities.
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          description: Gender (for individuals), if known.
+        profileImage:
+          type: string
+          description: The primary profile image.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n\
+            \ * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP\
+            \ by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER\
+            \ - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational\
+            \ Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n\
+            \ * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently
+            sanctioning the given profile. The full list of supported sanction bodies
+            and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning
+            the given profile in the past, but do not currently sanction them. The
+            full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies
+            endpoint.
+        pepTier:
+          allOf:
+          - $ref: '#/components/schemas/PepTierEnum'
+          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates
+            senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - datesOfBirth
+      - formerSanBodyIds
+      - match
+      - name
+      - nationalities
+      - resourceId
+      - score
+    IndividualSearchResultRequest:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a
+            profile has changed.
+        resourceId:
+          type: string
+          minLength: 1
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the Individual.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          minLength: 1
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          minLength: 1
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddressRequest'
+          description: The list of profile addresses and nationalities.
+        nationalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          description: List of the individual's nationalities.
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          description: Gender (for individuals), if known.
+        profileImage:
+          type: string
+          minLength: 1
+          description: The primary profile image.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n\
+            \ * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP\
+            \ by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER\
+            \ - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational\
+            \ Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n\
+            \ * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently
+            sanctioning the given profile. The full list of supported sanction bodies
+            and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning
+            the given profile in the past, but do not currently sanction them. The
+            full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies
+            endpoint.
+        pepTier:
+          allOf:
+          - $ref: '#/components/schemas/PepTierEnum'
+          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates
+            senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - datesOfBirth
+      - formerSanBodyIds
+      - match
+      - name
+      - nationalities
+      - resourceId
+      - score
+    InsSchema:
+      type: object
+      description: Serializer for an Insolvency (INS) entry.
+      properties:
+        type:
+          type: string
+          description: The type of insolvency.
+        insolvencyIdNumber:
+          type: string
+          description: The unique insolvency ID number provided by the insolvency
+            institution.
+        solicitor:
+          type: string
+          description: The name of the solicitor who is involved in the insolvency
+            process.
+        court:
+          type: string
+          description: The name of the court before which the insolvency case is presented.
+        petitioner:
+          type: string
+          description: The individual/company who files the petition.
+        debt:
+          type: string
+          description: The amount owned by the insolvent subject.
+        accountantInBankruptcyCaseNumber:
+          type: string
+          description: The unique case number provided by the Scotland's insolvency
+            service (Accountant in Bankruptcy).
+        insolvencyStartDate:
+          type: string
+          description: The start date of the insolvency.
+        insolvencyEndDate:
+          type: string
+          description: The end date of the insolvency.
+        hearingDate:
+          type: string
+          description: The date of the hearing of the insolvency case in court.
+        presentedDateOfPetition:
+          type: string
+          description: The date on which the petition was presented.
+        gazetteIssueDate:
+          type: string
+          description: The date on which the information was published on the gazette.
+        awardDate:
+          type: string
+          description: The date on which the insolvency awarding institution announces
+            its decision.
+        firstOrderDate:
+          type: string
+          description: The date on which the first insolvency order was made.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of the supporting evidence.
+      required:
+      - evidenceIds
+      - type
+    LinkedBusinessSchema:
+      type: object
+      properties:
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the business.
+        relationship:
+          type: string
+          description: Text including names used to describe the relationship with
+            the business.
+        ownershipPercentage:
+          type: integer
+          description: For certain relationship type related to business ownership
+            this value will indicate the percentage ownership when known.
+        name:
+          type: string
+          description: The name of the linked business.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessDatasetEnum'
+          description: "The profile datasets\n * PEP_LINKED - Only linked PEPs (PEP\
+            \ by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER\
+            \ - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational\
+            \ Risk Exposure\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement\
+            \ List\n * SOE_CURRENT - Only current SOE\n * SOE_FORMER - Only former\
+            \ SOE\n * GRI - Gambling Risk Intelligence.\n"
+        individualLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedIndividualSchema'
+          description: The list of individuals that are linked to this business.
+      required:
+      - datasets
+      - name
+      - relationship
+      - resourceId
+    LinkedIndividualSchema:
+      type: object
+      properties:
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or
+            the PDF of the business.
+        relationship:
+          type: string
+          description: Text including names used to describe the relationship with
+            the business.
+        ownershipPercentage:
+          type: integer
+          description: For certain relationship type related to business ownership
+            this value will indicate the percentage ownership when known.
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+      required:
+      - datasets
+      - lastName
+      - relationship
+      - resourceId
+    MainSexEnum:
+      enum:
+      - MALE
+      - FEMALE
+      type: string
+    ManagerAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        surname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - email
+      - id
+      - name
+      - surname
+    MonitoringAlertTypeEnum:
+      enum:
+      - ALERT
+      - DECLINED
+      - ACCEPTED
+      - PENDING
+      - STATUS
+      type: string
+    MonitoringStatusEnum:
+      enum:
+      - ACTIVE
+      - STOPPED
+      - PENDING
+      - ALERT
+      type: string
+    NotesSchema:
+      type: object
+      properties:
+        value:
+          type: string
+      required:
+      - value
+    PaginatedAmlMonitoringListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlMonitoringList'
+    PatchedAmlMonitoringUpdateRequest:
+      type: object
+      properties:
+        isSubscribed:
+          type: boolean
+          description: Should the expiration of this AML monitoring be automatically
+            extended or not.
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer
+            than 32 characters.
+          maxItems: 5
+    PepAssociationSchema:
+      type: object
+      description: Serializer for a Politically Exposed Person (PEP) by Association
+        entry, detailing an individual's connection to a PEP.
+      properties:
+        resourceId:
+          type: string
+          description: The resource ID to retrieve the profile or PDF of the associated
+            individual.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: A list of evidence IDs supporting the association.
+      required:
+      - evidenceIds
+      - resourceId
+    PepEntries:
+      type: object
+      description: Serializer for current and former PEP entries.
+      properties:
+        pepTier:
+          allOf:
+          - $ref: '#/components/schemas/FullPepTierEnum'
+          description: Defines the PEP tier of the individual.
+        current:
+          type: array
+          items:
+            $ref: '#/components/schemas/PepSchema'
+        former:
+          type: array
+          items:
+            $ref: '#/components/schemas/PepSchema'
+      required:
+      - current
+      - former
+    PepSchema:
+      type: object
+      description: Serializer for a Politically Exposed Person (PEP) entry.
+      properties:
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          description: The country code of the country where the position is held.
+        segment:
+          type: string
+          description: The category of in scope PEP positions for a particular country.
+        position:
+          type: string
+          description: The exact political position in scope for a particular country.
+        dateFrom:
+          type: string
+          description: The start data of the political position in format YYYY or
+            YYYY-MM or YYYY-MM-DD.
+        dateTo:
+          type: string
+          description: The end date of the political position in format YYYY or YYYY-MM
+            or YYYY-MM-DD. This date can be in the future.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of evidence linked to the political position.
+      required:
+      - evidenceIds
+      - position
+    PepTierEnum:
+      enum:
+      - PEP_TIER_1
+      - PEP_TIER_2
+      - PEP_TIER_3
+      type: string
+    Period:
+      type: object
+      properties:
+        days:
+          type: integer
+        years:
+          type: integer
+        months:
+          type: integer
+    PersonAmlCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        checkedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInput'
+        filter:
+          $ref: '#/components/schemas/PersonAmlCheckFilter'
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualSearchResult'
+          readOnly: true
+          nullable: true
+          description: AML database search result.
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaSearchResult'
+          readOnly: true
+          nullable: true
+          description: Adverse media database search result.
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          readOnly: true
+        monitoring:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckMonitoring'
+          readOnly: true
+          nullable: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - checkedAt
+      - clientId
+      - created
+      - filter
+      - id
+      - input
+      - monitoring
+      - overallStatus
+      - userType
+    PersonAmlCheckFilter:
+      type: object
+      properties:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonAmlCheckFilterDatasetsEnum'
+          description: Required. Specifies which screening datasets to include in
+            the check.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning
+            bodies that should be included when screening `SAN` dataset. The full
+            list of supported sanction bodies and their values are provided by the
+            API info endpoint. If none sanction bodies are provided the system will
+            search sanctions issued by any sanctioning body.
+        dateOfBirthMatching:
+          allOf:
+          - $ref: '#/components/schemas/DateOfBirthMatchingEnum'
+          nullable: true
+          default: EXACT
+        pepTiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PepTierEnum'
+          nullable: true
+    PersonAmlCheckFilterDatasetsEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      type: string
+    PersonAmlCheckFilterRequest:
+      type: object
+      properties:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonAmlCheckFilterDatasetsEnum'
+          description: Required. Specifies which screening datasets to include in
+            the check.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning
+            bodies that should be included when screening `SAN` dataset. The full
+            list of supported sanction bodies and their values are provided by the
+            API info endpoint. If none sanction bodies are provided the system will
+            search sanctions issued by any sanctioning body.
+        dateOfBirthMatching:
+          allOf:
+          - $ref: '#/components/schemas/DateOfBirthMatchingEnum'
+          nullable: true
+          default: EXACT
+        pepTiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PepTierEnum'
+          nullable: true
+    PersonAmlCheckInput:
+      type: object
+      properties:
+        fullName:
+          type: string
+          maxLength: 200
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        sex:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          nullable: true
+      required:
+      - fullName
+    PersonAmlCheckInputRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        sex:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          nullable: true
+      required:
+      - fullName
+    PersonAmlCheckRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInputRequest'
+        filter:
+          $ref: '#/components/schemas/PersonAmlCheckFilterRequest'
+      required:
+      - clientId
+      - filter
+      - input
+      - userType
+    PoiPosition:
+      type: object
+      description: Serializer for a position within a Profile of Interest (POI) entry.
+      properties:
+        position:
+          type: string
+          description: The name of the political position.
+        segment:
+          type: string
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        dateFrom:
+          type: string
+        dateTo:
+          type: string
+      required:
+      - position
+    PoiSchema:
+      type: object
+      description: Serializer for a Profile of Interest (POI) entry.
+      properties:
+        category:
+          type: string
+          description: The category of the Profile of Interest.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of evidence associated with the POI entry.
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PoiPosition'
+      required:
+      - category
+      - evidenceIds
+      - positions
+    RelCategoryEnum:
+      enum:
+      - FINANCIAL_REGULATOR
+      - LAW_ENFORCEMENT
+      type: string
+    RelEvent:
+      type: object
+      description: Serializer for a Regulatory Enforcement List (REL) event.
+      properties:
+        type:
+          type: string
+          description: The type of event associated with the list entry.
+        currencyCode:
+          type: string
+          description: For specific event types, there can be associated financial
+            penalties. This field indicates the international currency code.
+        amount:
+          type: integer
+          description: For specific event types, there can be associated financial
+            penalties. This field indicates the monetary amount.
+        period:
+          allOf:
+          - $ref: '#/components/schemas/Period'
+          description: Indicates the length of time of the penalty.
+        date:
+          type: string
+          description: The ISO date of the event.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of evidence associated with the REL event.
+      required:
+      - evidenceIds
+      - type
+    RelSchema:
+      type: object
+      description: Serializer for an Regulatory Enforcement List (REL) entry.
+      properties:
+        category:
+          $ref: '#/components/schemas/RelCategoryEnum'
+        subcategory:
+          type: string
+          description: The name of the list.
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelEvent'
+      required:
+      - category
+      - events
+      - subcategory
+    RreEvent:
+      type: object
+      description: Serializer for a Reputational Risk Exposure (RRE) event.
+      properties:
+        type:
+          type: string
+        date:
+          type: string
+          description: The ISO date associated with the event.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of evidence associated with the RRE event.
+      required:
+      - evidenceIds
+      - type
+    RreSchema:
+      type: object
+      description: Serializer for an Reputational Risk Exposure (RRE) entry.
+      properties:
+        category:
+          type: string
+        subcategory:
+          type: string
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/RreEvent'
+      required:
+      - category
+      - events
+    SanEntries:
+      type: object
+      description: Serializer for current and former sanction entries.
+      properties:
+        current:
+          type: array
+          items:
+            $ref: '#/components/schemas/SanctionSchema'
+        former:
+          type: array
+          items:
+            $ref: '#/components/schemas/SanctionSchema'
+      required:
+      - current
+      - former
+    SanctionEvent:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/SanctionEventTypeEnum'
+          description: Indicated what the event type was.
+        date:
+          type: string
+          description: The date of the event.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of evidence Ids associated with the sanction event.
+      required:
+      - date
+      - evidenceIds
+      - type
+    SanctionEventTypeEnum:
+      enum:
+      - ADDED
+      - AMENDED
+      - REMOVED
+      type: string
+    SanctionRegime:
+      type: object
+      properties:
+        body:
+          type: string
+          description: The name of the issuing body.
+        bodyId:
+          type: integer
+          description: The ID of the sanctioning bodies, that imposed the sanction.
+            The full list of sanction bodies and their IDs is provided by /dictionaries/sanction-bodies
+            endpoint.
+        name:
+          type: string
+          description: The name of the sanction Regime allocated by the sanctioning
+            body.
+        origin:
+          type: string
+          description: The country or region that issues the sanctions.
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SanctionRegimeTypeEnum'
+          description: The type of sanction classified by the sanctioning body.
+      required:
+      - body
+      - origin
+    SanctionRegimeTypeEnum:
+      enum:
+      - COUNTER_NARCOTICS
+      - HOSTILE_ACTIVITIES
+      - HUMAN_RIGHTS
+      - NON_PROLIFERATION
+      - TERRITORIAL_VIOLATION
+      - TERRORISM
+      type: string
+    SanctionSchema:
+      type: object
+      properties:
+        sanctionId:
+          type: string
+          description: The sanction ID provided by the sanctioning body.
+        measures:
+          type: array
+          items:
+            type: string
+          description: The list of measures enforced by the sanctioning body.
+        regime:
+          $ref: '#/components/schemas/SanctionRegime'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/SanctionEvent'
+      required:
+      - events
+      - measures
+      - regime
+    SearchAddress:
+      type: object
+      properties:
+        geography:
+          type: string
+          description: An upper-case two-letter ISO-3166-2 code of a country or dependent
+            territory of the profile address or profile nationality.
+        city:
+          type: string
+          description: The city name of the profile address.
+      required:
+      - geography
+    SearchAddressRequest:
+      type: object
+      properties:
+        geography:
+          type: string
+          minLength: 1
+          description: An upper-case two-letter ISO-3166-2 code of a country or dependent
+            territory of the profile address or profile nationality.
+        city:
+          type: string
+          minLength: 1
+          description: The city name of the profile address.
+      required:
+      - geography
+    SoeLevelEnum:
+      enum:
+      - NATIONAL
+      - LOCAL
+      type: string
+    SoeSchema:
+      type: object
+      description: Serializer for a State-Owned Enterprise (SOE) entry.
+      properties:
+        level:
+          allOf:
+          - $ref: '#/components/schemas/SoeLevelEnum'
+          description: Indicates whether this is a nation or local SOE.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SoeSchemaStatusEnum'
+          description: Indicates whether the SOE is current or former.
+        evidenceIds:
+          type: array
+          items:
+            type: string
+          description: The list of supporting evidence.
+      required:
+      - evidenceIds
+      - status
+    SoeSchemaStatusEnum:
+      enum:
+      - CURRENT
+      - FORMER
+      type: string
+    UserMonitoringTypeEnum:
+      enum:
+      - COMPANY
+      - PERSON
+      type: string
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is
+        *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API
+        secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales
+        team*.'
+x-tagGroups:
+- name: AML
+  tags:
+  - AML Checks
+  - AML Monitorings
+tags:
+- name: AML Checks
+  description: Anti-money laundering check endpoints.
+- name: AML Monitorings
+  description: Anti-money laundering monitoring endpoints.
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation
+    page.
+  url: https://documentation.idenfy.com
+webhooks:
+  amlMonitoring:
+    post:
+      operationId: amlMonitoring
+      description: This notification is sent when an AML monitoring user is checked,
+        accepted or declined.
+      summary: Aml monitoring
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - AML_MONITORING
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlMonitoringWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  amlMonitoringExpiration:
+    post:
+      operationId: amlMonitoringExpiration
+      description: This notification is sent when an AML monitoring user is nearing
+        expiration or expires.
+      summary: Aml monitoring expiration
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - AML_MONITORING_EXPIRATION
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmlMonitoringExpirationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.

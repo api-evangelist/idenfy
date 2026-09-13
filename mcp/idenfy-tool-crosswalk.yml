@@ -1,0 +1,66 @@
+generated: '2026-09-13'
+method: derived
+source: >-
+  Derived by binding the live tools/list response from https://documentation.idenfy.com/mcp against
+  the operationIds in openapi/ (iDenfy's own published OpenAPI 3.1.0 documents).
+provider: iDenfy
+providerId: idenfy
+surfaces:
+  openapi:
+  - openapi/idenfy-kyc-openapi.yml
+  - openapi/idenfy-kyb-openapi.yml
+  - openapi/idenfy-aml-openapi.yml
+  - openapi/idenfy-bank-openapi.yml
+  - openapi/idenfy-bank-card-openapi.yml
+  - openapi/idenfy-face-authentication-openapi.yml
+  - openapi/idenfy-age-estimation-openapi.yml
+  graphql: null
+  mcp:
+    url: https://documentation.idenfy.com/mcp
+    gated: false
+    scope: documentation only
+headline: >-
+  There is no overlap. iDenfy's MCP server is a documentation search server; every one of its three
+  tools reads published docs, and none of them binds to a REST operation. Conversely all 73 published
+  REST operations are rest_only — an agent connected to the iDenfy MCP server can read about the
+  API but cannot call it.
+crosswalk: []
+mcp_only:
+- tool: search_i_denfy_documentation
+  reason: >-
+    Full-text search over the documentation corpus. No public REST operation exposes documentation
+    search; this is a Mintlify-provided docs capability, not an iDenfy API operation.
+- tool: query_docs_filesystem_i_denfy_documentation
+  reason: >-
+    Read-only virtual filesystem over documentation pages and spec files. No REST equivalent.
+- tool: submit_feedback
+  reason: >-
+    Posts documentation feedback to the docs team. No public REST operation accepts docs feedback.
+rest_only:
+- operations: 6
+  spec: openapi/idenfy-kyc-openapi.yml
+  note: KYC token, identifications list, request-information, blocklist add/remove, POA check.
+- operations: 49
+  spec: openapi/idenfy-kyb-openapi.yml
+  note: KYB tokens, forms, beneficiaries, documents, questionnaires, companies, GOV orders, SOS reports, registry center checks.
+- operations: 12
+  spec: openapi/idenfy-aml-openapi.yml
+  note: AML checks and monitorings (create, retrieve, update, destroy, start/stop, PDF).
+- operations: 2
+  spec: openapi/idenfy-bank-openapi.yml
+- operations: 2
+  spec: openapi/idenfy-face-authentication-openapi.yml
+- operations: 1
+  spec: openapi/idenfy-bank-card-openapi.yml
+- operations: 1
+  spec: openapi/idenfy-age-estimation-openapi.yml
+coverage:
+  mcp_tools: 3
+  mcp_tools_bound_to_rest: 0
+  rest_operations: 73
+  rest_operations_bound_to_tool: 0
+  confidence: high
+  basis: >-
+    Both sides were read live — tools/list returned 200 with three tool definitions and their real
+    inputSchemas, and the OpenAPI documents were fetched from documentation.idenfy.com/openapi/.
+    Nothing here is inferred from prose.

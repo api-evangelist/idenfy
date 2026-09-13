@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: iDenfy IVS Core API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+paths:
+  /api/v2/facial-authentication-sessions/:
+    get:
+      operationId: faceAuthSessionsList
+      summary: List sessions
+      tags:
+      - Face Auth Sessions
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacialAuthenticationSession'
+          description: ''
+  /api/v2/facial-authentication-sessions/{tokenString}/:
+    get:
+      operationId: faceAuthSessionsRetrieve
+      summary: Retrieve session
+      parameters:
+      - in: path
+        name: tokenString
+        schema:
+          type: string
+          description: Token string used for authentication.
+        required: true
+      tags:
+      - Face Auth Sessions
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacialAuthenticationSession'
+          description: ''
+components:
+  schemas:
+    FacialAuthenticationMethodEnum:
+      enum:
+      - ACTIVE_LIVENESS
+      - FACE_MATCHING
+      type: string
+    RiskTagEnum:
+      enum:
+      - UNTRUSTED_ENVIRONMENT
+      type: string
+    FacialAuthenticationWebhookStatusEnum:
+      enum:
+      - Success
+      - Failed
+      - Expired
+      - Canceled
+      - Pending
+    FacialAuthenticationStatusTypeEnum:
+      enum:
+      - ENROLLMENT
+      - AUTHENTICATION
+      type: string
+    FacialAuthenticationWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        scanRef:
+          type: string
+          nullable: true
+          readOnly: true
+        clientId:
+          type: string
+          nullable: true
+          readOnly: true
+        token:
+          type: string
+          maxLength: 40
+          description: Token string used for authentication.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/FacialAuthenticationWebhookStatusEnum'
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/FacialAuthenticationStatusTypeEnum'
+        method:
+          $ref: '#/components/schemas/FacialAuthenticationMethodEnum'
+        facePhoto:
+          type: string
+          format: uri
+          nullable: true
+        ipAddress:
+          type: string
+          nullable: true
+        failReason:
+          type: string
+          maxLength: 255
+          nullable: true
+        riskTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskTagEnum'
+          nullable: true
+      required:
+      - clientId
+      - id
+      - scanRef
+      - status
+    FacialAuthenticationSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tokenString:
+          type: string
+          description: Token string used for authentication.
+          maxLength: 40
+        approved:
+          type: boolean
+          nullable: true
+        givenScanRef:
+          type: string
+          description: deprecated
+          maxLength: 40
+        type:
+          $ref: '#/components/schemas/FacialAuthenticationStatusTypeEnum'
+        authenticationMethod:
+          $ref: '#/components/schemas/FacialAuthenticationMethodEnum'
+        facePhoto:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - givenScanRef
+      - id
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is
+        *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API
+        secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales
+        team*.'
+x-tagGroups:
+- name: Face Authentication
+  tags:
+  - Face Auth Sessions
+- name: General
+  tags:
+  - Webhooks
+tags:
+- name: Face Auth Sessions
+  description: Face authentication session endpoints.
+- name: Webhooks
+  description: Webhooks.
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation
+    page.
+  url: https://documentation.idenfy.com
+webhooks:
+  facialAuthentication:
+    post:
+      operationId: facialAuthentication
+      description: This notification is sent when client's facial authentication session
+        ends, either by success, failure or expiration.
+      summary: Facial authentication
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - FACIAL_AUTHENTICATION
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacialAuthenticationWebhook'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.

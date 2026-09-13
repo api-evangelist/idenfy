@@ -1,0 +1,42 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  Documentation tree walked live via the iDenfy MCP server (tree / -L 2 against
+  https://documentation.idenfy.com/mcp) plus the three migration guides it lists.
+provider: iDenfy
+providerId: idenfy
+scheme: migration-guides
+dated_changelog_published: false
+detail: >-
+  iDenfy publishes no dated API changelog. The whole documentation tree — 84 pages across 42
+  directories — contains no changelog, release-notes or "what's new" page. What exists instead are
+  three migration guides, each describing one version transition without dates: an AML v2 -> v3
+  guide and per-platform SDK migration guides for Android and iOS. The Android quickstart even
+  points at the SDK migration guide as "the changelog", which is the clearest statement that no
+  separate one exists. Dated release history is therefore only recoverable from the GitHub tags of
+  the SDK repositories (see packages/idenfy-packages.yml), not from anything iDenfy publishes as a
+  changelog.
+sources:
+- url: https://documentation.idenfy.com/aml/migration-guide
+  kind: api-migration-guide
+  scope: AML Monitoring v2 to v3
+  http_status: 200
+  breaking: true
+  highlights:
+  - New screening engine behind AML Monitoring v3.
+  - Request body becomes nested — amlCheck.input (who to screen) and amlCheck.filter (what to screen for).
+  - 'Person fields: name + surname collapse into amlCheck.input.fullName; type becomes userType.'
+  - 'New status field with new values (ACTIVE/ALERT/STOPPED/PENDING); legacy alertStatus retained alongside it.'
+  - v2 integrations keep working through a compatibility mapping layer with no announced shutdown date.
+- url: https://documentation.idenfy.com/sdks/android/migration-guide
+  kind: sdk-migration-guide
+  scope: Android SDK, version-to-version upgrade notes and breaking changes
+  http_status: 200
+- url: https://documentation.idenfy.com/sdks/ios/migration-guide
+  kind: sdk-migration-guide
+  scope: iOS SDK, version-to-version upgrade notes and breaking changes
+  http_status: 200
+entries: []
+entries_note: >-
+  Deliberately empty. No dated entries exist to record, and inventing dates from git tags would
+  misrepresent a migration guide as a changelog.

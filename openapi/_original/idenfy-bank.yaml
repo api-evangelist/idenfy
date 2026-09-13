@@ -1,0 +1,713 @@
+openapi: 3.1.0
+info:
+  title: iDenfy IVS Core API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+  - url: https://ivs.idenfy.com
+paths:
+  /bank/tokens/:
+    post:
+      operationId: bankTokensCreate
+      summary: Generate bank verification token
+      tags:
+      - Bank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankTokenRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankToken'
+          description: ''
+  /bank/verifications/{verificationId}/accounts/{accountId}/transactions/:
+    get:
+      operationId: bankVerificationsAccountsTransactionsList
+      summary: List bank verification account transactions
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: perPage
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: verificationId
+        schema:
+          type: string
+        required: true
+      tags:
+      - Bank
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBankTransactionList'
+          description: ''
+components:
+  schemas:
+    BankAccess:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    BankAccessRequest:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    BankAccountWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 128
+        iban:
+          type: string
+          nullable: true
+          maxLength: 34
+        currency:
+          type: string
+          maxLength: 3
+        balancesOverview:
+          allOf:
+          - $ref: '#/components/schemas/BankBalancesOverviewWebhook'
+          nullable: true
+        transactionsCount:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - balancesOverview
+      - currency
+      - id
+      - transactionsCount
+    BankBalancesOverviewWebhook:
+      type: object
+      properties:
+        bookedBalance:
+          type: number
+          format: double
+          nullable: true
+        availableBalance:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - availableBalance
+      - bookedBalance
+    BankPartyIdentification:
+      type: object
+      properties:
+        fullName:
+          type: string
+          nullable: true
+          maxLength: 128
+    BankToken:
+      type: object
+      properties:
+        tokenString:
+          type: string
+          readOnly: true
+          description: Token string used for authentication.
+        expiration:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time when this token will become expired.
+        isValid:
+          type: boolean
+          description: Indicates whether this token is valid.
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccess'
+      required:
+      - expiration
+      - isValid
+      - tokenString
+    BankTokenCountryEnum:
+      enum:
+      - AT
+      - BE
+      - BG
+      - HR
+      - CY
+      - DK
+      - EE
+      - FI
+      - FR
+      - DE
+      - GR
+      - HU
+      - IS
+      - IE
+      - IT
+      - LV
+      - LT
+      - LU
+      - MT
+      - NL
+      - 'NO'
+      - PL
+      - PT
+      - RO
+      - SK
+      - SI
+      - ES
+      - SE
+      type: string
+    BankTokenRequest:
+      type: object
+      properties:
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of bank verification token validity.
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccessRequest'
+    BankTransaction:
+      type: object
+      properties:
+        creditor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        debtor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        bookingDate:
+          type: string
+          format: date
+          nullable: true
+        transactionDate:
+          type: string
+          format: date
+          nullable: true
+        transactionAmount:
+          $ref: '#/components/schemas/BankTransactionAmount'
+      required:
+      - creditor
+      - debtor
+      - transactionAmount
+    BankTransactionAmount:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        currency:
+          type: string
+          maxLength: 3
+      required:
+      - amount
+      - currency
+    BankVerificationWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccountWebhook'
+          nullable: true
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+      required:
+      - accounts
+      - id
+      - riskLevel
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - CD
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - XK
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VA
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+    PaginatedBankTransactionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransaction'
+    RiskLevelEnum:
+      enum:
+      - VERY_LOW
+      - LOW
+      - MEDIUM
+      - HIGH
+      - VERY_HIGH
+      - NOT_CHECKED
+      type: string
+    AccountCheckWebhookStatusEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    AccountCheckWebhook:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          nullable: true
+          readOnly: true
+        clientId:
+          type: string
+          nullable: true
+        authToken:
+          type: string
+          nullable: true
+        date:
+          type: string
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/AccountCheckWebhookStatusEnum'
+          readOnly: true
+        score:
+          type: number
+          format: double
+          readOnly: true
+        facebookScore:
+          type: number
+          format: double
+          nullable: true
+        gmailScore:
+          type: number
+          format: double
+          nullable: true
+        ipScore:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - scanRef
+      - score
+      - status
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: |-
+        The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+        Both can be retrieved by contacting *iDenfy's support* or *iDenfy's sales team*.
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+  - Bank
+tags:
+- name: Bank
+  description: Bank verification endpoints.
+- name: Webhooks
+  description: Webhooks.
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation
+    page.
+  url: https://documentation.idenfy.com
+webhooks:
+  bankVerification:
+    post:
+      operationId: bankVerification
+      description: This notification is sent when a bank verification is completed.
+      summary: Bank verification
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - BANK_VERIFICATION
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankVerificationWebhook'
+        required: true
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.
+  accountCheck:
+    post:
+      operationId: accountCheck
+      description: This notification is sent when an account social media check is completed.
+      summary: Account check
+      externalDocs:
+        description: Find info about webhook signing here.
+        url: https://documentation.idenfy.com/security/CallbackSigning
+      parameters:
+      - in: header
+        name: Idenfy-Event-Type
+        schema:
+          type: string
+          enum:
+          - ACCOUNT_CHECK
+        required: true
+      - in: header
+        name: Idenfy-Signature
+        schema:
+          type: string
+        description: Webhook signature
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCheckWebhook'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received
+            successfully.

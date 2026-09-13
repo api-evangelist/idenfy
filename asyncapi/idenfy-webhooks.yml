@@ -1,0 +1,218 @@
+generated: '2026-09-13'
+method: searched
+source: https://documentation.idenfy.com/openapi/*.yaml (OpenAPI 3.1.0 `webhooks` blocks) and https://documentation.idenfy.com/guides/webhooks-overview
+provider: iDenfy
+providerId: idenfy
+asyncapi: null
+note: iDenfy publishes no AsyncAPI document. Its event surface is declared natively inside the OpenAPI
+  3.1.0 `webhooks` blocks of its seven published specs — 23 webhook events in total, each with a full
+  request-body schema. Delivery is HTTPS POST to a URL configured per-account in Dashboard -> Settings
+  -> System notifications. Every request carries an `Idenfy-Signature` header holding a hex-encoded HMAC-SHA256
+  of the raw body, keyed on a signing key the customer sets on the webhook; verify it with a constant-time
+  comparison. iDenfy retries on non-2xx and documents IP whitelisting as the second control.
+transport:
+  protocol: https
+  method: POST
+  configuration: https://documentation.idenfy.com/guides/dashboard/settings/system-notifications-webhooks-emails
+security:
+  signature_header: Idenfy-Signature
+  algorithm: HMAC-SHA256
+  encoding: hex
+  signed_over: raw HTTP request body
+  docs: https://documentation.idenfy.com/security/callback-signing
+  ip_whitelisting: https://documentation.idenfy.com/security/ip-whitelisting
+event_count: 23
+events:
+- name: ageEstimationResult
+  method: POST
+  summary: Age estimation result
+  description: This notification is sent when an age estimation session reaches a terminal state (either
+    the estimate resolved, or a document step-up concluded).
+  operationId: ageEstimationResult
+  spec: openapi/idenfy-age-estimation-openapi.yml
+  tags:
+  - Webhooks
+- name: amlMonitoring
+  method: POST
+  summary: Aml monitoring
+  description: This notification is sent when an AML monitoring user is checked, accepted or declined.
+  operationId: amlMonitoring
+  spec: openapi/idenfy-aml-openapi.yml
+  tags:
+  - Webhooks
+- name: amlMonitoringExpiration
+  method: POST
+  summary: Aml monitoring expiration
+  description: This notification is sent when an AML monitoring user is nearing expiration or expires.
+  operationId: amlMonitoringExpiration
+  spec: openapi/idenfy-aml-openapi.yml
+  tags:
+  - Webhooks
+- name: bankCardVerificationCompleted
+  method: POST
+  summary: Bank card verification completed
+  description: This notification is sent when a bank card verification is completed.
+  operationId: bankCardVerificationCompleted
+  spec: openapi/idenfy-bank-card-openapi.yml
+  tags:
+  - Webhooks
+- name: bankVerification
+  method: POST
+  summary: Bank verification
+  description: This notification is sent when a bank verification is completed.
+  operationId: bankVerification
+  spec: openapi/idenfy-bank-openapi.yml
+  tags:
+  - Webhooks
+- name: accountCheck
+  method: POST
+  summary: Account check
+  description: This notification is sent when an account social media check is completed.
+  operationId: accountCheck
+  spec: openapi/idenfy-bank-openapi.yml
+  tags:
+  - Webhooks
+- name: facialAuthentication
+  method: POST
+  summary: Facial authentication
+  description: This notification is sent when client's facial authentication session ends, either by success,
+    failure or expiration.
+  operationId: facialAuthentication
+  spec: openapi/idenfy-face-authentication-openapi.yml
+  tags:
+  - Webhooks
+- name: companyReview
+  method: POST
+  summary: Company review
+  description: This notification is sent when a company verification is completed.
+  operationId: companyReview
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: companyDelete
+  method: POST
+  summary: Company delete
+  description: This notification is sent when a company is deleted.
+  operationId: companyDelete
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: companyAmlReview
+  method: POST
+  summary: Company aml review
+  description: This notification is sent when an AML review status is manually updated for a company or
+    it's beneficiaries.
+  operationId: companyAmlReview
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: companyInfoRequest
+  method: POST
+  summary: Company info request
+  description: This notification is sent when additional company info is requested and when the company
+    form token expires.
+  operationId: companyInfoRequest
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: companyExpiration
+  method: POST
+  summary: Company expiration
+  description: This notification is sent when a company verification is nearing expiration or expires.
+  operationId: companyExpiration
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: companySubmit
+  method: POST
+  summary: Company submit
+  description: This notification is sent when company information is submitted.
+  operationId: companySubmit
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: govOrderedDocument
+  method: POST
+  summary: Gov ordered document
+  description: This notification is sent when a gov registers document, which was ordered using the API,
+    is delivered.
+  operationId: govOrderedDocument
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: sosReport
+  method: POST
+  summary: Sos report
+  description: This notification is sent when a SOS filing report is delivered.
+  operationId: sosReport
+  spec: openapi/idenfy-kyb-openapi.yml
+  tags:
+  - Webhooks
+- name: identification
+  method: POST
+  summary: Identification
+  description: This notification is sent when a client completes an identity verification. Legacy, use
+    `ID_VERIFICATION_AUTO_FINISHED`, `ID_VERIFICATION_MANUAL_FINISHED`, `ID_VERIFICATION_EXPIRED` and
+    `ID_VERIFICATION_CANCELLED` instead.
+  operationId: identification
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: identificationAutoFinished
+  method: POST
+  summary: Identification auto finished
+  description: This notification is sent when an identity verification is completed.
+  operationId: identificationAutoFinished
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: identificationManualFinished
+  method: POST
+  summary: Identification manual finished
+  description: This notification is sent when an identity verification is manually approved or denied.
+  operationId: identificationManualFinished
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: identificationExpired
+  method: POST
+  summary: Identification expired
+  description: This notification is sent when an identity verification expires.
+  operationId: identificationExpired
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: identificationCancelled
+  method: POST
+  summary: Identification cancelled
+  description: This notification is sent when an identity verification is cancelled by the user or the
+    system.
+  operationId: identificationCancelled
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: identificationResubmitted
+  method: POST
+  summary: Identification resubmitted
+  description: This notification is sent when a client resubmits an identity verification.
+  operationId: identificationResubmitted
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: documentExpiration
+  method: POST
+  summary: Document expiration
+  description: This notification is sent when a client's identity verification document is nearing expiration
+    or expires
+  operationId: documentExpiration
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks
+- name: videoCallFinished
+  method: POST
+  summary: Video call finished
+  description: This notification is sent when a video call is finished.
+  operationId: videoCallFinished
+  spec: openapi/idenfy-kyc-openapi.yml
+  tags:
+  - Webhooks

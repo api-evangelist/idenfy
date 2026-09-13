@@ -1,0 +1,90 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  https://documentation.idenfy.com/guides/choosing-integration,
+  https://documentation.idenfy.com/sdks/overview, /kyc/iframe-redirect, /kyb/iframe,
+  /face-authentication/iframe, /integrations/magic-link and the per-platform SDK quickstarts.
+provider: iDenfy
+providerId: idenfy
+note: >-
+  iDenfy's product IS a client-side surface — the verification UI that captures a document and a
+  face. These are the embeddable/hosted surfaces, distinct from the SDK packages recorded in
+  packages/idenfy-packages.yml (the packages are how you install them; these are what they are).
+families:
+- name: Hosted redirect
+  kind: hosted-page
+  description: >-
+    Mint a session token, redirect the user to the iDenfy-hosted verification flow, and receive them
+    back on successUrl or errorUrl. No UI code on the integrator side.
+  entry_point: POST https://ivs.idenfy.com/api/v2/token
+  returns: redirect URL + authToken
+  docs: https://documentation.idenfy.com/kyc/iframe-redirect
+- name: iFrame embed
+  kind: iframe
+  description: >-
+    The same hosted flow embedded in the integrator's own page. Requires allow="camera; microphone"
+    on the iframe tag and an HTTPS page; Safari applies stricter third-party iframe policies.
+  surfaces:
+  - product: KYC
+    docs: https://documentation.idenfy.com/kyc/iframe-redirect
+  - product: KYB
+    docs: https://documentation.idenfy.com/kyb/iframe
+  - product: Face Authentication
+    docs: https://documentation.idenfy.com/face-authentication/iframe
+- name: Magic Link
+  kind: no-code hosted link
+  description: >-
+    Single-use or multi-use verification links sent by email or SMS from the dashboard. Onboards a
+    user with no integration at all.
+  docs: https://documentation.idenfy.com/integrations/magic-link
+- name: Native mobile SDK
+  kind: native-ui
+  description: >-
+    In-app verification UI for iOS and Android with programmatic colour/font/layout customisation,
+    SSL pinning, NFC chip reading, blur/glare detection, document auto-capture and advanced liveness.
+    Wrapped for React Native, Flutter and Cordova.
+  platforms:
+  - platform: Android
+    min: API Level 24
+    docs: https://documentation.idenfy.com/sdks/android/quickstart
+  - platform: iOS
+    min: iOS 13.0
+    docs: https://documentation.idenfy.com/sdks/ios/quickstart
+  - platform: React Native
+    docs: https://documentation.idenfy.com/sdks/react-native
+  - platform: Flutter
+    docs: https://documentation.idenfy.com/sdks/flutter
+  - platform: Cordova
+    docs: https://documentation.idenfy.com/sdks/other-plugins
+  customization:
+  - UI customization (colors, fonts, XML layouts on Android; Swift on iOS)
+  - Branding themes managed in the dashboard (separate KYC and KYB theme sets)
+  - White labelling including custom domain, available on request
+  docs: https://documentation.idenfy.com/guides/dashboard/settings/idv-flow-and-branding-guide
+- name: Platform plugins
+  kind: prebuilt-integration
+  description: >-
+    Drop-in verification for e-commerce and CMS platforms, installed rather than coded against.
+  items:
+  - platform: Shopify
+    docs: https://documentation.idenfy.com/integrations/shopify
+  - platform: WooCommerce
+    docs: https://documentation.idenfy.com/integrations/woocommerce
+  - platform: WordPress
+    docs: https://documentation.idenfy.com/integrations/wordpress
+  - platform: Adobe Commerce / Magento
+    docs: https://documentation.idenfy.com/integrations/adobe-commerce
+  - platform: Zapier
+    docs: https://documentation.idenfy.com/integrations/zapier
+  - platform: Bubble
+    docs: https://idenfy.com/integrations/
+loaders:
+  web_component_library: null
+  js_loader: null
+  note: >-
+    No published JavaScript element library, web-component bundle or npm browser SDK. The web
+    surface is an iframe or a redirect, not a component you mount — so there is no CDN loader to
+    pin and no client-side API to call.
+dashboard_embed:
+  supported: false
+  note: No embedded-dashboard or customer-facing analytics component is published.

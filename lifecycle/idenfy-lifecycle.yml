@@ -1,0 +1,78 @@
+generated: '2026-09-13'
+method: searched
+source: >-
+  https://documentation.idenfy.com/aml/migration-guide,
+  https://documentation.idenfy.com/sdks/android/migration-guide,
+  https://documentation.idenfy.com/sdks/ios/migration-guide, https://status.idenfy.com/ and the
+  published OpenAPI documents at https://documentation.idenfy.com/openapi/.
+provider: iDenfy
+providerId: idenfy
+versioning:
+  style: path-prefix, partial
+  detail: >-
+    Versioning is inconsistent across the surface. Some paths carry an explicit /api/v2 prefix
+    (/api/v2/token, /api/v2/poa-checks/, /api/v2/facial-authentication-sessions/,
+    /api/v2/registry-center-checks/, /api/v2/gov-ordered-documents/, /api/v2/sos-filing-documents/)
+    while product roots do not (/kyc/, /kyb/, /aml/, /bank/, /bank-card/, /age-estimation/,
+    /risk/, /fraud/). The AML product carries its own v2/v3 generation independent of the path.
+  spec_info_version: '0.0.0'
+  spec_version_note: >-
+    All seven published specs declare info.version "0.0.0" — the contract itself carries no usable
+    version number, so a consumer cannot pin to a spec revision.
+  api_versions:
+  - name: AML Monitoring v2
+    status: supported
+    note: >-
+      Still served. iDenfy maps v2 requests and webhook payloads onto the v3 engine; the
+      `alertStatus` field keeps returning v2 values for v2 integrations.
+  - name: AML Monitoring v3
+    status: current
+    note: >-
+      New screening engine, nested request body (amlCheck.input / amlCheck.filter), new `status`
+      field. Both `status` and `alertStatus` appear in every webhook payload.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  detail: >-
+    iDenfy publishes no deprecation policy, no notice period and no Sunset/Deprecation response
+    headers. The AML migration guide states plainly: "There is no announced shutdown date for v2
+    compatibility. However, the mapping layer exists for continuity, not as a permanent solution."
+    That is guidance, not a policy an integrator can plan against.
+  evidence:
+    url: https://documentation.idenfy.com/aml/migration-guide
+    http_status: 200
+  deprecated_operations: []
+  deprecated_fields:
+  - field: alertStatus
+    surface: AML monitoring webhooks
+    status: legacy, still returned
+    replacement: status
+    note: >-
+      Not marked deprecated in the OpenAPI; recorded from the migration guide prose.
+  legacy_events:
+  - event: identification
+    note: >-
+      The identification webhook's own description labels it "Legacy, use ID_VERIFICATION_AUTO_FINISHED,
+      ID_VERIFICATION_MANUAL_FINISHED, ID_VERIFICATION_EXPIRED and ID_VERIFICATION_CANCELLED instead."
+      This is the only in-contract deprecation signal in the whole surface.
+    source: openapi/idenfy-kyc-openapi.yml
+status_page:
+  url: https://status.idenfy.com/
+  provider: UptimeRobot
+  http_status: 200
+  verified: '2026-09-13'
+  note: >-
+    A branded uptime status page on iDenfy's own subdomain. No incident-history API and no
+    machine-readable status endpoint was found.
+sla:
+  published: false
+  note: >-
+    No public SLA or uptime commitment is published on the documentation site or the pricing page.
+    Enterprise yearly contracts are custom-quoted; SLA terms, if any, sit inside those contracts.
+support:
+  portal: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1
+  email: support@idenfy.com
+  note: >-
+    The Jira Service Desk portal is the contact named in info.contact of every published OpenAPI.

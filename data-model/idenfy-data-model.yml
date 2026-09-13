@@ -1,0 +1,242 @@
+generated: '2026-09-13'
+method: derived
+source: >-
+  Derived from the 414 component schemas and 73 operations across the seven OpenAPI 3.1.0 documents
+  iDenfy publishes at https://documentation.idenfy.com/openapi/, cross-read against the product
+  guides under https://documentation.idenfy.com/kyc/, /kyb/, /aml/ and /bank-verification/.
+provider: iDenfy
+providerId: idenfy
+note: >-
+  iDenfy's model is token-rooted: almost nothing is created directly. A caller mints a session token
+  for a product, the human (or the server, for Direct Processing) completes the flow, and the RESULT
+  entity comes into existence asynchronously and is announced by webhook. The identifiers a caller
+  holds are therefore its own clientId and the server-assigned scanRef / company id / token string.
+identifier_scheme:
+  style: uuid-and-caller-string
+  no_prefixes: true
+  note: >-
+    No Stripe-style typed prefixes. Identifiers are bare UUIDs or opaque strings, so an id does not
+    tell you what it points at.
+  identifiers:
+  - name: clientId
+    owner: caller
+    scope: KYC and KYB session creation
+    note: >-
+      Caller-chosen and must be unique per active session; reusing one returns 409. It is the
+      correlation key echoed through every webhook.
+  - name: scanRef
+    owner: iDenfy
+    scope: KYC identification
+    example_shape: UUID
+    note: The handle for a completed identity verification — retrieval, PDF, blocklist, deletion.
+  - name: tokenString
+    owner: iDenfy
+    scope: KYB form token, face authentication session
+    note: Doubles as the kybTokenAuth bearer credential for form-scoped operations.
+  - name: companyId / id
+    owner: iDenfy
+    scope: KYB company and form
+  - name: monitoringId
+    owner: iDenfy
+    scope: AML ongoing monitoring
+entities:
+- name: KycToken
+  root: true
+  created_by: kycTokensCreate
+  path: POST /api/v2/token
+  note: >-
+    Session token. Returns authToken (client-side) and a redirect URL. The only way to start a KYC
+    verification.
+  relationships:
+  - has_one: Identification
+    via: scanRef
+    note: Materialises only once the verification runs.
+- name: Identification
+  spec: openapi/idenfy-kyc-openapi.yml
+  key: scanRef
+  read_by:
+  - kycIdentificationsList
+  note: >-
+    The KYC result — document data, face match, liveness outcome, status (APPROVED / DENIED /
+    SUSPECTED / EXPIRED), fraudTags and mismatchTags.
+  relationships:
+  - belongs_to: KycToken
+    via: clientId
+  - has_many: BlocklistEntry
+    via: scanRef + blocklistSource
+  - has_many: PoaCheck
+    via: scanRef
+  announced_by:
+  - identification
+  - identificationAutoFinished
+  - identificationManualFinished
+  - identificationExpired
+  - identificationCancelled
+  - identificationResubmitted
+- name: BlocklistEntry
+  key: scanRef + blocklistSource
+  created_by: kycIdentificationsBlocklistsCreate
+  removed_by: kycIdentificationsBlocklistsDestroy
+  relationships:
+  - belongs_to: Identification
+    via: scanRef
+- name: PoaCheck
+  created_by: apiV2PoaChecksCreate
+  path: POST /api/v2/poa-checks/
+  note: Proof-of-address document check, also reachable from the Fraud Prevention AI POA surface.
+- name: KybToken
+  root: true
+  created_by: kybTokensCreate
+  path: POST /kyb/tokens/
+  note: Mints the KYB form token; tokenString is also the bearer credential for form operations.
+  relationships:
+  - has_one: KybForm
+    via: tokenString
+- name: KybForm
+  spec: openapi/idenfy-kyb-openapi.yml
+  created_by: kybFormsCreate
+  submitted_by: kybFormsSubmitCreate
+  relationships:
+  - belongs_to: KybToken
+    via: tokenString
+  - has_many: Beneficiary
+    via: companyId
+  - has_many: KybDocument
+    via: companyId
+  - has_many: Questionnaire
+    via: companyId
+  - has_one: Company
+    via: companyId
+- name: Beneficiary
+  note: Ultimate beneficial owner on a KYB form.
+  relationships:
+  - belongs_to: KybForm
+    via: companyId
+  - has_many: KybDocument
+    via: beneficiaryId
+- name: KybDocument
+  note: Attached to either the company or a beneficiary — the path decides which.
+  relationships:
+  - belongs_to: KybForm
+    via: companyId
+  - belongs_to: Beneficiary
+    via: beneficiaryId
+- name: Questionnaire
+  relationships:
+  - belongs_to: KybForm
+    via: companyId
+  - has_one: QuestionnaireAnswers
+    via: id
+- name: Company
+  key: id
+  read_by: kybCompaniesRetrieve
+  deleted_by: kybCompaniesDestroy
+  note: The KYB verification result. Status transitions are gated — cannot leave PENDING or PROCESSING.
+  relationships:
+  - has_many: GovOrderedDocument
+  - has_many: SosFilingDocument
+  - has_many: RegistryCenterCheck
+  - has_many: AmlMonitoring
+    via: ongoing monitoring configured on approved companies
+  announced_by:
+  - companyReview
+  - companyDelete
+  - companyAmlReview
+  - companyInfoRequest
+  - companyExpiration
+  - companySubmit
+- name: GovOrderedDocument
+  path: /api/v2/gov-ordered-documents/
+  note: Government registry document ordered for a company.
+  announced_by:
+  - govOrderedDocument
+- name: SosFilingDocument
+  path: /api/v2/sos-filing-documents/
+  note: US Secretary of State filing document order.
+  announced_by:
+  - sosReport
+- name: RegistryCenterCheck
+  path: /api/v2/registry-center-checks/
+- name: AmlCheck
+  spec: openapi/idenfy-aml-openapi.yml
+  created_by: amlChecksCreate
+  note: One-time screening against sanctions, PEP and adverse-media sources.
+  relationships:
+  - has_many: AmlProfile
+    via: profileId
+- name: AmlProfile
+  note: A matched entity inside an AML check or monitoring. Removable from a monitoring.
+  relationships:
+  - belongs_to: AmlCheck
+    via: id + profileId
+  - belongs_to: AmlMonitoring
+    via: id + profileId
+- name: AmlMonitoring
+  created_by: amlMonitoringsCreate
+  note: >-
+    Ongoing screening. Carries BOTH a v3 `status` (ACTIVE/ALERT/STOPPED/PENDING) and a legacy v2
+    `alertStatus` (ACCEPTED/ALERT/DECLINED/PENDING) in every webhook payload.
+  announced_by:
+  - amlMonitoring
+  - amlMonitoringExpiration
+- name: BankToken
+  root: true
+  created_by: bankTokensCreate
+  relationships:
+  - has_one: BankVerification
+- name: BankVerification
+  note: Open-banking account verification.
+  relationships:
+  - has_many: BankAccount
+    via: accountId
+  - has_many: BankTransaction
+    via: verificationId + accountId
+  announced_by:
+  - bankVerification
+  - accountCheck
+- name: BankCardToken
+  root: true
+  created_by: bankCardTokenCreate
+  announced_by:
+  - bankCardVerificationCompleted
+- name: FaceAuthSession
+  key: tokenString
+  read_by:
+  - faceAuthSessionsList
+  - faceAuthSessionsRetrieve
+  note: >-
+    Re-authenticates a returning user against a previously verified identity. Note the asymmetry —
+    the published spec exposes only READ operations; session creation is documented at
+    /face-authentication/token-generation but is not in the OpenAPI.
+  announced_by:
+  - facialAuthentication
+- name: AgeEstimationToken
+  root: true
+  created_by: ageEstimationTokenCreate
+  path: POST /age-estimation/token/
+  note: Returns 402 when the account balance cannot cover the session.
+  announced_by:
+  - ageEstimationResult
+graph_summary:
+  roots:
+  - KycToken
+  - KybToken
+  - BankToken
+  - BankCardToken
+  - AgeEstimationToken
+  - AmlCheck
+  - AmlMonitoring
+  entity_count: 22
+  component_schemas: 414
+  operations: 73
+  webhook_events: 23
+gaps:
+- >-
+  Several documented operations are absent from the published specs and therefore absent from this
+  graph as first-class operations: KYC deletion (POST /api/v2/delete), the whole Fraud Prevention
+  surface (/fraud/proxy-check, /fraud/validate-phone, /fraud/send-sms, /fraud/verify-sms,
+  /fraud/estimate-fraud-probability, /api/v2/address-verification), the Risk Assessment surface
+  (/risk/assessment-profiles/, /risk/assessments/), and face-authentication token generation. They
+  are real — each has a reference page naming its ivs.idenfy.com endpoint — but iDenfy publishes no
+  OpenAPI for them.
+render: null

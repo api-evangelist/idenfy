@@ -21,6 +21,15 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "idenfy-aml-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "idenfy-bank-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "idenfy-face-authentication-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "idenfy-fraud-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "idenfy-kyb-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "idenfy-kyc-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "idenfy-token-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }
