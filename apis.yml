@@ -45,155 +45,34 @@ tags:
 - Open Banking
 - RegTech
 - Sanctions Screening
+- Webhook
+tags_raw:
+- AML
+- Age Verification
+- Bank Verification
+- Biometrics
+- Compliance
+- Fraud Detection
+- Identity Verification
+- KYB
+- KYC
+- MCP
+- Open Banking
+- RegTech
+- Sanctions Screening
 - Webhooks
 created: '2024-11-13'
 modified: '2026-09-13'
 url: https://raw.githubusercontent.com/api-evangelist/idenfy/refs/heads/main/apis.yml
 specificationVersion: '0.23'
 apis:
-- aid: idenfy:idenfy-kyc-api
-  name: iDenfy Identity Verification (KYC) API
-  description: Document verification, selfie capture, liveness detection and AI plus human review. Mint
-    a session token with POST /api/v2/token, hand the returned authToken to a redirect, iFrame or mobile
-    SDK, and receive the result as a signed webhook. Also covers blocklisting, proof-of-address checks
-    and requesting additional information from a client.
-  humanURL: https://documentation.idenfy.com/kyc/overview
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - Identity Verification
-  - KYC
-  - Liveness
-  - Biometrics
-  - Document Verification
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-kyc-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-kyc-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/kyc/overview
-  - type: APIReference
-    url: https://documentation.idenfy.com/api-reference/overview
-- aid: idenfy:idenfy-kyb-api
-  name: iDenfy Business Verification (KYB) API
-  description: Company verification across 180+ registries with ultimate beneficial owner identification,
-    KYB form collection, beneficiary and document management, questionnaires, credit bureau reports, government
-    document orders, US Secretary of State filings and registry centre checks. The largest of the published
-    contracts at 49 operations and 8 webhook events.
-  humanURL: https://documentation.idenfy.com/kyb/overview
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - Business Verification
-  - KYB
-  - UBO
-  - Compliance
-  - Registry
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-kyb-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-kyb-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/kyb/overview
-- aid: idenfy:idenfy-aml-api
-  name: iDenfy AML Screening and Monitoring API
-  description: 'Screens people and companies against sanctions lists, politically exposed persons and
-    adverse media, as a one-time check or as ongoing monitoring that raises an alert when a new match
-    appears. Carries two generations at once: v3 status values alongside the legacy v2 alertStatus in
-    every webhook payload.'
-  humanURL: https://documentation.idenfy.com/aml/overview
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - AML
-  - Compliance
-  - PEP
-  - Sanctions
-  - Adverse Media
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-aml-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-aml-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/aml/overview
-- aid: idenfy:idenfy-bank-api
-  name: iDenfy Bank Verification API
-  description: Verifies bank account ownership through open banking connections to European banks, and
-    exposes the account transaction list behind a completed verification. Two operations and two webhook
-    events.
-  humanURL: https://documentation.idenfy.com/bank-verification/overview
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - Bank Verification
-  - Open Banking
-  - Account Verification
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-bank-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-bank-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/bank-verification/overview
-- aid: idenfy:idenfy-bank-card-api
-  name: iDenfy Bank Card Verification API
-  description: Creates a standalone bank card verification session. Account balance is pre-checked, and
-    an insufficient balance is rejected with 402 rather than 403. One operation and one webhook event.
-  humanURL: https://documentation.idenfy.com/bank-card/create-session
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - Bank Card
-  - Card Verification
-  - Fraud Detection
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-bank-card-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-bank-card-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/bank-card/create-session
-- aid: idenfy:idenfy-face-authentication-api
-  name: iDenfy Face Authentication API
-  description: Re-authenticates a returning user in about thirty seconds by matching a live facial scan
-    against a previously verified identity. The published contract exposes the session list and retrieve
-    operations; token generation is documented separately and is not in the OpenAPI.
-  humanURL: https://documentation.idenfy.com/face-authentication/overview
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - Face Authentication
-  - Biometrics
-  - Identity Verification
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-face-authentication-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-face-authentication-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/face-authentication/overview
-- aid: idenfy:idenfy-age-estimation-api
-  name: iDenfy Age Estimation API
-  description: Estimates age from a selfie and escalates borderline cases to a full document check on
-    the same integration, giving one audit trail from selfie to certified ID. Account balance is pre-checked
-    and an insufficient balance returns 402.
-  humanURL: https://documentation.idenfy.com/age-estimation/create-session
-  baseURL: https://ivs.idenfy.com
-  tags:
-  - Age Verification
-  - Age Estimation
-  - Identity Verification
-  - Compliance
-  properties:
-  - type: OpenAPI
-    url: openapi/idenfy-age-estimation-openapi.yml
-  - type: Overlay
-    url: overlays/idenfy-age-estimation-overlay.yaml
-  - type: Documentation
-    url: https://documentation.idenfy.com/age-estimation/create-session
 - aid: idenfy:idenfy-fraud-api
   name: iDenfy Fraud Prevention and Risk API
-  description: AI risk scoring, proxy/VPN/Tor detection, phone validation, SMS phone verification, fraud
-    probability estimation, address verification and AI proof of address, plus configurable risk assessment
-    profiles. Every endpoint is documented with its ivs.idenfy.com path, but iDenfy publishes NO OpenAPI
-    for this surface - it is the one product family with a reference page and no machine-readable contract.
+  description: >-
+    AI risk scoring, proxy/VPN/Tor detection, phone validation, SMS phone verification, fraud probability
+    estimation, address verification and AI proof of address, plus configurable risk assessment profiles.
+    Every endpoint is documented with its ivs.idenfy.com path, but iDenfy publishes NO OpenAPI for this
+    surface - it is the one product family with a reference page and no machine-readable contract.
   humanURL: https://documentation.idenfy.com/fraud-prevention/overview
   baseURL: https://ivs.idenfy.com
   tags:
@@ -209,13 +88,18 @@ apis:
     url: https://documentation.idenfy.com/fraud-prevention/risk-assessment
 - aid: idenfy:idenfy-docs-mcp
   name: iDenfy Documentation MCP Server
-  description: 'A hosted, unauthenticated remote Model Context Protocol server over the whole public documentation
+  description: >-
+    A hosted, unauthenticated remote Model Context Protocol server over the whole public documentation
     site, including the seven OpenAPI specs. Three live tools: documentation search, a read-only virtual
     filesystem for reading pages and specs, and documentation feedback submission. Read-only by design
-    - it reaches no dashboard, key or verification data, and cannot call the verification APIs.'
+    - it reaches no dashboard, key or verification data, and cannot call the verification APIs.
   humanURL: https://documentation.idenfy.com/resources/mcp
   baseURL: https://documentation.idenfy.com/mcp
   tags:
+  - MCP
+  - Documentation
+  - Agents
+  tags_raw:
   - MCP
   - Model Context Protocol
   - Documentation
@@ -227,7 +111,541 @@ apis:
     url: mcp/idenfy-tool-crosswalk.yml
   - type: Documentation
     url: https://documentation.idenfy.com/resources/mcp
+- aid: idenfy:idenfy-age-estimation-api
+  name: iDenfy Age Estimation API
+  description: Age estimation session endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Age Estimation
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-age-estimation-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-aml-checks-api
+  name: iDenfy AML Checks API
+  description: Anti-money laundering check endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - AML Checks
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-aml-checks-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-aml-monitorings-api
+  name: iDenfy AML Monitorings API
+  description: Anti-money laundering monitoring endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - AML Monitorings
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-aml-monitorings-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-bank-api
+  name: iDenfy Bank API
+  description: Bank verification endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Bank
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-bank-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-bank-card-verification-api
+  name: iDenfy Bank Card Verification API
+  description: Bank card verification endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Bank Card Verification
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-bank-card-verification-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-beneficiaries-api
+  name: iDenfy Beneficiaries API
+  description: Beneficiaries CRUD endpoints for the KYB form.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Beneficiaries
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-beneficiaries-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-companies-api
+  name: iDenfy Companies API
+  description: Endpoints for actions with companies.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-companies-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-face-auth-sessions-api
+  name: iDenfy Face Auth Sessions API
+  description: Face authentication session endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Face Auth Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-face-auth-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-gov-orders-api
+  name: iDenfy GOV Orders API
+  description: Endpoints for actions with GOV ordered documents.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - GOV Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-gov-orders-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyb-documents-api
+  name: iDenfy KYB Documents API
+  description: KYB documents CRUD endpoints for the KYB form.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYB Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyb-documents-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyb-forms-api
+  name: iDenfy KYB Forms API
+  description: Endpoints for KYB form actions.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYB Forms
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyb-forms-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyb-questionnaires-api
+  name: iDenfy KYB Questionnaires API
+  description: KYB questionnaires endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYB Questionnaires
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyb-questionnaires-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyb-token-api
+  name: iDenfy KYB Token API
+  description: KYB token endpoints to begin KYB flow.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYB Token
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyb-token-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyc-blocklist-api
+  name: iDenfy KYC Blocklist API
+  description: Endpoints for managing face, document-face and document-info blocklist entries.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYC Blocklist
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyc-blocklist-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyc-token-api
+  name: iDenfy KYC Token API
+  description: Endpoints for creating KYC verification session tokens.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYC Token
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyc-token-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-kyc-verifications-api
+  name: iDenfy KYC Verifications API
+  description: Endpoints for actions with KYC verifications.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - KYC Verifications
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-kyc-verifications-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-poa-api
+  name: iDenfy POA API
+  description: Endpoints for standalone proof of address (POA) checks.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - POA
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-poa-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-registry-center-checks-api
+  name: iDenfy Registry Center Checks API
+  description: Registry center check endpoints.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Registry Center Checks
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-registry-center-checks-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-sos-reports-api
+  name: iDenfy SOS Reports API
+  description: Endpoints for actions with SOS filing documents.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - SOS Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-sos-reports-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
+- aid: idenfy:idenfy-webhooks-api
+  name: iDenfy Webhooks API
+  description: Webhooks.
+  humanURL: https://documentation.idenfy.com/kyc/overview
+  baseURL: https://ivs.idenfy.com
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/idenfy-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyc/overview
+  - type: APIReference
+    url: https://documentation.idenfy.com/api-reference/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/kyb/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/aml/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-verification/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/bank-card/create-session
+  - type: Documentation
+    url: https://documentation.idenfy.com/face-authentication/overview
+  - type: Documentation
+    url: https://documentation.idenfy.com/age-estimation/create-session
 common:
+- type: Overlay
+  url: overlays/idenfy-kyc-overlay.yaml
+- type: Overlay
+  url: overlays/idenfy-kyb-overlay.yaml
+- type: Overlay
+  url: overlays/idenfy-aml-overlay.yaml
+- type: Overlay
+  url: overlays/idenfy-bank-overlay.yaml
+- type: Overlay
+  url: overlays/idenfy-bank-card-overlay.yaml
+- type: Overlay
+  url: overlays/idenfy-face-authentication-overlay.yaml
+- type: Overlay
+  url: overlays/idenfy-age-estimation-overlay.yaml
 - type: Website
   url: https://www.idenfy.com/
 - type: DeveloperPortal
