@@ -611,6 +611,8 @@ apis:
   humanURL: https://documentation.idenfy.com/kyc/overview
   baseURL: https://ivs.idenfy.com
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
