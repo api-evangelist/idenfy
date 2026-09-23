@@ -1,0 +1,797 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core KYB Documents API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: KYB Documents
+  description: KYB documents CRUD endpoints for the KYB form.
+paths:
+  /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/:
+    get:
+      operationId: kybFormsBeneficiariesDocumentsList
+      summary: List beneficiary documents
+      parameters:
+      - in: path
+        name: beneficiaryId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYB Documents
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeneficiaryDocument'
+          description: ''
+    post:
+      operationId: kybFormsBeneficiariesDocumentsCreate
+      summary: Add new beneficiary document
+      parameters:
+      - in: path
+        name: beneficiaryId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYB Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryDocumentCreateRequest'
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryDocumentCreate'
+          description: ''
+  /kyb/forms/{companyId}/beneficiaries/{beneficiaryId}/documents/{id}/:
+    get:
+      operationId: kybFormsBeneficiariesDocumentsRetrieve
+      summary: Retrieve beneficiary document
+      parameters:
+      - in: path
+        name: beneficiaryId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryDocument'
+          description: ''
+    put:
+      operationId: kybFormsBeneficiariesDocumentsUpdate
+      summary: Update beneficiary document
+      parameters:
+      - in: path
+        name: beneficiaryId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryDocumentRequest'
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryDocument'
+          description: ''
+    patch:
+      operationId: kybFormsBeneficiariesDocumentsPartialUpdate
+      summary: Partially update beneficiary document
+      parameters:
+      - in: path
+        name: beneficiaryId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBeneficiaryDocumentRequest'
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryDocument'
+          description: ''
+    delete:
+      operationId: kybFormsBeneficiariesDocumentsDestroy
+      summary: Delete beneficiary document
+      parameters:
+      - in: path
+        name: beneficiaryId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+  /kyb/forms/{companyId}/documents/:
+    get:
+      operationId: kybFormsDocumentsList
+      summary: List documents
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: type
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ANNUAL_REPORT
+            - BANK_STATEMENT
+            - COMPANY_ADVERSE_MEDIA
+            - DIRECTORS_REGISTRY
+            - DIRECTOR_CERT
+            - DIRECTOR_ONLINE_PRESENCE
+            - EMAIL_CHECK
+            - E_SIGNATURE_CERT
+            - GOOD_STANDING_CERT
+            - INCORPORATION_ARTICLES
+            - INCORPORATION_CERT
+            - INCUMBENCY_CERT
+            - INDIVIDUAL_ADVERSE_MEDIA
+            - INFORMATION_STATEMENT
+            - INVOICE
+            - NAME_CHANGE_PROOF
+            - ONLINE_PRESENCE
+            - ORG_CHART
+            - OTHER
+            - OWNERSHIP_STRUCTURE
+            - PROOF_OF_ADDRESS
+            - PROOF_OF_DOMAIN
+            - SHAREHOLDER_CERT
+            - SHAREHOLDER_ONLINE_PRESENCE
+            - SHAREHOLDER_REGISTRY
+            - SOURCE_OF_FUNDS
+            - SOURCE_OF_WEALTH
+            - STATE_REGISTRY
+            - TRADING_STATUS_PROOF
+            - TRUST_AGREEMENT
+            - UBO_CERT
+            - UBO_REGISTRY
+            - WEBSITE_OVERVIEW
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: type_Exclude
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ANNUAL_REPORT
+            - BANK_STATEMENT
+            - COMPANY_ADVERSE_MEDIA
+            - DIRECTORS_REGISTRY
+            - DIRECTOR_CERT
+            - DIRECTOR_ONLINE_PRESENCE
+            - EMAIL_CHECK
+            - E_SIGNATURE_CERT
+            - GOOD_STANDING_CERT
+            - INCORPORATION_ARTICLES
+            - INCORPORATION_CERT
+            - INCUMBENCY_CERT
+            - INDIVIDUAL_ADVERSE_MEDIA
+            - INFORMATION_STATEMENT
+            - INVOICE
+            - NAME_CHANGE_PROOF
+            - ONLINE_PRESENCE
+            - ORG_CHART
+            - OTHER
+            - OWNERSHIP_STRUCTURE
+            - PROOF_OF_ADDRESS
+            - PROOF_OF_DOMAIN
+            - SHAREHOLDER_CERT
+            - SHAREHOLDER_ONLINE_PRESENCE
+            - SHAREHOLDER_REGISTRY
+            - SOURCE_OF_FUNDS
+            - SOURCE_OF_WEALTH
+            - STATE_REGISTRY
+            - TRADING_STATUS_PROOF
+            - TRUST_AGREEMENT
+            - UBO_CERT
+            - UBO_REGISTRY
+            - WEBSITE_OVERVIEW
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - KYB Documents
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KybFormDocument'
+          description: ''
+    post:
+      operationId: kybFormsDocumentsCreate
+      summary: Add new document
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYB Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybFormDocumentCreateRequest'
+        required: true
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybFormDocumentCreate'
+          description: ''
+  /kyb/forms/{companyId}/documents/{id}/:
+    get:
+      operationId: kybFormsDocumentsRetrieve
+      summary: Retrieve document
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybFormDocument'
+          description: ''
+    put:
+      operationId: kybFormsDocumentsUpdate
+      summary: Update document
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybFormDocumentRequest'
+        required: true
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybFormDocument'
+          description: ''
+    patch:
+      operationId: kybFormsDocumentsPartialUpdate
+      summary: Partially update document
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedKybFormDocumentRequest'
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybFormDocument'
+          description: ''
+    delete:
+      operationId: kybFormsDocumentsDestroy
+      summary: Delete document
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this KYB Document.
+        required: true
+      tags:
+      - KYB Documents
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    PatchedBeneficiaryDocumentRequest:
+      oneOf:
+      - $ref: '#/components/schemas/PatchedIndividualKybDocRequest'
+      - $ref: '#/components/schemas/PatchedCompanyKybDocRequest'
+    KybFormDocumentCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    CompanyKybDoc:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    IndividualKybDocCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: byte
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - type
+    IndividualKybDocTypeEnum:
+      enum:
+      - IDENTITY_DOCUMENT
+      - PROOF_OF_ADDRESS
+      - OTHER
+      type: string
+    CompanyKybDocRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - type
+    CompanyKybDocCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    KybFormDocumentCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: byte
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - type
+    KybFormDocumentRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - type
+    IndividualKybDocRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - type
+    IndividualKybDoc:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    BeneficiaryDocumentCreate:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDocCreate'
+      - $ref: '#/components/schemas/CompanyKybDocCreate'
+    CompanyKybDocCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: byte
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - type
+    KybDocumentTypeEnum:
+      enum:
+      - INCORPORATION_CERT
+      - DIRECTOR_CERT
+      - SHAREHOLDER_CERT
+      - UBO_CERT
+      - INCORPORATION_ARTICLES
+      - SHAREHOLDER_REGISTRY
+      - DIRECTORS_REGISTRY
+      - STATE_REGISTRY
+      - UBO_REGISTRY
+      - OWNERSHIP_STRUCTURE
+      - INCUMBENCY_CERT
+      - TRUST_AGREEMENT
+      - INFORMATION_STATEMENT
+      - GOOD_STANDING_CERT
+      - PROOF_OF_DOMAIN
+      - PROOF_OF_ADDRESS
+      - SOURCE_OF_FUNDS
+      - BANK_STATEMENT
+      - INVOICE
+      - ONLINE_PRESENCE
+      - DIRECTOR_ONLINE_PRESENCE
+      - SHAREHOLDER_ONLINE_PRESENCE
+      - WEBSITE_OVERVIEW
+      - E_SIGNATURE_CERT
+      - ANNUAL_REPORT
+      - NAME_CHANGE_PROOF
+      - TRADING_STATUS_PROOF
+      - ORG_CHART
+      - COMPANY_ADVERSE_MEDIA
+      - INDIVIDUAL_ADVERSE_MEDIA
+      - EMAIL_CHECK
+      - SOURCE_OF_WEALTH
+      - OTHER
+      type: string
+    BeneficiaryDocument:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDoc'
+      - $ref: '#/components/schemas/CompanyKybDoc'
+    PatchedCompanyKybDocRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+    PatchedKybFormDocumentRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+    BeneficiaryDocumentRequest:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDocRequest'
+      - $ref: '#/components/schemas/CompanyKybDocRequest'
+    KybFormDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    IndividualKybDocCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    PatchedIndividualKybDocRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+    BeneficiaryDocumentCreateRequest:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDocCreateRequest'
+      - $ref: '#/components/schemas/CompanyKybDocCreateRequest'
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks

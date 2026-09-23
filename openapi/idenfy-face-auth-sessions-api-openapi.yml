@@ -1,0 +1,116 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core Face Auth Sessions API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: Face Auth Sessions
+  description: Face authentication session endpoints.
+paths:
+  /api/v2/facial-authentication-sessions/:
+    get:
+      operationId: faceAuthSessionsList
+      summary: List sessions
+      tags:
+      - Face Auth Sessions
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacialAuthenticationSession'
+          description: ''
+  /api/v2/facial-authentication-sessions/{tokenString}/:
+    get:
+      operationId: faceAuthSessionsRetrieve
+      summary: Retrieve session
+      parameters:
+      - in: path
+        name: tokenString
+        schema:
+          type: string
+          description: Token string used for authentication.
+        required: true
+      tags:
+      - Face Auth Sessions
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacialAuthenticationSession'
+          description: ''
+components:
+  schemas:
+    FacialAuthenticationMethodEnum:
+      enum:
+      - ACTIVE_LIVENESS
+      - FACE_MATCHING
+      type: string
+    FacialAuthenticationSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tokenString:
+          type: string
+          description: Token string used for authentication.
+          maxLength: 40
+        approved:
+          type: boolean
+          nullable: true
+        givenScanRef:
+          type: string
+          description: deprecated
+          maxLength: 40
+        type:
+          $ref: '#/components/schemas/FacialAuthenticationStatusTypeEnum'
+        authenticationMethod:
+          $ref: '#/components/schemas/FacialAuthenticationMethodEnum'
+        facePhoto:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - givenScanRef
+      - id
+    FacialAuthenticationStatusTypeEnum:
+      enum:
+      - ENROLLMENT
+      - AUTHENTICATION
+      type: string
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: Face Authentication
+  tags:
+  - Face Auth Sessions
+- name: General
+  tags:
+  - Webhooks

@@ -1,0 +1,172 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core KYC Blocklist API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: KYC Blocklist
+  description: Endpoints for managing face, document-face and document-info blocklist entries.
+paths:
+  /kyc/identifications/{scanRef}/blocklists/{blocklistSource}/:
+    post:
+      operationId: kycIdentificationsBlocklistsCreate
+      summary: Add identification to blocklist
+      tags:
+      - KYC Blocklist
+      parameters:
+      - in: path
+        name: blocklistSource
+        schema:
+          type: string
+          enum:
+          - DOCUMENT
+          - DOCUMENT_INFO
+          - SELFIE
+        required: true
+      - in: path
+        name: scanRef
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationBlacklistRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentificationBlacklistEntry'
+          description: ''
+    delete:
+      operationId: kycIdentificationsBlocklistsDestroy
+      summary: Remove identification from blocklist
+      tags:
+      - KYC Blocklist
+      parameters:
+      - in: path
+        name: blocklistSource
+        schema:
+          type: string
+          enum:
+          - DOCUMENT
+          - DOCUMENT_INFO
+          - SELFIE
+        required: true
+      - in: path
+        name: scanRef
+        schema:
+          type: string
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    IdentificationBlacklistRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          nullable: true
+    IdentificationBlacklistEntry:
+      oneOf:
+      - $ref: '#/components/schemas/IdentificationBlacklist'
+      - $ref: '#/components/schemas/IdentificationDataBlacklistResponse'
+    IdentificationDataBlacklistResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The database `id` of the blocklisted data record; use it as the `id` path parameter.
+        fullName:
+          type: string
+          readOnly: true
+        dateOfBirth:
+          type: string
+          format: date
+          readOnly: true
+        personalNumber:
+          type: string
+          readOnly: true
+        documentNumber:
+          type: string
+          readOnly: true
+        nationality:
+          type: string
+          readOnly: true
+        reason:
+          type: string
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - dateOfBirth
+      - documentNumber
+      - fullName
+      - id
+      - nationality
+      - personalNumber
+      - reason
+    IdentificationBlacklist:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The `scan_ref` of the blocklisted face image; use it as the `id` path parameter.
+        reason:
+          type: string
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        faceImageUrl:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - created
+      - faceImageUrl
+      - id
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYC
+  tags:
+  - KYC Blocklist
+  - KYC Token
+  - KYC Verifications
+  - POA

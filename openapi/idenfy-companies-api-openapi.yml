@@ -1,0 +1,2937 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core Companies API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: Companies
+  description: Endpoints for actions with companies.
+paths:
+  /kyb/companies/:
+    get:
+      operationId: kybCompaniesList
+      summary: List companies
+      parameters:
+      - in: query
+        name: created
+        schema:
+          type: array
+          items:
+            type: string
+            format: date-time
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: perPage
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: registrationNumber
+        schema:
+          type: string
+      tags:
+      - Companies
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCompanyListList'
+          description: ''
+  /kyb/companies/{id}/:
+    get:
+      operationId: kybCompaniesRetrieve
+      summary: Retrieve all company info
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this company.
+        required: true
+      tags:
+      - Companies
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetail'
+          description: ''
+    delete:
+      operationId: kybCompaniesDestroy
+      summary: Delete company
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this company.
+        required: true
+      tags:
+      - Companies
+      security:
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+  /kyb/companies/{id}/change-status/:
+    post:
+      operationId: kybCompaniesChangeStatusCreate
+      description: Note that the status cannot be changed from `PENDING` and `PROCESSING` statuses.
+      summary: Change company status
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this company.
+        required: true
+      tags:
+      - Companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyStatusRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyStatus'
+          description: ''
+  /kyb/companies/{id}/pdf/:
+    post:
+      operationId: kybCompaniesPdfCreate
+      summary: Generate company PDF
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this company.
+        required: true
+      tags:
+      - Companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybPdfRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /kyb/companies/{id}/automation/:
+    post:
+      operationId: kybCompaniesAutomationCreate
+      summary: Re-run company automation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this company.
+        required: true
+      tags:
+      - Companies
+      security:
+      - apiKeyPair: []
+      responses:
+        '202':
+          description: No response body
+        '402':
+          description: No response body
+components:
+  schemas:
+    ManagerAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        surname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - email
+      - id
+      - name
+      - surname
+    MonitoringStatusEnum:
+      enum:
+      - ACTIVE
+      - STOPPED
+      - PENDING
+      - ALERT
+      type: string
+    AmlMonitoringUser:
+      type: object
+      properties:
+        monitoringId:
+          type: string
+          maxLength: 100
+        name:
+          type: string
+          nullable: true
+          maxLength: 200
+        surname:
+          type: string
+          nullable: true
+          maxLength: 100
+        lastCheckDate:
+          type: string
+          format: date
+          nullable: true
+        alertStatus:
+          $ref: '#/components/schemas/MonitoringAlertTypeEnum'
+      required:
+      - monitoringId
+    CompanyAmlCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        checkedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInput'
+        filter:
+          $ref: '#/components/schemas/CompanyAmlCheckFilter'
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchResult'
+          readOnly: true
+          nullable: true
+          description: AML database search result.
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaSearchResult'
+          readOnly: true
+          nullable: true
+          description: Adverse media database search result.
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          readOnly: true
+        monitoring:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckMonitoring'
+          readOnly: true
+          nullable: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - checkedAt
+      - clientId
+      - created
+      - filter
+      - id
+      - input
+      - monitoring
+      - overallStatus
+      - userType
+    AmlCheckStatusEnum:
+      enum:
+      - NOT_CHECKED
+      - NO_FLAGS
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE
+      - FLAGS_FOUND
+      type: string
+    CompanyPdfContentEnum:
+      enum:
+      - SUBMITTED_COMPANY_INFO
+      - COMPANY_META
+      - RELATED_SUBJECTS
+      - OWNERSHIP_STRUCTURE
+      - QUESTIONNAIRE_ANSWERS
+      - COMPANY_NAME_AUDIT
+      - BANK_VERIFICATION
+      - WEBSITE_AUDIT
+      - ADDRESS_AUDIT
+      - GOV_CHECKS
+      - KYB_DATA_MATCHING
+      - KYB_DOCUMENTS
+      - AUDIT_LOGS
+      - VAT_VERIFICATION
+      - TAGS
+      - SHAREHOLDERS_CHECK
+      - AML_MONITORING_USERS
+      - LINKED_COMPANIES
+      - COMMENTS
+      - COMPANY_AML_CHECK
+      - COMPANY_ADVERSE_MEDIA_CHECK
+      - BENEFICIARY_AML_CHECKS
+      - BENEFICIARY_ADVERSE_MEDIA_CHECKS
+      type: string
+    PepTierEnum:
+      enum:
+      - PEP_TIER_1
+      - PEP_TIER_2
+      - PEP_TIER_3
+      type: string
+    KybAnswersDisplay:
+      type: object
+      properties:
+        title:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplaySections'
+        id:
+          type: string
+          description: A unique identifier for the questionnaire.
+        name:
+          type: string
+      required:
+      - id
+      - name
+      - sections
+      - title
+    CompanyGovRegistersDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        lite:
+          type: boolean
+        checkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        dataFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:json)$
+        reportFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:pdf)$
+        checkedCompanyName:
+          type: string
+          nullable: true
+          maxLength: 200
+        checkedRegistrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        companyName:
+          type: string
+          nullable: true
+          maxLength: 200
+        externalCompanyId:
+          type: string
+          maxLength: 512
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 32
+        activity:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        addresses:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        aliases:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        email:
+          type: string
+          nullable: true
+          maxLength: 128
+        faxNumber:
+          type: string
+          nullable: true
+          maxLength: 32
+        telephoneNumber:
+          type: string
+          nullable: true
+          maxLength: 32
+        fiscalCode:
+          type: string
+          nullable: true
+          maxLength: 128
+        websiteUrl:
+          type: string
+          nullable: true
+          maxLength: 128
+        foundationDate:
+          type: string
+          nullable: true
+          maxLength: 128
+        legalForm:
+          type: string
+          nullable: true
+          maxLength: 128
+        legalStatus:
+          type: string
+          nullable: true
+          maxLength: 128
+        registrationAuthority:
+          type: string
+          nullable: true
+          maxLength: 128
+        registrationAuthorityCode:
+          type: string
+          nullable: true
+          maxLength: 128
+        registrationDate:
+          type: string
+          nullable: true
+          maxLength: 128
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 128
+        vatNumber:
+          type: string
+          nullable: true
+          maxLength: 128
+        stateOfIncorporation:
+          type: string
+          nullable: true
+          maxLength: 128
+        associatedPersons:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        beneficiaryDocument:
+          type: boolean
+      required:
+      - externalCompanyId
+      - id
+    AddressAuditImageTypeEnum:
+      enum:
+      - STREET_VIEW
+      - ADDITIONAL
+      type: string
+    ManualApproveRequest:
+      type: object
+      properties:
+        approvalStatus:
+          allOf:
+          - $ref: '#/components/schemas/ApprovalStatusEnum'
+          description: 'Review approval status.
+
+            - Can not select this status if there are unreviewed AML statuses.
+
+            - In the end, AML monitoring subjects are added according to account settings.'
+      required:
+      - approvalStatus
+    ManualApprove:
+      type: object
+      properties:
+        approvalStatus:
+          allOf:
+          - $ref: '#/components/schemas/ApprovalStatusEnum'
+          description: 'Review approval status.
+
+            - Can not select this status if there are unreviewed AML statuses.
+
+            - In the end, AML monitoring subjects are added according to account settings.'
+        denyReason:
+          type: string
+          readOnly: true
+          nullable: true
+          description: The reason why this KYB form was denied.
+      required:
+      - approvalStatus
+      - denyReason
+    CountryFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - title
+      - type
+    EinVerification:
+      type: object
+      properties:
+        result:
+          allOf:
+          - $ref: '#/components/schemas/EinVerificationEnum'
+          readOnly: true
+          nullable: true
+        checkedEin:
+          type: string
+          readOnly: true
+        checkedCompanyName:
+          type: string
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - checkedCompanyName
+      - checkedEin
+      - created
+      - result
+    CompanyStatus:
+      oneOf:
+      - $ref: '#/components/schemas/NeedToStatus'
+      - $ref: '#/components/schemas/NeedToStatus'
+      - $ref: '#/components/schemas/CompletedStatus'
+      discriminator:
+        propertyName: status
+        mapping:
+          NEED_TO_PROCESS: '#/components/schemas/NeedToStatus'
+          NEED_TO_REVIEW: '#/components/schemas/NeedToStatus'
+          COMPLETED: '#/components/schemas/CompletedStatus'
+    BlacklistStatusEnum:
+      enum:
+      - CHECKED
+      - SKIPPED
+      type: string
+    PersonAmlCheckInput:
+      type: object
+      properties:
+        fullName:
+          type: string
+          maxLength: 200
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        sex:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          nullable: true
+      required:
+      - fullName
+    IndividualDatasetEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      - GRI
+      type: string
+    KybDataMatchingList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        companyComparison:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyComparisonDataMatching'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        reportId:
+          type: string
+          maxLength: 36
+        reportType:
+          $ref: '#/components/schemas/ReportTypeEnum'
+      required:
+      - companyComparison
+      - created
+      - id
+      - reportId
+      - reportType
+    CompanyDetailInfo:
+      type: object
+      properties:
+        companyName:
+          type: string
+          maxLength: 200
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        region:
+          type: string
+          nullable: true
+          maxLength: 2
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        brandNames:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          default: []
+          maxItems: 10
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 8
+        tin:
+          type: string
+          nullable: true
+          description: Taxpayer identification number.
+          maxLength: 32
+        operatingAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        postalAddress:
+          type: string
+          nullable: true
+          description: Registration address.
+          maxLength: 255
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+      required:
+      - additionalInfo
+      - companyName
+      - country
+    CompanyCreditBureauDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        externalCompanyId:
+          type: string
+          maxLength: 255
+        checkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/CreditBureauStatusEnum'
+        dataFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:json)$
+        reportFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:pdf)$
+        beneficiaryDocument:
+          type: boolean
+      required:
+      - externalCompanyId
+      - id
+      - status
+    CompanyList:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        company:
+          $ref: '#/components/schemas/CompanyDetailInfo'
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/KybFormMeta'
+          readOnly: true
+      required:
+      - company
+      - id
+      - meta
+    KybFormMeta:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/KybStatusEnum'
+        approvalStatus:
+          allOf:
+          - $ref: '#/components/schemas/ApprovalStatusEnum'
+          nullable: true
+          description: Review approval status.
+        submissionTime:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when KYB form submit endpoint was called.
+        soleProprietor:
+          type: boolean
+    KybAuditLog:
+      type: object
+      properties:
+        identifier:
+          type: string
+        text:
+          type: string
+        additionalText:
+          type: string
+        logType:
+          $ref: '#/components/schemas/KybLogTypeEnum'
+        logLevel:
+          $ref: '#/components/schemas/LogLevelEnum'
+        timestamp:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/AuditLogManager'
+        logId:
+          type: string
+          nullable: true
+      required:
+      - identifier
+      - logId
+      - logLevel
+      - logType
+      - text
+      - timestamp
+    CompanyLogs:
+      type: object
+      properties:
+        logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/KybAuditLog'
+          readOnly: true
+        logsCount:
+          type: integer
+          readOnly: true
+      required:
+      - logs
+      - logsCount
+    CompanyApplicant:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        companyName:
+          type: string
+          maxLength: 200
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        region:
+          type: string
+          nullable: true
+          maxLength: 2
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        brandNames:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          default: []
+          maxItems: 10
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 8
+        tin:
+          type: string
+          nullable: true
+          description: Taxpayer identification number.
+          maxLength: 32
+        operatingAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        postalAddress:
+          type: string
+          nullable: true
+          description: Registration address.
+          maxLength: 255
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+      required:
+      - companyName
+      - country
+      - infoType
+    CompanyGovChecks:
+      type: object
+      properties:
+        creditBureauDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyCreditBureauDocument'
+        govRegistersDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyGovRegistersDocument'
+        govOrderedDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyGovOrderedDocument'
+        sosFilingDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanySosReportDocument'
+      required:
+      - creditBureauDocuments
+      - govOrderedDocuments
+      - govRegistersDocuments
+      - sosFilingDocuments
+    AdverseMediaSearchResult:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+          format: uri
+        text:
+          type: string
+          nullable: true
+        score:
+          type: integer
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AmlArticleTypeEnum'
+          nullable: true
+        publishDate:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    IndividualApplicant:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        name:
+          type: string
+          maxLength: 100
+        surname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+          description: ID issuing country.
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        personalNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        citizenship:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        countryOfBirth:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        residentialAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        countryOfResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        address:
+          type: string
+          nullable: true
+          maxLength: 255
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        tin:
+          type: string
+          nullable: true
+          maxLength: 20
+        taxResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        selfDeclaredPep:
+          type: boolean
+          nullable: true
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+      required:
+      - infoType
+      - name
+      - surname
+    CompanySosReportDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        checkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        dataFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:json)$
+        reportFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:pdf)$
+        companyName:
+          type: string
+          nullable: true
+          maxLength: 200
+        formationDate:
+          type: string
+          format: date
+          nullable: true
+        entityType:
+          allOf:
+          - $ref: '#/components/schemas/SosEntityTypeEnum'
+          nullable: true
+        watchlistHitsCount:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        beneficiaryDocument:
+          type: boolean
+      required:
+      - id
+    AmlCheckMonitoring:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/MonitoringStatusEnum'
+        isSubscribed:
+          type: boolean
+        expiration:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - id
+    SosEntityTypeEnum:
+      enum:
+      - CORPORATION
+      - LLC
+      - PARTNERSHIP
+      - NON_PROFIT
+      - TRUST
+      - SOLE_PROPRIETORSHIP
+      type: string
+    BeneficiaryMonitoringUser:
+      type: object
+      properties:
+        monitoringId:
+          type: string
+          readOnly: true
+        alertStatus:
+          allOf:
+          - $ref: '#/components/schemas/MonitoringAlertTypeEnum'
+          readOnly: true
+      required:
+      - alertStatus
+      - monitoringId
+    AddressAuditImage:
+      type: object
+      properties:
+        image:
+          type: string
+          format: uri
+          description: Address audit image
+        type:
+          $ref: '#/components/schemas/AddressAuditImageTypeEnum'
+      required:
+      - image
+    CompanyNameAudit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        descriptionByCompany:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          maxLength: 255
+        phoneNumber:
+          type: string
+          nullable: true
+          maxLength: 128
+        industry:
+          type: string
+          nullable: true
+          maxLength: 100
+        rating:
+          type: number
+          format: double
+          nullable: true
+        socialMediaProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialMediaProfiles'
+      required:
+      - created
+      - id
+      - socialMediaProfiles
+    IdentificationHistory:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          maxLength: 40
+        finalStatus:
+          type: string
+          readOnly: true
+      required:
+      - finalStatus
+      - scanRef
+    SelectFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: string
+          nullable: true
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+      required:
+      - title
+      - type
+    SearchAddress:
+      type: object
+      properties:
+        geography:
+          type: string
+          description: An upper-case two-letter ISO-3166-2 code of a country or dependent territory of the profile address or profile nationality.
+        city:
+          type: string
+          description: The city name of the profile address.
+      required:
+      - geography
+    CheckboxFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: boolean
+          nullable: true
+      required:
+      - title
+      - type
+    CompletedStatus:
+      type: object
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/KybStatusEnum'
+          description: Setting this status is the same as a manual review through the dashboard.<br>In the end, the KYB review webhook is sent.
+        reviewInfo:
+          $ref: '#/components/schemas/ManualReview'
+      required:
+      - reviewInfo
+    CompanyAmlCheckInput:
+      type: object
+      properties:
+        companyName:
+          type: string
+          maxLength: 200
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - companyName
+    QuestionnaireAnswersDisplayQuestions:
+      type: object
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/TypeB9cEnum'
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+          - type: boolean
+          nullable: true
+          readOnly: true
+      required:
+      - key
+      - title
+      - type
+      - value
+    EinVerificationEnum:
+      enum:
+      - MISMATCH
+      - UNKNOWN
+      - VERIFIED
+      type: string
+    RiskLevelEnum:
+      enum:
+      - VERY_LOW
+      - LOW
+      - MEDIUM
+      - HIGH
+      - VERY_HIGH
+      - NOT_CHECKED
+      type: string
+    UserMonitoringTypeEnum:
+      enum:
+      - COMPANY
+      - PERSON
+      type: string
+    MonitoringAlertTypeEnum:
+      enum:
+      - ALERT
+      - DECLINED
+      - ACCEPTED
+      - PENDING
+      - STATUS
+      type: string
+    IntegerFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: integer
+          nullable: true
+      required:
+      - title
+      - type
+    KybDocument:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - created
+      - file
+      - type
+    CountryMultiFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - title
+      - type
+    PaginatedCompanyListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyList'
+    CompanyDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        company:
+          $ref: '#/components/schemas/CompanyDetailInfo'
+        meta:
+          $ref: '#/components/schemas/CompanyMeta'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/KybDocument'
+        beneficiaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryDetail'
+        questionnaires:
+          type: array
+          items:
+            $ref: '#/components/schemas/KybAnswersDisplay'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/KybComments'
+        auditLogs:
+          allOf:
+          - $ref: '#/components/schemas/CompanyLogs'
+          readOnly: true
+        addressAudit:
+          $ref: '#/components/schemas/AddressAuditRetrieve'
+        websiteAudit:
+          $ref: '#/components/schemas/WebsiteAudit'
+        companyNameAudit:
+          $ref: '#/components/schemas/CompanyNameAudit'
+        dataMatchings:
+          type: array
+          items:
+            $ref: '#/components/schemas/KybDataMatchingList'
+        einVerification:
+          $ref: '#/components/schemas/EinVerification'
+        govChecks:
+          $ref: '#/components/schemas/CompanyGovChecks'
+        amlCheck:
+          allOf:
+          - $ref: '#/components/schemas/CompanyAmlCheck'
+          nullable: true
+        amlChecks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlCheck'
+          description: Other AML checks that were performed for this company.
+        amlMonitoringUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlMonitoringUser'
+          nullable: true
+        riskAssessment:
+          allOf:
+          - $ref: '#/components/schemas/RiskAssessmentSummary'
+          nullable: true
+      required:
+      - addressAudit
+      - amlCheck
+      - amlChecks
+      - amlMonitoringUsers
+      - auditLogs
+      - beneficiaries
+      - comments
+      - company
+      - companyNameAudit
+      - dataMatchings
+      - documents
+      - einVerification
+      - govChecks
+      - id
+      - meta
+      - questionnaires
+      - riskAssessment
+      - websiteAudit
+    BeneficiaryDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        beneficiaryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryTypeEnum'
+          minItems: 1
+        info:
+          $ref: '#/components/schemas/Applicant'
+        positions:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 50
+          default: []
+          description: Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.
+          maxItems: 3
+        formFiller:
+          type: boolean
+          description: Indicates whether this beneficiary is the filler of the KYB form.
+        ownershipPercentage:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+        parent:
+          type: string
+          readOnly: true
+          nullable: true
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/BeneficiaryDetailMeta'
+          readOnly: true
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/KybDocument'
+          default: []
+        amlCheck:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheck'
+          nullable: true
+        amlMonitoringUser:
+          allOf:
+          - $ref: '#/components/schemas/BeneficiaryMonitoringUser'
+          readOnly: true
+      required:
+      - amlCheck
+      - amlMonitoringUser
+      - id
+      - info
+      - meta
+      - parent
+    ApplicantTypeEnum:
+      enum:
+      - INDIVIDUAL
+      - COMPANY
+      type: string
+    CustomFieldTypeEnum:
+      enum:
+      - CHECKBOX
+      - COUNTRY
+      - COUNTRY_MULTI
+      - DATE
+      - INTEGER
+      - SELECT
+      - SELECT_MULTI
+      - TEXT
+      type: string
+    PersonAmlCheckFilter:
+      type: object
+      properties:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonAmlCheckFilterDatasetsEnum'
+          nullable: true
+          description: Required when checking `AML_CHECK` service.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning bodies that should be included when screening `SAN` dataset. The full list of supported sanction bodies and their values are provided by the API info endpoint. If none sanction bodies are provided the system will search sanctions issued by any sanctioning body.
+        dateOfBirthMatching:
+          allOf:
+          - $ref: '#/components/schemas/DateOfBirthMatchingEnum'
+          nullable: true
+          default: EXACT
+        pepTiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PepTierEnum'
+          nullable: true
+    KybDataMatchEnum:
+      enum:
+      - MATCH
+      - NO_MATCH
+      - PARTIAL_MATCH
+      type: string
+    ManualReviewRequest:
+      oneOf:
+      - $ref: '#/components/schemas/ManualApproveRequest'
+      - $ref: '#/components/schemas/ManualDenyRequest'
+      discriminator:
+        propertyName: approvalStatus
+        mapping:
+          APPROVED: '#/components/schemas/ManualApproveRequest'
+          DENIED: '#/components/schemas/ManualDenyRequest'
+    KybLogTypeEnum:
+      enum:
+      - AUTOMATION
+      - CLIENT
+      - DEFAULT
+      - PARTNER
+      - SYSTEM
+      type: string
+    BusinessSearchDatasetEnum:
+      enum:
+      - PEP
+      - PEP_LINKED
+      - SAN
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE
+      - SOE_CURRENT
+      - SOE_FORMER
+      type: string
+    GovDocumentOrderStatusEnum:
+      enum:
+      - NOT_ORDERED
+      - IN_PROGRESS
+      - FINISHED
+      - FAILED
+      - TIMED_OUT
+      type: string
+    Applicant:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualApplicant'
+      - $ref: '#/components/schemas/CompanyApplicant'
+      discriminator:
+        propertyName: infoType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/IndividualApplicant'
+          COMPANY: '#/components/schemas/CompanyApplicant'
+    BeneficiaryTypeEnum:
+      enum:
+      - CEO
+      - REPRESENTATIVE
+      - SHAREHOLDER
+      - UBO
+      - ABO
+      type: string
+    AmlArticleTypeEnum:
+      enum:
+      - NEGATIVE
+      type: string
+    SocialMediaProfiles:
+      type: object
+      properties:
+        link:
+          type: string
+        name:
+          type: string
+      required:
+      - link
+      - name
+    RiskAssessmentSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        riskScore:
+          type: integer
+          maximum: 100
+          minimum: 0
+          nullable: true
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+      required:
+      - id
+    CompanyGovOrderedDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          nullable: true
+        documentFormat:
+          type: string
+          maxLength: 5
+        expectedDeliveryTime:
+          type: string
+          format: date-time
+        deliveredAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        file:
+          type: string
+          format: uri
+          nullable: true
+        beneficiaryDocument:
+          type: boolean
+      required:
+      - expectedDeliveryTime
+      - id
+    KybDocumentTypeEnum:
+      enum:
+      - INCORPORATION_CERT
+      - DIRECTOR_CERT
+      - SHAREHOLDER_CERT
+      - UBO_CERT
+      - INCORPORATION_ARTICLES
+      - SHAREHOLDER_REGISTRY
+      - DIRECTORS_REGISTRY
+      - STATE_REGISTRY
+      - UBO_REGISTRY
+      - OWNERSHIP_STRUCTURE
+      - INCUMBENCY_CERT
+      - TRUST_AGREEMENT
+      - INFORMATION_STATEMENT
+      - GOOD_STANDING_CERT
+      - PROOF_OF_DOMAIN
+      - PROOF_OF_ADDRESS
+      - SOURCE_OF_FUNDS
+      - BANK_STATEMENT
+      - INVOICE
+      - ONLINE_PRESENCE
+      - DIRECTOR_ONLINE_PRESENCE
+      - SHAREHOLDER_ONLINE_PRESENCE
+      - WEBSITE_OVERVIEW
+      - E_SIGNATURE_CERT
+      - ANNUAL_REPORT
+      - NAME_CHANGE_PROOF
+      - TRADING_STATUS_PROOF
+      - ORG_CHART
+      - COMPANY_ADVERSE_MEDIA
+      - INDIVIDUAL_ADVERSE_MEDIA
+      - EMAIL_CHECK
+      - SOURCE_OF_WEALTH
+      - OTHER
+      type: string
+    MainSexEnum:
+      enum:
+      - MALE
+      - FEMALE
+      type: string
+    CompanyComparisonDataMatching:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/CompanyFieldEnum'
+        systemValue:
+          type: string
+          nullable: true
+          maxLength: 255
+        reportValue:
+          type: string
+          nullable: true
+          maxLength: 255
+        match:
+          allOf:
+          - $ref: '#/components/schemas/KybDataMatchEnum'
+          nullable: true
+      required:
+      - field
+      - match
+      - reportValue
+      - systemValue
+    BlacklistStatus:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/BlacklistStatusEnum'
+      required:
+      - id
+      - status
+    KybComments:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        content:
+          type: string
+          maxLength: 10000
+        manager:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+      required:
+      - content
+      - created
+      - manager
+    PersonAmlCheckFilterDatasetsEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      type: string
+    LogLevelEnum:
+      enum:
+      - DEBUG
+      - INFO
+      - STEP
+      - ACTION
+      - WARNING
+      - FE_ERROR
+      - ERROR
+      - CRITICAL
+      - NOT_SET
+      type: string
+    NeedToStatusRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/KybStatusEnum'
+    CompanyAmlCheckFilterDatasetsEnum:
+      enum:
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE_CURRENT
+      - SOE_FORMER
+      type: string
+    PersonAmlCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        checkedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInput'
+        filter:
+          $ref: '#/components/schemas/PersonAmlCheckFilter'
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualSearchResult'
+          readOnly: true
+          nullable: true
+          description: AML database search result.
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaSearchResult'
+          readOnly: true
+          nullable: true
+          description: Adverse media database search result.
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          readOnly: true
+        monitoring:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckMonitoring'
+          readOnly: true
+          nullable: true
+      required:
+      - adverseMedia
+      - amlCheck
+      - checkedAt
+      - clientId
+      - created
+      - filter
+      - id
+      - input
+      - monitoring
+      - overallStatus
+      - userType
+    ReportTypeEnum:
+      enum:
+      - KYB_DOCUMENT
+      - CREDIT_BUREAU
+      - GOV_REGISTERS
+      - GOV_REGISTERS_FILINGS
+      - SOS_REPORT
+      - SOLE_PROPRIETOR_REPORT
+      - COMPANY_AI_REPORT
+      type: string
+    CompanyFieldEnum:
+      enum:
+      - COMPANY_NAME
+      - REGISTRATION_NUMBER
+      - COUNTRY
+      - REGION
+      - TYPE
+      - PHONE
+      - WEBSITE
+      - EMAIL
+      - BRAND_NAMES
+      - ACTIVITY_CODE
+      - TIN
+      - OPERATING_ADDRESS
+      - POSTAL_ADDRESS
+      - POSTCODE
+      - STREET
+      - CITY
+      type: string
+    AmlCheck:
+      oneOf:
+      - $ref: '#/components/schemas/PersonAmlCheck'
+      - $ref: '#/components/schemas/CompanyAmlCheck'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/PersonAmlCheck'
+          COMPANY: '#/components/schemas/CompanyAmlCheck'
+    QuestionnaireAnswersDisplaySections:
+      type: object
+      properties:
+        title:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
+      required:
+      - questions
+      - title
+    AuditLogManager:
+      type: object
+      properties:
+        id:
+          type: integer
+        displayName:
+          type: string
+    DateOfBirthMatchingEnum:
+      enum:
+      - EXACT
+      - SAME_YEAR
+      - WITHIN_ONE_YEAR
+      - WITHIN_TWO_YEARS
+      - WITHIN_THREE_YEARS
+      - WITHIN_FOUR_YEARS
+      - WITHIN_FIVE_YEARS
+      type: string
+    SelectMultiFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: array
+          items:
+            type: string
+            pattern: ^[\w_*-]+$
+            maxLength: 32
+          nullable: true
+      required:
+      - title
+      - type
+    CreditBureauStatusEnum:
+      enum:
+      - ACTIVE
+      - NON_ACTIVE
+      - PENDING
+      - OTHER
+      - NOT_FOUND
+      type: string
+    TextFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - title
+      - type
+    CustomFieldValue:
+      oneOf:
+      - $ref: '#/components/schemas/CheckboxFieldValue'
+      - $ref: '#/components/schemas/CountryFieldValue'
+      - $ref: '#/components/schemas/CountryMultiFieldValue'
+      - $ref: '#/components/schemas/DateFieldValue'
+      - $ref: '#/components/schemas/IntegerFieldValue'
+      - $ref: '#/components/schemas/SelectFieldValue'
+      - $ref: '#/components/schemas/SelectMultiFieldValue'
+      - $ref: '#/components/schemas/TextFieldValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          CHECKBOX: '#/components/schemas/CheckboxFieldValue'
+          COUNTRY: '#/components/schemas/CountryFieldValue'
+          COUNTRY_MULTI: '#/components/schemas/CountryMultiFieldValue'
+          DATE: '#/components/schemas/DateFieldValue'
+          INTEGER: '#/components/schemas/IntegerFieldValue'
+          SELECT: '#/components/schemas/SelectFieldValue'
+          SELECT_MULTI: '#/components/schemas/SelectMultiFieldValue'
+          TEXT: '#/components/schemas/TextFieldValue'
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - CD
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - XK
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VA
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+    CompletedStatusRequest:
+      type: object
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/KybStatusEnum'
+          description: Setting this status is the same as a manual review through the dashboard.<br>In the end, the KYB review webhook is sent.
+        reviewInfo:
+          $ref: '#/components/schemas/ManualReviewRequest'
+      required:
+      - reviewInfo
+    CompanyAmlCheckFilter:
+      type: object
+      properties:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlCheckFilterDatasetsEnum'
+          nullable: true
+          description: Required when checking `AML_CHECK` service.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning bodies that should be included when screening `SAN` dataset. The full list of supported sanction bodies and their values are provided by the API info endpoint. If none sanction bodies are provided the system will search sanctions issued by any sanctioning body.
+    KybStatusEnum:
+      enum:
+      - PENDING
+      - PROCESSING
+      - NEED_TO_PROCESS
+      - NEED_TO_REVIEW
+      - COMPLETED
+      type: string
+    WebsiteAudit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+        riskLevel:
+          $ref: '#/components/schemas/RiskLevelEnum'
+        trustScore:
+          type: integer
+          maximum: 100
+          minimum: 0
+        blacklistScore:
+          type: integer
+          maximum: 100
+          minimum: -100
+        internalAuditScore:
+          type: integer
+          maximum: 100
+          minimum: 0
+        popularityScore:
+          type: integer
+          maximum: 100
+          minimum: 0
+        domainCreatedAt:
+          type: string
+          format: date-time
+          nullable: true
+        websiteTitle:
+          type: string
+          nullable: true
+        websiteDescription:
+          type: string
+          nullable: true
+      required:
+      - created
+      - id
+      - riskLevel
+      - url
+    KybPdfRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 1
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyPdfContentEnum'
+          default:
+          - SUBMITTED_COMPANY_INFO
+          - COMPANY_META
+          - RELATED_SUBJECTS
+          - OWNERSHIP_STRUCTURE
+          - QUESTIONNAIRE_ANSWERS
+          - COMPANY_NAME_AUDIT
+          - BANK_VERIFICATION
+          - WEBSITE_AUDIT
+          - ADDRESS_AUDIT
+          - GOV_CHECKS
+          - KYB_DATA_MATCHING
+          - KYB_DOCUMENTS
+          - AUDIT_LOGS
+          - VAT_VERIFICATION
+          - TAGS
+          - SHAREHOLDERS_CHECK
+          - AML_MONITORING_USERS
+          - LINKED_COMPANIES
+          - COMMENTS
+          - COMPANY_AML_CHECK
+          - COMPANY_ADVERSE_MEDIA_CHECK
+          - BENEFICIARY_AML_CHECKS
+          - BENEFICIARY_ADVERSE_MEDIA_CHECKS
+    CompanyStatusRequest:
+      oneOf:
+      - $ref: '#/components/schemas/NeedToStatusRequest'
+      - $ref: '#/components/schemas/NeedToStatusRequest'
+      - $ref: '#/components/schemas/CompletedStatusRequest'
+      discriminator:
+        propertyName: status
+        mapping:
+          NEED_TO_PROCESS: '#/components/schemas/NeedToStatusRequest'
+          NEED_TO_REVIEW: '#/components/schemas/NeedToStatusRequest'
+          COMPLETED: '#/components/schemas/CompletedStatusRequest'
+    ManualDeny:
+      type: object
+      properties:
+        approvalStatus:
+          allOf:
+          - $ref: '#/components/schemas/ApprovalStatusEnum'
+          description: Review approval status.
+        denyReason:
+          type: string
+          nullable: true
+          description: The reason why this KYB form was denied.
+          maxLength: 64
+      required:
+      - approvalStatus
+    NeedToStatus:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/KybStatusEnum'
+    BeneficiaryDetailMeta:
+      type: object
+      properties:
+        identifier:
+          type: string
+          readOnly: true
+          nullable: true
+        clientId:
+          type: string
+          readOnly: true
+          nullable: true
+        finalStatus:
+          type: string
+          readOnly: true
+          nullable: true
+        sessionExpiration:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        identificationHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentificationHistory'
+          readOnly: true
+        pepsCheckStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          description: Always `NOT_CHECKED` for `COMPANY` beneficiaries because company AML can't have PEPs flags.
+        pepsStatusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        pepsStatusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        sanctionsCheckStatus:
+          $ref: '#/components/schemas/AmlCheckStatusEnum'
+        sanctionsStatusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        sanctionsStatusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        amlComment:
+          type: string
+          nullable: true
+        negativeNewsStatus:
+          $ref: '#/components/schemas/AmlCheckStatusEnum'
+        negativeNewsComment:
+          type: string
+          nullable: true
+        newsStatusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        newsStatusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - clientId
+      - finalStatus
+      - identificationHistory
+      - identifier
+      - newsStatusSetBy
+      - pepsStatusSetBy
+      - sanctionsStatusSetBy
+      - sessionExpiration
+    ApprovalStatusEnum:
+      enum:
+      - APPROVED
+      - DENIED
+      type: string
+    CompanyMeta:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/KybStatusEnum'
+        statusChangedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        statusChangedBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        expirationStatus:
+          allOf:
+          - $ref: '#/components/schemas/CompanyExpirationStatusEnum'
+          nullable: true
+        assignedTo:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        initialSubmissionTime:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when KYB form submit endpoint was called for the first time.
+        submissionTime:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when KYB form submit endpoint was called.
+        matchedBlacklists:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 32
+          nullable: true
+        blacklistStatuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlacklistStatus'
+          readOnly: true
+          nullable: true
+        automationFlags:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 32
+          nullable: true
+        automationStatuses:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        automationRanAt:
+          type: string
+          format: date-time
+          nullable: true
+        ipProxyRiskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+        fraudProbLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+        sanctionsCheckStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          description: DEPRECATED
+        sanctionsStatusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: DEPRECATED
+        sanctionsStatusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        amlComment:
+          type: string
+          nullable: true
+          description: DEPRECATED
+        negativeNewsStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          description: DEPRECATED
+        newsStatusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: DEPRECATED
+        newsStatusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          readOnly: true
+          nullable: true
+        negativeNewsComment:
+          type: string
+          nullable: true
+          description: DEPRECATED
+        approvalStatus:
+          allOf:
+          - $ref: '#/components/schemas/ApprovalStatusEnum'
+          nullable: true
+          description: Review approval status.
+        approvalStatusChangedAt:
+          type: string
+          format: date-time
+          nullable: true
+        denyReason:
+          type: string
+          nullable: true
+          description: The reason why this KYB form was denied.
+          maxLength: 64
+        informationRequested:
+          type: boolean
+        reviewLevel:
+          type: string
+          nullable: true
+          maxLength: 32
+        soleProprietor:
+          type: boolean
+      required:
+      - assignedTo
+      - blacklistStatuses
+      - created
+      - newsStatusSetBy
+      - sanctionsStatusSetBy
+      - statusChangedAt
+      - statusChangedBy
+    AddressAuditRetrieve:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        googleMapsUrl:
+          type: string
+          format: uri
+          readOnly: true
+          nullable: true
+          description: Link to google maps result for address
+        dataId:
+          type: string
+          readOnly: true
+          nullable: true
+          description: SerpAPI result data ID
+        type:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        address:
+          type: string
+          readOnly: true
+          nullable: true
+        associatedBodies:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+          description: Associated bodies at this address
+        latitude:
+          type: number
+          format: double
+          readOnly: true
+          nullable: true
+          description: Address latitude
+        longitude:
+          type: number
+          format: double
+          readOnly: true
+          nullable: true
+          description: Address longitude
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          readOnly: true
+        addressAuditImages:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressAuditImage'
+          readOnly: true
+      required:
+      - address
+      - addressAuditImages
+      - associatedBodies
+      - created
+      - dataId
+      - googleMapsUrl
+      - id
+      - latitude
+      - longitude
+      - riskLevel
+      - type
+    BusinessSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a profile has been changed by our research team.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or the PDF of the business.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchDatasetEnum'
+          description: "The profile datasets\n * PEP - (Deprecated - ignore)\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN - (Deprecated - ignore)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * SOE - (Deprecated - ignore)\n * SOE_CURRENT - Only current SOE\n * SOE_FORMER - Only former SOE.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - formerSanBodyIds
+      - match
+      - name
+      - resourceId
+      - score
+    IndividualSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a profile has changed.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or the PDF of the Individual.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses and nationalities.
+        nationalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          description: List of the individual's nationalities.
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          description: Gender (for individuals), if known.
+        profileImage:
+          type: string
+          description: The primary profile image.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        pepTier:
+          allOf:
+          - $ref: '#/components/schemas/PepTierEnum'
+          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - datesOfBirth
+      - formerSanBodyIds
+      - match
+      - name
+      - nationalities
+      - resourceId
+      - score
+    ManualDenyRequest:
+      type: object
+      properties:
+        approvalStatus:
+          allOf:
+          - $ref: '#/components/schemas/ApprovalStatusEnum'
+          description: Review approval status.
+        denyReason:
+          type: string
+          nullable: true
+          description: The reason why this KYB form was denied.
+          maxLength: 64
+      required:
+      - approvalStatus
+    DateFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - title
+      - type
+    CompanyExpirationStatusEnum:
+      enum:
+      - PENDING
+      - EXPIRED
+      type: string
+    TypeB9cEnum:
+      enum:
+      - CHECKBOX
+      - COLOR
+      - COUNTRY
+      - COUNTRY_MULTI
+      - DATE
+      - DATETIME
+      - EMAIL
+      - FILE
+      - FILE_MULTI
+      - FLOAT
+      - LIST
+      - INTEGER
+      - PASSWORD
+      - RADIO
+      - SELECT
+      - SELECT_MULTI
+      - TEL
+      - TEXT
+      - TEXT_AREA
+      - TIME
+      - URL
+      type: string
+    ManualReview:
+      oneOf:
+      - $ref: '#/components/schemas/ManualApprove'
+      - $ref: '#/components/schemas/ManualDeny'
+      discriminator:
+        propertyName: approvalStatus
+        mapping:
+          APPROVED: '#/components/schemas/ManualApprove'
+          DENIED: '#/components/schemas/ManualDeny'
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks

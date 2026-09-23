@@ -1,0 +1,566 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core GOV Orders API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: GOV Orders
+  description: Endpoints for actions with GOV ordered documents.
+paths:
+  /api/v2/gov-ordered-documents/:
+    get:
+      operationId: apiV2GovOrderedDocumentsList
+      summary: List GOV ordered documents
+      parameters:
+      - in: query
+        name: deliveredAfter
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: deliveredBefore
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: documentFormat
+        schema:
+          type: string
+      - in: query
+        name: expectedDeliveryAfter
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: expectedDeliveryBefore
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: orderBy
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - -deliveryTime
+            - -expectedDeliveryTime
+            - -orderTime
+            - deliveryTime
+            - expectedDeliveryTime
+            - orderTime
+        description: Ordering
+        explode: false
+        style: form
+      - in: query
+        name: orderedAfter
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: orderedBefore
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - FAILED
+          - FINISHED
+          - IN_PROGRESS
+          - NOT_ORDERED
+          - TIMED_OUT
+      - in: query
+        name: title
+        schema:
+          type: string
+      tags:
+      - GOV Orders
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GovPartnerOrderedDocument'
+          description: ''
+  /api/v2/gov-ordered-documents/{id}/:
+    get:
+      operationId: apiV2GovOrderedDocumentsRetrieve
+      summary: Retrieve GOV ordered document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this gov partner ordered document.
+        required: true
+      tags:
+      - GOV Orders
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovPartnerOrderedDocument'
+          description: ''
+  /api/v2/gov-ordered-documents/available-documents/:
+    get:
+      operationId: apiV2GovOrderedDocumentsAvailableDocumentsRetrieve
+      summary: Retrieve available documents to order
+      parameters:
+      - in: query
+        name: countryCode
+        schema:
+          enum:
+          - AL
+          - AM
+          - AR
+          - AT
+          - AU
+          - AW
+          - AZ
+          - BA
+          - BB
+          - BD
+          - BE
+          - BG
+          - BH
+          - BN
+          - BO
+          - BQ
+          - BR
+          - BW
+          - BY
+          - BZ
+          - CA
+          - CH
+          - CN
+          - CO
+          - CR
+          - CW
+          - CY
+          - CZ
+          - DE
+          - DK
+          - DO
+          - EC
+          - EE
+          - ES
+          - FI
+          - FR
+          - GB
+          - GE
+          - GG
+          - GH
+          - GI
+          - GR
+          - HK
+          - HR
+          - HU
+          - ID
+          - IE
+          - IL
+          - IM
+          - IN
+          - IS
+          - IT
+          - JE
+          - JO
+          - KH
+          - KW
+          - KY
+          - LI
+          - LK
+          - LS
+          - LT
+          - LU
+          - LV
+          - MA
+          - ME
+          - MH
+          - MM
+          - MT
+          - MU
+          - MY
+          - NL
+          - 'NO'
+          - NZ
+          - PE
+          - PH
+          - PK
+          - PL
+          - PR
+          - PT
+          - QA
+          - RO
+          - RS
+          - RU
+          - SB
+          - SE
+          - SG
+          - SI
+          - SK
+          - TH
+          - TN
+          - TO
+          - TR
+          - TT
+          - TW
+          - UG
+          - US
+          - UY
+          - VG
+          - VI
+          - VN
+          - VU
+          - WS
+          - ZA
+          type: string
+          minLength: 1
+        required: true
+      - in: query
+        name: region
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: registrationNumber
+        schema:
+          type: string
+          minLength: 1
+        description: External company ID from GOV registers search should be used.
+        required: true
+      tags:
+      - GOV Orders
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovRegistersAvailableDocuments'
+          description: ''
+  /api/v2/gov-ordered-documents/document-order/:
+    post:
+      operationId: apiV2GovOrderedDocumentsDocumentOrderCreate
+      summary: Order GOV document
+      tags:
+      - GOV Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GovPartnerOrderDocumentRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    GovPartnerOrderedDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          nullable: true
+        documentFormat:
+          type: string
+          maxLength: 5
+        productKey:
+          type: string
+        expectedDeliveryTime:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: double
+          minimum: 0
+        deliveredAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        file:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - expectedDeliveryTime
+      - id
+      - price
+      - productKey
+    GovDocumentOrderStatusEnum:
+      enum:
+      - NOT_ORDERED
+      - IN_PROGRESS
+      - FINISHED
+      - FAILED
+      - TIMED_OUT
+      type: string
+    GovPartnerOrderDocumentRequest:
+      type: object
+      properties:
+        countryCode:
+          allOf:
+          - $ref: '#/components/schemas/CountryCodeEnum'
+          writeOnly: true
+        registrationNumber:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: External company ID from GOV registers search should be used.
+        region:
+          type: string
+          writeOnly: true
+          minLength: 1
+        companyName:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 200
+        productKey:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - companyName
+      - countryCode
+      - productKey
+      - registrationNumber
+    CountryCodeEnum:
+      enum:
+      - AL
+      - AM
+      - AR
+      - AT
+      - AU
+      - AW
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BG
+      - BH
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CH
+      - CN
+      - CO
+      - CR
+      - CW
+      - CY
+      - CZ
+      - DE
+      - DK
+      - DO
+      - EC
+      - EE
+      - ES
+      - FI
+      - FR
+      - GB
+      - GE
+      - GG
+      - GH
+      - GI
+      - GR
+      - HK
+      - HR
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IS
+      - IT
+      - JE
+      - JO
+      - KH
+      - KW
+      - KY
+      - LI
+      - LK
+      - LS
+      - LT
+      - LU
+      - LV
+      - MA
+      - ME
+      - MH
+      - MM
+      - MT
+      - MU
+      - MY
+      - NL
+      - 'NO'
+      - NZ
+      - PE
+      - PH
+      - PK
+      - PL
+      - PR
+      - PT
+      - QA
+      - RO
+      - RS
+      - RU
+      - SB
+      - SE
+      - SG
+      - SI
+      - SK
+      - TH
+      - TN
+      - TO
+      - TR
+      - TT
+      - TW
+      - UG
+      - US
+      - UY
+      - VG
+      - VI
+      - VN
+      - VU
+      - WS
+      - ZA
+      type: string
+    GovRegistersAvailableDocuments:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/GovRegistersFilingResult'
+      required:
+      - products
+    GovRegistersFilingResult:
+      type: object
+      properties:
+        id:
+          type: string
+        productCode:
+          type: string
+        price:
+          type: integer
+          nullable: true
+          readOnly: true
+        productFormat:
+          type: string
+          nullable: true
+          readOnly: true
+        productTitle:
+          type: string
+        deliveryTimeMinutes:
+          type: integer
+        type:
+          type: string
+        displayDate:
+          type: string
+        priceTag:
+          type: string
+        companyName:
+          type: string
+        countryISO:
+          type: string
+        noVatPrice:
+          type: string
+        vatCharge:
+          type: string
+        currency:
+          type: string
+        companyCode:
+          type: string
+        productDetails:
+          type: object
+          additionalProperties: {}
+        downloadURL:
+          type: string
+        propertyChanged:
+          type: string
+        tierCode:
+          type: string
+        tierValue:
+          type: string
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        canOrder:
+          type: boolean
+          readOnly: true
+        file:
+          type: string
+      required:
+      - canOrder
+      - id
+      - price
+      - productFormat
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks

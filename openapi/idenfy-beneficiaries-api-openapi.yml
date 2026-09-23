@@ -1,0 +1,1605 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core Beneficiaries API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: Beneficiaries
+  description: Beneficiaries CRUD endpoints for the KYB form.
+paths:
+  /kyb/forms/{companyId}/beneficiaries/:
+    get:
+      operationId: kybFormsBeneficiariesList
+      summary: List beneficiaries
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - Beneficiaries
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+          description: ''
+    post:
+      operationId: kybFormsBeneficiariesCreate
+      summary: Add new beneficiary
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - Beneficiaries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryCreateRequest'
+        required: true
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryCreate'
+          description: ''
+  /kyb/forms/{companyId}/beneficiaries/{id}/:
+    get:
+      operationId: kybFormsBeneficiariesRetrieve
+      summary: Retrieve beneficiary
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this beneficiary.
+        required: true
+      tags:
+      - Beneficiaries
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+          description: ''
+    put:
+      operationId: kybFormsBeneficiariesUpdate
+      summary: Update beneficiary
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this beneficiary.
+        required: true
+      tags:
+      - Beneficiaries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryRequest'
+        required: true
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+          description: ''
+    patch:
+      operationId: kybFormsBeneficiariesPartialUpdate
+      summary: Partially update beneficiary
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this beneficiary.
+        required: true
+      tags:
+      - Beneficiaries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBeneficiaryRequest'
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+          description: ''
+    delete:
+      operationId: kybFormsBeneficiariesDestroy
+      summary: Delete beneficiary
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this beneficiary.
+        required: true
+      tags:
+      - Beneficiaries
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    IndividualApplicant:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        name:
+          type: string
+          maxLength: 100
+        surname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+          description: ID issuing country.
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        personalNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        citizenship:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        countryOfBirth:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        residentialAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        countryOfResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        address:
+          type: string
+          nullable: true
+          maxLength: 255
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        tin:
+          type: string
+          nullable: true
+          maxLength: 20
+        taxResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        selfDeclaredPep:
+          type: boolean
+          nullable: true
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+      required:
+      - infoType
+      - name
+      - surname
+    CompanyApplicantCreate:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        companyName:
+          type: string
+          maxLength: 200
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        region:
+          type: string
+          nullable: true
+          maxLength: 2
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        brandNames:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          default: []
+          maxItems: 10
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 8
+        tin:
+          type: string
+          nullable: true
+          description: Taxpayer identification number.
+          maxLength: 32
+        operatingAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        postalAddress:
+          type: string
+          nullable: true
+          description: Registration address.
+          maxLength: 255
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalFieldValue'
+      required:
+      - companyName
+      - country
+      - infoType
+    IndividualApplicantRequest:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        surname:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+          description: ID issuing country.
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        personalNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        citizenship:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        countryOfBirth:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        residentialAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        countryOfResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        address:
+          type: string
+          nullable: true
+          maxLength: 255
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        tin:
+          type: string
+          nullable: true
+          maxLength: 20
+        taxResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        selfDeclaredPep:
+          type: boolean
+          nullable: true
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalFieldValueRequest'
+      required:
+      - infoType
+      - name
+      - surname
+    CompanyApplicantRequest:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        region:
+          type: string
+          nullable: true
+          maxLength: 2
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        brandNames:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+          default: []
+          maxItems: 10
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 8
+        tin:
+          type: string
+          nullable: true
+          description: Taxpayer identification number.
+          maxLength: 32
+        operatingAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        postalAddress:
+          type: string
+          nullable: true
+          description: Registration address.
+          maxLength: 255
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalFieldValueRequest'
+      required:
+      - companyName
+      - country
+      - infoType
+    SelectMultiFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: array
+          items:
+            type: string
+            pattern: ^[\w_*-]+$
+            maxLength: 32
+          nullable: true
+      required:
+      - title
+      - type
+    TextFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - title
+      - type
+    CustomFieldValue:
+      oneOf:
+      - $ref: '#/components/schemas/CheckboxFieldValue'
+      - $ref: '#/components/schemas/CountryFieldValue'
+      - $ref: '#/components/schemas/CountryMultiFieldValue'
+      - $ref: '#/components/schemas/DateFieldValue'
+      - $ref: '#/components/schemas/IntegerFieldValue'
+      - $ref: '#/components/schemas/SelectFieldValue'
+      - $ref: '#/components/schemas/SelectMultiFieldValue'
+      - $ref: '#/components/schemas/TextFieldValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          CHECKBOX: '#/components/schemas/CheckboxFieldValue'
+          COUNTRY: '#/components/schemas/CountryFieldValue'
+          COUNTRY_MULTI: '#/components/schemas/CountryMultiFieldValue'
+          DATE: '#/components/schemas/DateFieldValue'
+          INTEGER: '#/components/schemas/IntegerFieldValue'
+          SELECT: '#/components/schemas/SelectFieldValue'
+          SELECT_MULTI: '#/components/schemas/SelectMultiFieldValue'
+          TEXT: '#/components/schemas/TextFieldValue'
+    Applicant:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualApplicant'
+      - $ref: '#/components/schemas/CompanyApplicant'
+      discriminator:
+        propertyName: infoType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/IndividualApplicant'
+          COMPANY: '#/components/schemas/CompanyApplicant'
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - CD
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - XK
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VA
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+    SelectFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: string
+          nullable: true
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+      required:
+      - title
+      - type
+    BeneficiaryTypeEnum:
+      enum:
+      - CEO
+      - REPRESENTATIVE
+      - SHAREHOLDER
+      - UBO
+      - ABO
+      type: string
+    BeneficiaryCreateRequest:
+      type: object
+      properties:
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        beneficiaryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryTypeEnum'
+          minItems: 1
+        info:
+          $ref: '#/components/schemas/ApplicantCreateRequest'
+        positions:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: ^[^,]+$
+            maxLength: 50
+          default: []
+          description: Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.
+          maxItems: 3
+        formFiller:
+          type: boolean
+          description: Indicates whether this beneficiary is the filler of the KYB form.
+        ownershipPercentage:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+        parent:
+          type: string
+          minLength: 1
+          nullable: true
+      required:
+      - info
+    BeneficiaryCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        beneficiaryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryTypeEnum'
+          minItems: 1
+        info:
+          $ref: '#/components/schemas/ApplicantCreate'
+        positions:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 50
+          default: []
+          description: Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.
+          maxItems: 3
+        formFiller:
+          type: boolean
+          description: Indicates whether this beneficiary is the filler of the KYB form.
+        ownershipPercentage:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+        parent:
+          type: string
+          nullable: true
+      required:
+      - id
+      - info
+    CheckboxFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: boolean
+          nullable: true
+      required:
+      - title
+      - type
+    PatchedBeneficiaryRequest:
+      type: object
+      properties:
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        beneficiaryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryTypeEnum'
+          minItems: 1
+        info:
+          $ref: '#/components/schemas/ApplicantRequest'
+        positions:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: ^[^,]+$
+            maxLength: 50
+          default: []
+          description: Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.
+          maxItems: 3
+        formFiller:
+          type: boolean
+          description: Indicates whether this beneficiary is the filler of the KYB form.
+        ownershipPercentage:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+    CompanyApplicantCreateRequest:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        region:
+          type: string
+          nullable: true
+          maxLength: 2
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        brandNames:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+          default: []
+          maxItems: 10
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 8
+        tin:
+          type: string
+          nullable: true
+          description: Taxpayer identification number.
+          maxLength: 32
+        operatingAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        postalAddress:
+          type: string
+          nullable: true
+          description: Registration address.
+          maxLength: 255
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalFieldValueRequest'
+      required:
+      - companyName
+      - country
+      - infoType
+    AdditionalFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+          readOnly: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/CustomFieldTypeEnum'
+          readOnly: true
+        value:
+          nullable: true
+      required:
+      - title
+      - type
+      - value
+    CountryFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - title
+      - type
+    BeneficiaryRequest:
+      type: object
+      properties:
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        beneficiaryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryTypeEnum'
+          minItems: 1
+        info:
+          $ref: '#/components/schemas/ApplicantRequest'
+        positions:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: ^[^,]+$
+            maxLength: 50
+          default: []
+          description: Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.
+          maxItems: 3
+        formFiller:
+          type: boolean
+          description: Indicates whether this beneficiary is the filler of the KYB form.
+        ownershipPercentage:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+      required:
+      - info
+    Beneficiary:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        beneficiaryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryTypeEnum'
+          minItems: 1
+        info:
+          $ref: '#/components/schemas/Applicant'
+        positions:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 50
+          default: []
+          description: Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.
+          maxItems: 3
+        formFiller:
+          type: boolean
+          description: Indicates whether this beneficiary is the filler of the KYB form.
+        ownershipPercentage:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+        parent:
+          type: string
+          readOnly: true
+          nullable: true
+      required:
+      - id
+      - info
+      - parent
+    IntegerFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: integer
+          nullable: true
+      required:
+      - title
+      - type
+    CountryMultiFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - title
+      - type
+    ApplicantRequest:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualApplicantRequest'
+      - $ref: '#/components/schemas/CompanyApplicantRequest'
+      discriminator:
+        propertyName: infoType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/IndividualApplicantRequest'
+          COMPANY: '#/components/schemas/CompanyApplicantRequest'
+    AdditionalFieldValueRequest:
+      type: object
+      properties:
+        value:
+          nullable: true
+      required:
+      - value
+    ApplicantCreate:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualApplicantCreate'
+      - $ref: '#/components/schemas/CompanyApplicantCreate'
+      discriminator:
+        propertyName: infoType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/IndividualApplicantCreate'
+          COMPANY: '#/components/schemas/CompanyApplicantCreate'
+    ApplicantCreateRequest:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualApplicantCreateRequest'
+      - $ref: '#/components/schemas/CompanyApplicantCreateRequest'
+      discriminator:
+        propertyName: infoType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/IndividualApplicantCreateRequest'
+          COMPANY: '#/components/schemas/CompanyApplicantCreateRequest'
+    IndividualApplicantCreateRequest:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        surname:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+          description: ID issuing country.
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        personalNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        citizenship:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        countryOfBirth:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        residentialAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        countryOfResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        address:
+          type: string
+          nullable: true
+          maxLength: 255
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        tin:
+          type: string
+          nullable: true
+          maxLength: 20
+        taxResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        selfDeclaredPep:
+          type: boolean
+          nullable: true
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalFieldValueRequest'
+        scanRef:
+          type: string
+          minLength: 1
+          writeOnly: true
+          description: Existing scan reference of an ID verification to associate with this beneficiary.<br> *NOTE:* This field is **ignored** when using `kybTokenAuth` authentication.
+      required:
+      - infoType
+      - name
+      - surname
+    ApplicantTypeEnum:
+      enum:
+      - INDIVIDUAL
+      - COMPANY
+      type: string
+    CustomFieldTypeEnum:
+      enum:
+      - CHECKBOX
+      - COUNTRY
+      - COUNTRY_MULTI
+      - DATE
+      - INTEGER
+      - SELECT
+      - SELECT_MULTI
+      - TEXT
+      type: string
+    DateFieldValue:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        value:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - title
+      - type
+    IndividualApplicantCreate:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        name:
+          type: string
+          maxLength: 100
+        surname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+          description: ID issuing country.
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        personalNumber:
+          type: string
+          nullable: true
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 50
+        citizenship:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        countryOfBirth:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        residentialAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        countryOfResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        address:
+          type: string
+          nullable: true
+          maxLength: 255
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        tin:
+          type: string
+          nullable: true
+          maxLength: 20
+        taxResidence:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        selfDeclaredPep:
+          type: boolean
+          nullable: true
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalFieldValue'
+      required:
+      - infoType
+      - name
+      - surname
+    CompanyApplicant:
+      type: object
+      properties:
+        infoType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        companyName:
+          type: string
+          maxLength: 200
+        registrationNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+        region:
+          type: string
+          nullable: true
+          maxLength: 2
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+          maxLength: 128
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Email address.
+          maxLength: 254
+        brandNames:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          default: []
+          maxItems: 10
+        activityCode:
+          type: string
+          nullable: true
+          maxLength: 8
+        tin:
+          type: string
+          nullable: true
+          description: Taxpayer identification number.
+          maxLength: 32
+        operatingAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        postalAddress:
+          type: string
+          nullable: true
+          description: Registration address.
+          maxLength: 255
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        additionalInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+      required:
+      - companyName
+      - country
+      - infoType
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks

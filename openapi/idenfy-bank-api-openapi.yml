@@ -1,0 +1,263 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core Bank API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: Bank
+  description: Bank verification endpoints.
+paths:
+  /bank/tokens/:
+    post:
+      operationId: bankTokensCreate
+      summary: Generate bank verification token
+      tags:
+      - Bank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankTokenRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankToken'
+          description: ''
+  /bank/verifications/{verificationId}/accounts/{accountId}/transactions/:
+    get:
+      operationId: bankVerificationsAccountsTransactionsList
+      summary: List bank verification account transactions
+      parameters:
+      - in: path
+        name: accountId
+        schema:
+          type: string
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: perPage
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: verificationId
+        schema:
+          type: string
+        required: true
+      tags:
+      - Bank
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBankTransactionList'
+          description: ''
+components:
+  schemas:
+    BankAccessRequest:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    BankAccess:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    BankTokenCountryEnum:
+      enum:
+      - AT
+      - BE
+      - BG
+      - HR
+      - CY
+      - DK
+      - EE
+      - FI
+      - FR
+      - DE
+      - GR
+      - HU
+      - IS
+      - IE
+      - IT
+      - LV
+      - LT
+      - LU
+      - MT
+      - NL
+      - 'NO'
+      - PL
+      - PT
+      - RO
+      - SK
+      - SI
+      - ES
+      - SE
+      type: string
+    BankToken:
+      type: object
+      properties:
+        tokenString:
+          type: string
+          readOnly: true
+          description: Token string used for authentication.
+        expiration:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time when this token will become expired.
+        isValid:
+          type: boolean
+          description: Indicates whether this token is valid.
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccess'
+      required:
+      - expiration
+      - isValid
+      - tokenString
+    BankPartyIdentification:
+      type: object
+      properties:
+        fullName:
+          type: string
+          nullable: true
+          maxLength: 128
+    BankTransaction:
+      type: object
+      properties:
+        creditor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        debtor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        bookingDate:
+          type: string
+          format: date
+          nullable: true
+        transactionDate:
+          type: string
+          format: date
+          nullable: true
+        transactionAmount:
+          $ref: '#/components/schemas/BankTransactionAmount'
+      required:
+      - creditor
+      - debtor
+      - transactionAmount
+    BankTokenRequest:
+      type: object
+      properties:
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of bank verification token validity.
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccessRequest'
+    PaginatedBankTransactionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransaction'
+    BankTransactionAmount:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        currency:
+          type: string
+          maxLength: 3
+      required:
+      - amount
+      - currency
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+  - Bank

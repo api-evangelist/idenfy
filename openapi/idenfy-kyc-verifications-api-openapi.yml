@@ -1,0 +1,193 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core KYC Verifications API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: KYC Verifications
+  description: Endpoints for actions with KYC verifications.
+paths:
+  /kyc/identifications/:
+    get:
+      operationId: kycIdentificationsList
+      summary: List identifications
+      parameters:
+      - in: query
+        name: clientId
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: perPage
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - KYC Verifications
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartnerIdentificationListList'
+          description: ''
+  /kyc/identifications/{scanRef}/request-information/:
+    post:
+      operationId: kycIdentificationsRequestInformationCreate
+      summary: Request additional information from client
+      parameters:
+      - in: path
+        name: scanRef
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYC Verifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentificationRequestInformationRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentificationRequestInformation'
+          description: ''
+components:
+  schemas:
+    IdentificationStatusEnum:
+      description: Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
+      enum:
+      - APPROVED
+      - DENIED
+      - SUSPECTED
+      - REVIEWING
+      - EXPIRED
+      - ACTIVE
+      - DELETED
+      - ARCHIVED
+      type: string
+    PartnerIdentificationList:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/IdentificationStatusEnum'
+          readOnly: true
+        suspected:
+          type: boolean
+          readOnly: true
+      required:
+      - scanRef
+      - status
+      - suspected
+    PaginatedPartnerIdentificationListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerIdentificationList'
+    IdentificationRequestInformation:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          format: uri
+          readOnly: true
+        tokenString:
+          type: string
+          readOnly: true
+      required:
+      - sessionUrl
+      - tokenString
+    IdentificationRequestInformationRequest:
+      type: object
+      properties:
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 86400
+        questionnaire:
+          type: string
+          minLength: 1
+          writeOnly: true
+        riskAssessmentProfile:
+          type: string
+          format: uuid
+          writeOnly: true
+        additionalStepUploadRequired:
+          type: boolean
+          writeOnly: true
+        bankCardVerification:
+          type: boolean
+          writeOnly: true
+        bankCardExpectedLastFour:
+          type: string
+          writeOnly: true
+          nullable: true
+          minLength: 4
+          maxLength: 4
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYC
+  tags:
+  - KYC Blocklist
+  - KYC Token
+  - KYC Verifications
+  - POA

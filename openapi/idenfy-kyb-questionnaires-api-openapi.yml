@@ -1,0 +1,452 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core KYB Questionnaires API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: KYB Questionnaires
+  description: KYB questionnaires endpoints.
+paths:
+  /kyb/forms/{companyId}/questionnaires/:
+    get:
+      operationId: kybFormsQuestionnairesList
+      summary: List questionnaires
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYB Questionnaires
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Questionnaire'
+          description: ''
+  /kyb/forms/{companyId}/questionnaires/{id}/:
+    get:
+      operationId: kybFormsQuestionnairesRetrieve
+      summary: Retrieve questionnaire
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this questionnaire.
+        required: true
+      tags:
+      - KYB Questionnaires
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+          description: ''
+  /kyb/forms/{companyId}/questionnaires/{id}/answers/:
+    get:
+      operationId: kybFormsQuestionnairesAnswersRetrieve
+      summary: Retrieve questionnaire answers
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this questionnaire.
+        required: true
+      tags:
+      - KYB Questionnaires
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybFormAnswers'
+          description: ''
+        '204':
+          description: No response body
+    put:
+      operationId: kybFormsQuestionnairesAnswersUpdate
+      summary: Update questionnaire answers
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this questionnaire.
+        required: true
+      tags:
+      - KYB Questionnaires
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybFormAnswersRequest'
+        required: true
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybFormAnswers'
+          description: ''
+    delete:
+      operationId: kybFormsQuestionnairesAnswersDestroy
+      summary: Delete questionnaire answers
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this questionnaire.
+        required: true
+      tags:
+      - KYB Questionnaires
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '204':
+          description: No response body
+  /kyb/forms/{companyId}/questionnaires/answers/detail/:
+    get:
+      operationId: kybFormsQuestionnairesAnswersDetailList
+      summary: Retrieve all questionnaires' answers
+      parameters:
+      - in: path
+        name: companyId
+        schema:
+          type: string
+        required: true
+      tags:
+      - KYB Questionnaires
+      security:
+      - kybTokenAuth: []
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KybAnswersDisplay'
+          description: ''
+components:
+  schemas:
+    KybAnswersDisplay:
+      type: object
+      properties:
+        title:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplaySections'
+        id:
+          type: string
+          description: A unique identifier for the questionnaire.
+        name:
+          type: string
+      required:
+      - id
+      - name
+      - sections
+      - title
+    KybFormAnswers:
+      type: object
+      properties:
+        sections:
+          type: object
+          additionalProperties:
+            type: object
+            description: Section keys from a questionnaire.
+            additionalProperties:
+              $ref: '#/components/schemas/QuestionnaireAnswersQuestion'
+      required:
+      - sections
+    KybFormAnswersRequest:
+      type: object
+      properties:
+        sections:
+          type: object
+          additionalProperties:
+            type: object
+            description: Section keys from a questionnaire.
+            additionalProperties:
+              $ref: '#/components/schemas/QuestionnaireAnswersQuestionRequest'
+      required:
+      - sections
+    QuestionnaireAnswersDisplayQuestions:
+      type: object
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/TypeB9cEnum'
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+          - type: boolean
+          nullable: true
+          readOnly: true
+      required:
+      - key
+      - title
+      - type
+      - value
+    QuestionnaireAnswersQuestionRequest:
+      type: object
+      description: Question keys from a questionnaire.
+      properties:
+        value:
+          nullable: true
+          description: Question answer. Value depends on the question type.
+      required:
+      - value
+    QuestionnaireTypeEnum:
+      enum:
+      - KYC
+      - KYB
+      type: string
+    QuestionnaireAnswersQuestion:
+      type: object
+      description: Question keys from a questionnaire.
+      properties:
+        value:
+          nullable: true
+          description: Question answer. Value depends on the question type.
+      required:
+      - value
+    QuestionnaireAnswersDisplaySections:
+      type: object
+      properties:
+        title:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
+      required:
+      - questions
+      - title
+    Section:
+      type: object
+      properties:
+        key:
+          type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 512
+        description:
+          type: string
+          nullable: true
+          default: ''
+          maxLength: 512
+        condition:
+          type: string
+          nullable: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+      required:
+      - key
+      - questions
+      - title
+    Choice:
+      type: object
+      properties:
+        key:
+          type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 512
+      required:
+      - key
+      - title
+    Question:
+      type: object
+      properties:
+        key:
+          type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 512
+        description:
+          type: string
+          nullable: true
+          default: ''
+          maxLength: 512
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Choice'
+        type:
+          $ref: '#/components/schemas/TypeB9cEnum'
+        required:
+          type: boolean
+          default: false
+        placeholder:
+          type: string
+          nullable: true
+          maxLength: 100
+        condition:
+          type: string
+          nullable: true
+      required:
+      - key
+      - title
+      - type
+    Questionnaire:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        key:
+          type: string
+          readOnly: true
+          description: Used for token creation to identify this questionnaire.
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 512
+        description:
+          type: string
+          nullable: true
+          default: ''
+          maxLength: 512
+        type:
+          $ref: '#/components/schemas/QuestionnaireTypeEnum'
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Section'
+      required:
+      - id
+      - key
+      - name
+      - sections
+      - title
+    TypeB9cEnum:
+      enum:
+      - CHECKBOX
+      - COLOR
+      - COUNTRY
+      - COUNTRY_MULTI
+      - DATE
+      - DATETIME
+      - EMAIL
+      - FILE
+      - FILE_MULTI
+      - FLOAT
+      - LIST
+      - INTEGER
+      - PASSWORD
+      - RADIO
+      - SELECT
+      - SELECT_MULTI
+      - TEL
+      - TEXT
+      - TEXT_AREA
+      - TIME
+      - URL
+      type: string
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks

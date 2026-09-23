@@ -1,0 +1,442 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core POA API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: POA
+  description: Endpoints for standalone proof of address (POA) checks.
+paths:
+  /api/v2/poa-checks/:
+    post:
+      operationId: apiV2PoaChecksCreate
+      summary: Create POA check
+      tags:
+      - POA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PoaCheckDetailRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PoaCheckDetail'
+          description: ''
+components:
+  schemas:
+    PoaCheckDetailRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: byte
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `webp`, `heic`, `heif`, `pdf` files.'
+        providedName:
+          type: string
+          nullable: true
+          maxLength: 255
+        providedAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - file
+    PoaCheckStatusEnum:
+      enum:
+      - MATCH
+      - NO_MATCH
+      - NOT_COMPARED
+      type: string
+    PoaCheckDetail:
+      type: object
+      properties:
+        file:
+          type: string
+          format: uri
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `webp`, `heic`, `heif`, `pdf` files.'
+        providedName:
+          type: string
+          nullable: true
+          maxLength: 255
+        providedAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        issueDate:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        documentType:
+          type: string
+          readOnly: true
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          readOnly: true
+          nullable: true
+        hasLogo:
+          type: boolean
+          readOnly: true
+          nullable: true
+        isScreenshot:
+          type: boolean
+          readOnly: true
+          nullable: true
+        nameMatch:
+          type: boolean
+          readOnly: true
+          nullable: true
+        addressMatch:
+          type: boolean
+          readOnly: true
+          nullable: true
+        dateValid:
+          type: boolean
+          readOnly: true
+          nullable: true
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/PoaCheckStatusEnum'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+          nullable: true
+        address:
+          type: string
+          readOnly: true
+          nullable: true
+        orgName:
+          type: string
+          readOnly: true
+          nullable: true
+        orgAddress:
+          type: string
+          readOnly: true
+          nullable: true
+        documentTypeSupported:
+          type: boolean
+          readOnly: true
+          nullable: true
+        countrySupported:
+          type: boolean
+          readOnly: true
+          nullable: true
+      required:
+      - address
+      - addressMatch
+      - country
+      - countrySupported
+      - created
+      - dateValid
+      - documentType
+      - documentTypeSupported
+      - file
+      - hasLogo
+      - id
+      - isScreenshot
+      - issueDate
+      - name
+      - nameMatch
+      - orgAddress
+      - orgName
+      - overallStatus
+    CountryEnum:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - CD
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - XK
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - KP
+      - MK
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - KR
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - UM
+      - US
+      - UY
+      - UZ
+      - VU
+      - VA
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      type: string
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYC
+  tags:
+  - KYC Blocklist
+  - KYC Token
+  - KYC Verifications
+  - POA

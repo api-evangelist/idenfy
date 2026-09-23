@@ -1,0 +1,275 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core SOS Reports API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: SOS Reports
+  description: Endpoints for actions with SOS filing documents.
+paths:
+  /api/v2/sos-filing-documents/:
+    get:
+      operationId: apiV2SosFilingDocumentsList
+      summary: List SOS filing documents
+      parameters:
+      - in: query
+        name: checkedAt
+        schema:
+          type: array
+          items:
+            type: string
+            format: date-time
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - FAILED
+          - FINISHED
+          - IN_PROGRESS
+          - NOT_ORDERED
+          - TIMED_OUT
+      tags:
+      - SOS Reports
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SosReportDocument'
+          description: ''
+    post:
+      operationId: apiV2SosFilingDocumentsCreate
+      summary: Order SOS filing document
+      tags:
+      - SOS Reports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SosReportParameterRequest'
+        required: true
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SosReportDocument'
+          description: ''
+  /api/v2/sos-filing-documents/{id}/:
+    get:
+      operationId: apiV2SosFilingDocumentsRetrieve
+      summary: Retrieve SOS filing document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this sos document.
+        required: true
+      tags:
+      - SOS Reports
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SosReportDocument'
+          description: ''
+components:
+  schemas:
+    SosReportParameterRequest:
+      type: object
+      properties:
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        state:
+          $ref: '#/components/schemas/StateEnum'
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+        street:
+          type: string
+          minLength: 1
+          maxLength: 255
+        postalCode:
+          type: string
+          minLength: 1
+          pattern: ^\d{5}$
+          maxLength: 10
+      required:
+      - city
+      - companyName
+      - postalCode
+      - state
+      - street
+    GovDocumentOrderStatusEnum:
+      enum:
+      - NOT_ORDERED
+      - IN_PROGRESS
+      - FINISHED
+      - FAILED
+      - TIMED_OUT
+      type: string
+    SosEntityTypeEnum:
+      enum:
+      - CORPORATION
+      - LLC
+      - PARTNERSHIP
+      - NON_PROFIT
+      - TRUST
+      - SOLE_PROPRIETORSHIP
+      type: string
+    StateEnum:
+      enum:
+      - AK
+      - AL
+      - AR
+      - AZ
+      - CA
+      - CO
+      - CT
+      - DE
+      - FL
+      - GA
+      - HI
+      - IA
+      - ID
+      - IL
+      - IN
+      - KS
+      - KY
+      - LA
+      - MA
+      - MD
+      - ME
+      - MI
+      - MN
+      - MO
+      - MS
+      - MT
+      - NC
+      - ND
+      - NE
+      - NH
+      - NJ
+      - NM
+      - NV
+      - NY
+      - OH
+      - OK
+      - OR
+      - PA
+      - RI
+      - SC
+      - SD
+      - TN
+      - TX
+      - UT
+      - VA
+      - VT
+      - WA
+      - WI
+      - WV
+      - WY
+      type: string
+    SosReportDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        checkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        dataFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:json)$
+        reportFile:
+          type: string
+          format: uri
+          nullable: true
+          pattern: (?:pdf)$
+        companyName:
+          type: string
+          nullable: true
+          maxLength: 200
+        formationDate:
+          type: string
+          format: date
+          nullable: true
+        entityType:
+          allOf:
+          - $ref: '#/components/schemas/SosEntityTypeEnum'
+          nullable: true
+        watchlistHitsCount:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+      required:
+      - id
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks

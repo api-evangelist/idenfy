@@ -1,0 +1,460 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core KYC Token API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: KYC Token
+  description: Endpoints for creating KYC verification session tokens.
+paths:
+  /api/v2/token:
+    post:
+      operationId: kycTokensCreate
+      summary: Generate KYC token
+      description: Creates a KYC verification session token. Pass the returned `authToken` to your frontend or SDK to launch the verification flow.
+      tags:
+      - KYC Token
+      security:
+      - apiKeyPair: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - clientId
+              - tokenType
+              properties:
+                clientId:
+                  type: string
+                  maxLength: 100
+                  description: A unique string identifying the client on your side.
+                tokenType:
+                  type: string
+                  enum:
+                  - IDENTIFICATION
+                  - DOCUMENT
+                  description: '- `IDENTIFICATION` — document scan + selfie (default)
+
+                    - `DOCUMENT` — document scan only'
+                externalRef:
+                  type: string
+                  nullable: true
+                  maxLength: 40
+                  description: Optional internal reference. Returned as-is in webhooks.
+                generateDigitString:
+                  type: boolean
+                  default: false
+                  description: If `true`, generates an 8-digit mobile app code returned as `digitString`.
+                expiryTime:
+                  type: integer
+                  minimum: 0
+                  maximum: 2592000
+                  description: Token validity in seconds. Maximum 2,592,000 (30 days).
+                locale:
+                  type: string
+                  nullable: true
+                  maxLength: 7
+                  description: UI language code (e.g. `en`, `de`, `ko`).
+                country:
+                  type: string
+                  nullable: true
+                  description: Restrict accepted document-issuing country (ISO alpha-2).
+                sessionLength:
+                  type: integer
+                  minimum: 60
+                  maximum: 3600
+                  description: Seconds the user has to complete verification once started.
+                documents:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                  description: Restrict accepted document types (e.g. `PASSPORT`, `ID_CARD`).
+                firstName:
+                  type: string
+                  nullable: true
+                  maxLength: 100
+                  description: Pre-fill client first name. Mismatch triggers `SUSPECTED` status.
+                lastName:
+                  type: string
+                  nullable: true
+                  maxLength: 100
+                  description: Pre-fill client last name. Mismatch triggers `SUSPECTED` status.
+                dateOfBirth:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Pre-fill client date of birth.
+                nationality:
+                  type: string
+                  nullable: true
+                  description: Pre-fill client nationality.
+                documentNumber:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                  description: Pre-fill document number.
+                personalNumber:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                  description: Pre-fill personal/national ID number.
+                sex:
+                  type: string
+                  nullable: true
+                  enum:
+                  - M
+                  - F
+                  description: Pre-fill client sex.
+                dateOfExpiry:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Pre-fill document expiry date.
+                dateOfIssue:
+                  type: string
+                  nullable: true
+                  description: Pre-fill document issue date.
+                address:
+                  type: string
+                  nullable: true
+                  description: Client address for Proof of Address verification.
+                successUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Redirect URL on successful verification.
+                errorUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Redirect URL on failed verification.
+                unverifiedUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Redirect URL when verification result is unverified.
+                callbackUrl:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Override webhook callback URL for this session only.
+                showInstructions:
+                  type: boolean
+                reviewSuccessful:
+                  type: boolean
+                  description: Enable manual review for successful verifications.
+                reviewFailed:
+                  type: boolean
+                  description: Enable manual review for failed verifications.
+                questionnaire:
+                  type: string
+                  nullable: true
+                  description: Questionnaire `key` for this session. Pass `null` to disable.
+                questionnaireRequired:
+                  type: boolean
+                  default: true
+                riskAssessmentProfile:
+                  type: string
+                  format: uuid
+                  nullable: true
+                theme:
+                  type: string
+                  format: uuid
+                  nullable: true
+                registryCentersCountries:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                verifyEmail:
+                  type: boolean
+                verifyPhone:
+                  type: boolean
+                verifyBank:
+                  type: boolean
+                verifyBankAccounts:
+                  type: boolean
+                verifyBankBalances:
+                  type: boolean
+                verifyBankTransactions:
+                  type: boolean
+                bankCardVerification:
+                  type: boolean
+                bankCardPdfUpload:
+                  type: boolean
+                verifyAddress:
+                  type: boolean
+                checkAml:
+                  type: boolean
+                checkCriminal:
+                  type: boolean
+                checkLiveness:
+                  type: boolean
+                checkFaceBlacklist:
+                  type: boolean
+                checkDocFaceBlacklist:
+                  type: boolean
+                checkPersonBlacklist:
+                  type: boolean
+                checkDuplicateFaces:
+                  type: boolean
+                checkDuplicateDocFaces:
+                  type: boolean
+                checkDuplicatePersonalData:
+                  type: boolean
+                checkDriverLicense:
+                  type: boolean
+                checkLid:
+                  type: boolean
+                checkIpProxy:
+                  type: boolean
+                allowBsnMasking:
+                  type: boolean
+                nfcRequired:
+                  type: boolean
+                autoAmlMonitoring:
+                  type: boolean
+                driverLicenseBack:
+                  type: boolean
+                faceMatchingThresholdModifier:
+                  type: number
+                additionalSteps:
+                  type: object
+                  description: Request extra document steps. See Additional Steps documentation.
+                additionalData:
+                  type: object
+                  description: Data for COMPARE-type additional steps.
+                utilityBill:
+                  type: boolean
+                  nullable: true
+                nfcOptional:
+                  type: boolean
+                ageLimit:
+                  type: integer
+                  description: Minimum required age. Below this triggers `SUSPECTED` status.
+                ageMax:
+                  type: integer
+                  description: Maximum allowed age. Above this triggers `SUSPECTED` status.
+      responses:
+        '201':
+          description: Token created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - authToken
+                - scanRef
+                - tokenType
+                properties:
+                  message:
+                    type: string
+                    readOnly: true
+                  authToken:
+                    type: string
+                    readOnly: true
+                    description: Pass this to the frontend, SDK, or redirect URL to start verification.
+                  redirectUrl:
+                    type: string
+                    readOnly: true
+                    nullable: true
+                    description: Direct URL to the hosted verification flow. Redirect the user here or embed in an iFrame.
+                  scanRef:
+                    type: string
+                    readOnly: true
+                    description: Unique session ID. Store this to correlate with webhook results.
+                  clientId:
+                    type: string
+                    nullable: true
+                  personScanRef:
+                    type: string
+                    nullable: true
+                  firstName:
+                    type: string
+                    nullable: true
+                  lastName:
+                    type: string
+                    nullable: true
+                  successUrl:
+                    type: string
+                    nullable: true
+                  errorUrl:
+                    type: string
+                    nullable: true
+                  unverifiedUrl:
+                    type: string
+                    nullable: true
+                  callbackUrl:
+                    type: string
+                    nullable: true
+                  locale:
+                    type: string
+                    nullable: true
+                  country:
+                    type: string
+                    nullable: true
+                  expiryTime:
+                    type: integer
+                    description: Token expiry time in seconds.
+                  sessionLength:
+                    type: integer
+                  documents:
+                    type: array
+                    items:
+                      type: string
+                  allowedDocuments:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                  dateOfBirth:
+                    type: string
+                    nullable: true
+                  dateOfExpiry:
+                    type: string
+                    nullable: true
+                  dateOfIssue:
+                    type: string
+                    nullable: true
+                  nationality:
+                    type: string
+                    nullable: true
+                  personalNumber:
+                    type: string
+                    nullable: true
+                  documentNumber:
+                    type: string
+                    nullable: true
+                  sex:
+                    type: string
+                    nullable: true
+                  address:
+                    type: string
+                    nullable: true
+                  showInstructions:
+                    type: boolean
+                  tokenType:
+                    type: string
+                    enum:
+                    - IDENTIFICATION
+                    - DOCUMENT
+                  utilityBill:
+                    nullable: true
+                  additionalSteps:
+                    type: object
+                  additionalData:
+                    type: object
+                  externalRef:
+                    type: string
+                    nullable: true
+                  questionnaire:
+                    type: string
+                    nullable: true
+                  registryCentersCountries:
+                    type: array
+                    items:
+                      type: string
+                  riskAssessmentProfile:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  theme:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  allowBsnMasking:
+                    type: boolean
+                  verifyBankTransactions:
+                    type: boolean
+                  bankCardVerification:
+                    type: boolean
+                  bankCardPdfUpload:
+                    type: boolean
+                  checkLid:
+                    type: boolean
+                  checkDriverLicense:
+                    type: boolean
+                  verifyAddress:
+                    type: boolean
+                  checkFaceBlacklist:
+                    type: boolean
+                  verifyEmail:
+                    type: boolean
+                  checkPersonBlacklist:
+                    type: boolean
+                  checkDuplicateDocFaces:
+                    type: boolean
+                  reviewSuccessful:
+                    type: boolean
+                  reviewFailed:
+                    type: boolean
+                  verifyBank:
+                    type: boolean
+                  autoAmlMonitoring:
+                    type: boolean
+                  verifyPhone:
+                    type: boolean
+                  faceMatchingThresholdModifier:
+                    type: number
+                  checkCriminal:
+                    type: boolean
+                  checkAml:
+                    type: boolean
+                  checkDuplicateFaces:
+                    type: boolean
+                  driverLicenseBack:
+                    type: boolean
+                  verifyBankAccounts:
+                    type: boolean
+                  checkDuplicatePersonalData:
+                    type: boolean
+                  verifyBankBalances:
+                    type: boolean
+                  nfcRequired:
+                    type: boolean
+                  checkIpProxy:
+                    type: boolean
+                  checkDocFaceBlacklist:
+                    type: boolean
+                  checkLiveness:
+                    type: boolean
+                  digitString:
+                    type: string
+                    nullable: true
+                    readOnly: true
+                    description: 8-digit mobile code. Only present when `generateDigitString` was `true`.
+components:
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYC
+  tags:
+  - KYC Blocklist
+  - KYC Token
+  - KYC Verifications
+  - POA

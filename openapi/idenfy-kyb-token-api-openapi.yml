@@ -1,0 +1,992 @@
+openapi: 3.2.0
+info:
+  title: iDenfy IVS Core KYB Token API
+  version: 0.0.0
+  description: iDenfy Identity Verification Service's Core API documentation.
+  contact:
+    name: API Support
+    url: https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1/group/-1
+  x-logo:
+    url: /static/idenfy_logo.svg
+    altText: iDenfy logo
+servers:
+- url: https://ivs.idenfy.com
+tags:
+- name: KYB Token
+  description: KYB token endpoints to begin KYB flow.
+paths:
+  /kyb/info/:
+    get:
+      operationId: kybInfoRetrieve
+      description: Various info for KYB session.
+      summary: Retrieve KYB session info
+      tags:
+      - KYB Token
+      security:
+      - kybTokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybInfo'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybInfoUnauthorized'
+          description: ''
+  /kyb/tokens/:
+    post:
+      operationId: kybTokensCreate
+      summary: Generate KYB form token
+      tags:
+      - KYB Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybTokenRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybToken'
+          description: ''
+  /kyb/tokens/{tokenString}/:
+    put:
+      operationId: kybTokensUpdate
+      summary: Update KYB form token
+      parameters:
+      - in: path
+        name: tokenString
+        schema:
+          type: string
+          description: Token string used for authentication.
+        required: true
+      tags:
+      - KYB Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybTokenUpdateRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybTokenUpdate'
+          description: ''
+    patch:
+      operationId: kybTokensPartialUpdate
+      summary: Partially update KYB form token
+      parameters:
+      - in: path
+        name: tokenString
+        schema:
+          type: string
+          description: Token string used for authentication.
+        required: true
+      tags:
+      - KYB Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedKybTokenUpdateRequest'
+      security:
+      - apiKeyPair: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KybTokenUpdate'
+          description: ''
+components:
+  schemas:
+    CustomField:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        key:
+          type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 64
+        description:
+          type: string
+          nullable: true
+          default: ''
+          maxLength: 512
+        type:
+          $ref: '#/components/schemas/CustomFieldTypeEnum'
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Choice'
+      required:
+      - id
+      - key
+      - title
+      - type
+    KybTokenUpdateRequest:
+      type: object
+      properties:
+        scanRefs:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: ^[^,]+$
+            maxLength: 40
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+    KybTokenTypeEnum:
+      enum:
+      - FORM
+      - GOV1
+      - GOV2
+      type: string
+    PatchedKybTokenUpdateRequest:
+      type: object
+      properties:
+        scanRefs:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: ^[^,]+$
+            maxLength: 40
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+    KybInfoUnauthorized:
+      oneOf:
+      - $ref: '#/components/schemas/KybInfoUnauthorizedString'
+      - $ref: '#/components/schemas/KybInfoUnauthorizedObject'
+    KybFormTokenRequest:
+      type: object
+      properties:
+        tokenType:
+          $ref: '#/components/schemas/KybTokenTypeEnum'
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of KYB token validity.
+        clientId:
+          type: string
+          minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        externalRef:
+          type: string
+          nullable: true
+          description: Any additional value chosen by you.
+          maxLength: 40
+        locale:
+          allOf:
+          - $ref: '#/components/schemas/KybLocaleEnum'
+          nullable: true
+          description: The default client's language. By default selected by a client's IP address.
+        flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: KYB flow's `id` to use for this KYB session.
+        theme:
+          type: string
+          format: uuid
+          nullable: true
+          description: KYB theme's `id` to use for this KYB session.
+        questionnaire:
+          type: string
+          minLength: 1
+          writeOnly: true
+          nullable: true
+          description: KYB questionnaire's `key` to use for this KYB session. `null` for no questionnaire. If not given, the default questionnaire (from your KYB settings) will be used. Ignored when KYB flow is used, then questionnaire is taken according to used flow.
+        questionnaireRequired:
+          type: boolean
+          writeOnly: true
+          default: true
+          description: If KYB session should have a questionnaire.
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+        scanRefs:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: ^[^,]+$
+            maxLength: 40
+          nullable: true
+      required:
+      - clientId
+      - tokenType
+    CompanyField:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+        field:
+          $ref: '#/components/schemas/CompanyFieldEnum'
+        order:
+          type: integer
+          minimum: 0
+          nullable: true
+      required:
+      - field
+    SeverityEnum:
+      enum:
+      - NOT_SEVERE
+      - SEVERE
+      type: string
+    Choice:
+      type: object
+      properties:
+        key:
+          type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 512
+      required:
+      - key
+      - title
+    KybToken:
+      oneOf:
+      - $ref: '#/components/schemas/KybFormToken'
+      discriminator:
+        propertyName: tokenType
+        mapping:
+          FORM: '#/components/schemas/KybFormToken'
+    ThemeCore:
+      type: object
+      properties:
+        companyName:
+          type: string
+          nullable: true
+          maxLength: 32
+        logo:
+          type: string
+          format: uri
+          nullable: true
+        font:
+          type: string
+          format: uri
+          nullable: true
+        colors:
+          $ref: '#/components/schemas/ThemeColor'
+        supportEmail:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 100
+    ThemeColor:
+      type: object
+      properties:
+        primary:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        secondary:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        primaryBackground:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        secondaryBackground:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        hoveredButton:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        disabledIconButton:
+          type: string
+          nullable: true
+          title: Disabled icon
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        disabledButtonTypography:
+          type: string
+          nullable: true
+          title: Disabled typography
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        disabledButton:
+          type: string
+          nullable: true
+          title: Disabled background
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        typography:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        success:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        successBackground:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        error:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        errorBackground:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        warning:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        warningBackground:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        info:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        infoBackground:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+        border:
+          type: string
+          nullable: true
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+          maxLength: 25
+    BeneficiaryTypeEnum:
+      enum:
+      - CEO
+      - REPRESENTATIVE
+      - SHAREHOLDER
+      - UBO
+      - ABO
+      type: string
+    KybTokenUpdate:
+      type: object
+      properties:
+        scanRefs:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 40
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+    BeneficiaryField:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+        field:
+          $ref: '#/components/schemas/BeneficiaryFieldEnum'
+      required:
+      - field
+    KybFormUnifiedFlow:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyFieldUnified'
+          nullable: true
+        fieldsCustom:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldAssignmentUnified'
+          nullable: true
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyDocType'
+          nullable: true
+        beneficiaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryUnifiedFlow'
+          nullable: true
+        companySearch:
+          type: boolean
+          nullable: true
+        bankVerification:
+          type: boolean
+          nullable: true
+        emailVerification:
+          type: boolean
+          nullable: true
+        ownershipFullStructure:
+          type: boolean
+          description: Indicates that the KYB form must contain at least one beneficiary (of any kind) and every company beneficiary of `SHAREHOLDER`, `UBO` and `ABO` type must have at least one individual beneficiary. This is validated when submitting the KYB form.
+        ownershipPercentageThreshold:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          nullable: true
+          description: Threshold to not require to add shareholders that are below this number.
+        description:
+          type: string
+          nullable: true
+          description: Note for the user to guide them on how the company information (including documents uploading) should be filled/edited.
+          maxLength: 512
+        questionnaireDescription:
+          type: string
+          nullable: true
+          description: Note for the user to guide them on how the questionnaire should be filled/edited.
+          maxLength: 512
+    KybInfoUnauthorizedString:
+      type: object
+      properties:
+        message:
+          type: string
+        identifier:
+          allOf:
+          - $ref: '#/components/schemas/IdentifierEnum'
+          readOnly: true
+        documentation:
+          type: string
+          format: uri
+          readOnly: true
+        severity:
+          allOf:
+          - $ref: '#/components/schemas/SeverityEnum'
+          readOnly: true
+      required:
+      - documentation
+      - identifier
+      - message
+      - severity
+    IndividualDocType:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+          maxLength: 512
+        required:
+          type: boolean
+          default: false
+        docType:
+          type: string
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 100
+      required:
+      - docType
+    KybInfoUnauthorizedObject:
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/KybInfoUnauthorizedObjectMessage'
+        identifier:
+          allOf:
+          - $ref: '#/components/schemas/IdentifierEnum'
+          readOnly: true
+        documentation:
+          type: string
+          format: uri
+          readOnly: true
+        severity:
+          allOf:
+          - $ref: '#/components/schemas/SeverityEnum'
+          readOnly: true
+      required:
+      - documentation
+      - identifier
+      - message
+      - severity
+    KybFormToken:
+      type: object
+      properties:
+        tokenType:
+          $ref: '#/components/schemas/KybTokenTypeEnum'
+        tokenString:
+          type: string
+          readOnly: true
+          description: Token string used for authentication.
+        expiration:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time when this token will become expired.
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Indicates whether this token is not deactivated.
+          deprecated: true
+        isValid:
+          type: boolean
+          description: Indicates whether this token is valid.
+          readOnly: true
+        companyId:
+          type: string
+          readOnly: true
+          nullable: true
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        externalRef:
+          type: string
+          nullable: true
+          description: Any additional value chosen by you.
+          maxLength: 40
+        locale:
+          allOf:
+          - $ref: '#/components/schemas/KybLocaleEnum'
+          nullable: true
+          description: The default client's language. By default selected by a client's IP address.
+        flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: KYB flow's `id` to use for this KYB session.
+        theme:
+          type: string
+          format: uuid
+          nullable: true
+          description: KYB theme's `id` to use for this KYB session.
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+        scanRefs:
+          type: array
+          items:
+            type: string
+            pattern: ^[^,]+$
+            maxLength: 40
+          nullable: true
+      required:
+      - clientId
+      - companyId
+      - expiration
+      - isActive
+      - isValid
+      - tokenString
+      - tokenType
+    KybLocaleEnum:
+      enum:
+      - en
+      - es
+      - fr
+      - ru
+      - de
+      - it
+      - pl
+      - lt
+      - lv
+      - et
+      - cs
+      - ro
+      - hu
+      - ja
+      - bg
+      - nl
+      - pt
+      type: string
+    CustomFieldAssignmentUnified:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/CustomField'
+        required:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          nullable: true
+        readOnly:
+          type: boolean
+          default: false
+        changeFrom:
+          nullable: true
+          description: KYB form field value must be changed from this field's value.
+        changeRequired:
+          type: boolean
+      required:
+      - field
+    IdentifierEnum:
+      enum:
+      - AUTHENTICATION_FAILED
+      type: string
+    IndividualFlow:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+        applicantType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        fieldsCustom:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldAssignment'
+          nullable: true
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualField'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDocType'
+          nullable: true
+      required:
+      - applicantType
+      - fields
+    ApplicantFlow:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualFlow'
+      - $ref: '#/components/schemas/CompanyFlow'
+      discriminator:
+        propertyName: applicantType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/IndividualFlow'
+          COMPANY: '#/components/schemas/CompanyFlow'
+    IndividualField:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+        field:
+          $ref: '#/components/schemas/IndividualFieldEnum'
+        order:
+          type: integer
+          minimum: 0
+          nullable: true
+      required:
+      - field
+    BeneficiaryUnifiedFlow:
+      type: object
+      description: Indicates which beneficiary types are editable.
+      properties:
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryTypeEnum'
+        required:
+          type: boolean
+          default: false
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryField'
+          nullable: true
+        applicants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicantFlow'
+        description:
+          type: string
+          description: Note for the user to guide them on how the beneficiaries information (including documents uploading) should be filled/edited.
+          maxLength: 512
+        readOnly:
+          type: boolean
+          default: false
+      required:
+      - applicants
+      - beneficiaryType
+    CustomFieldAssignment:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/CustomField'
+        required:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          nullable: true
+      required:
+      - field
+    KybInfo:
+      type: object
+      properties:
+        locale:
+          allOf:
+          - $ref: '#/components/schemas/KybLocaleEnum'
+          nullable: true
+          readOnly: true
+          description: Default locale to use when user opens the KYB form for the first time.
+        theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeCore'
+          nullable: true
+          readOnly: true
+          description: Indicates the visual customization of the KYB form.
+        flow:
+          allOf:
+          - $ref: '#/components/schemas/KybFormUnifiedFlow'
+          nullable: true
+          readOnly: true
+          description: Indicates which fields/objects should be present in the KYB form.<br>If this field is `null`, then all possible fields/objects are present in this KYB form.
+      required:
+      - flow
+      - locale
+      - theme
+    CompanyFieldUnified:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+        field:
+          $ref: '#/components/schemas/CompanyFieldEnum'
+        order:
+          type: integer
+          minimum: 0
+          nullable: true
+        readOnly:
+          type: boolean
+          default: false
+        changeFrom:
+          nullable: true
+          description: KYB form field value must be changed from this field's value.
+        changeRequired:
+          type: boolean
+      required:
+      - field
+    KybInfoUnauthorizedObjectMessage:
+      type: object
+      properties:
+        detail:
+          type: string
+        completed:
+          type: boolean
+          readOnly: true
+      required:
+      - completed
+      - detail
+    CompanyDocType:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+          maxLength: 512
+        required:
+          type: boolean
+          default: false
+        docType:
+          type: string
+          pattern: ^[\u0000-\u007F]+$
+          maxLength: 100
+      required:
+      - docType
+    CompanyFlow:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+        applicantType:
+          $ref: '#/components/schemas/ApplicantTypeEnum'
+        fieldsCustom:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldAssignment'
+          nullable: true
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyField'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyDocType'
+          nullable: true
+      required:
+      - applicantType
+      - fields
+    IndividualFieldEnum:
+      enum:
+      - NAME
+      - SURNAME
+      - COUNTRY
+      - EMAIL
+      - PHONE
+      - DATE_OF_BIRTH
+      - NATIONALITY
+      - DOCUMENT_NUMBER
+      - PERSONAL_NUMBER
+      - CITIZENSHIP
+      - COUNTRY_OF_BIRTH
+      - RESIDENTIAL_ADDRESS
+      - COUNTRY_OF_RESIDENCE
+      - POSTCODE
+      - ADDRESS
+      - STREET
+      - CITY
+      - TIN
+      - TAX_RESIDENCE
+      - SELF_DECLARED_PEP
+      - POSITIONS
+      type: string
+    ApplicantTypeEnum:
+      enum:
+      - INDIVIDUAL
+      - COMPANY
+      type: string
+    KybTokenRequest:
+      oneOf:
+      - $ref: '#/components/schemas/KybFormTokenRequest'
+      discriminator:
+        propertyName: tokenType
+        mapping:
+          FORM: '#/components/schemas/KybFormTokenRequest'
+    CustomFieldTypeEnum:
+      enum:
+      - CHECKBOX
+      - COUNTRY
+      - COUNTRY_MULTI
+      - DATE
+      - INTEGER
+      - SELECT
+      - SELECT_MULTI
+      - TEXT
+      type: string
+    CompanyFieldEnum:
+      enum:
+      - COMPANY_NAME
+      - REGISTRATION_NUMBER
+      - COUNTRY
+      - REGION
+      - TYPE
+      - PHONE
+      - WEBSITE
+      - EMAIL
+      - BRAND_NAMES
+      - ACTIVITY_CODE
+      - TIN
+      - OPERATING_ADDRESS
+      - POSTAL_ADDRESS
+      - POSTCODE
+      - STREET
+      - CITY
+      type: string
+    BeneficiaryFieldEnum:
+      enum:
+      - OWNERSHIP_PERCENTAGE
+      type: string
+  securitySchemes:
+    apiKeyPair:
+      type: http
+      scheme: basic
+      description: 'The request must contain basic auth headers where username is *API key* and password is *API secret*.<br>
+
+        In order for you to start using our API you will need an **API key** and **API secret**.<br>
+
+        Both can be retrieved by contacting *iDenfy''s support* or *iDenfy''s sales team*.'
+    kybTokenAuth:
+      type: http
+      scheme: bearer
+      description: 'Authentication for actions with all operations associated with KYB form.<br>
+
+        Token obtained from *KYB form token generation* endpoint as ``tokenString`` value.<br>'
+externalDocs:
+  description: For other/more docs on iDenfy services visit our main documentation page.
+  url: https://documentation.idenfy.com
+x-tagGroups:
+- name: General
+  tags:
+  - Webhooks
+- name: KYB
+  tags:
+  - KYB Token
+  - KYB Forms
+  - KYB Documents
+  - Beneficiaries
+  - KYB Questionnaires
+  - Companies
+- name: KYB GOV Checks
+  tags:
+  - Credit Bureau
+  - GOV Registers
+  - GOV Orders
+  - SOS Reports
+  - Registry Center Checks
