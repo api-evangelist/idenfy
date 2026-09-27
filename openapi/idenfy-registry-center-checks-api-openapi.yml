@@ -160,70 +160,6 @@ paths:
       summary: Create registry center check
 components:
   schemas:
-    DatabaseEnum:
-      enum:
-      - LT
-      - HU
-      - UK
-      - US_15
-      type: string
-    LithuaniaRegistryCenterCheck:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        checkedPersonalNumber:
-          type: string
-          maxLength: 30
-        checkedDocumentType:
-          type: string
-          nullable: true
-          maxLength: 2
-        personalNumber:
-          type: string
-          readOnly: true
-          nullable: true
-        name:
-          type: string
-          readOnly: true
-          nullable: true
-        surname:
-          type: string
-          readOnly: true
-          nullable: true
-        documentNumber:
-          type: string
-          readOnly: true
-          nullable: true
-        documentExpiration:
-          type: string
-          format: date
-          readOnly: true
-          nullable: true
-        facePhoto:
-          type: string
-          format: uri
-          readOnly: true
-          nullable: true
-          description: Face photo from a document.
-        database:
-          $ref: '#/components/schemas/DatabaseEnum'
-        clientId:
-          type: string
-          nullable: true
-          maxLength: 100
-      required:
-      - checkedPersonalNumber
-      - database
-      - documentExpiration
-      - documentNumber
-      - facePhoto
-      - id
-      - name
-      - personalNumber
-      - surname
     UsRegistryCenterCheck:
       type: object
       properties:
@@ -377,12 +313,65 @@ components:
       - stateStatus
       - yobStatus
       - zipStatus
-    UkRegistryCenterCheck:
+    HungaryRegistryCenterCheck:
       type: object
       properties:
         id:
           type: string
           format: uuid
+          readOnly: true
+        checkedMrz:
+          type: string
+          maxLength: 100
+        firstName:
+          type: string
+          readOnly: true
+          nullable: true
+        lastName:
+          type: string
+          readOnly: true
+          nullable: true
+        maidenName:
+          type: string
+          readOnly: true
+          nullable: true
+        mothersMaidenName:
+          type: string
+          readOnly: true
+          nullable: true
+        birthDate:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        birthPlace:
+          type: string
+          readOnly: true
+          nullable: true
+        address:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        residentialAddress:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          readOnly: true
+          nullable: true
+        idCard:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        passport:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        additionalData:
+          type: object
+          additionalProperties: {}
           readOnly: true
         database:
           $ref: '#/components/schemas/DatabaseEnum'
@@ -390,49 +379,108 @@ components:
           type: string
           nullable: true
           maxLength: 100
+      required:
+      - additionalData
+      - address
+      - birthDate
+      - birthPlace
+      - checkedMrz
+      - database
+      - firstName
+      - id
+      - idCard
+      - lastName
+      - maidenName
+      - mothersMaidenName
+      - nationality
+      - passport
+      - residentialAddress
+    UkRegistryCenterCheckRequest:
+      type: object
+      properties:
+        database:
+          $ref: '#/components/schemas/DatabaseEnum'
+        clientId:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 100
         firstName:
           type: string
+          minLength: 1
           maxLength: 255
         lastName:
           type: string
+          minLength: 1
           maxLength: 255
         dateOfBirth:
           type: string
           format: date
         address:
-          $ref: '#/components/schemas/UkAddress'
-        firstNameStatus:
-          allOf:
-          - $ref: '#/components/schemas/FirstNameStatus5e4Enum'
-          readOnly: true
-        lastNameStatus:
-          allOf:
-          - $ref: '#/components/schemas/LastNameStatus5e4Enum'
-          readOnly: true
-        dateOfBirthStatus:
-          allOf:
-          - $ref: '#/components/schemas/DateOfBirthStatusEnum'
-          readOnly: true
-        addressStatus:
-          allOf:
-          - $ref: '#/components/schemas/AddressStatusEnum'
-          readOnly: true
-        addressStatusScore:
-          type: number
-          format: double
-          readOnly: true
+          $ref: '#/components/schemas/UkAddressRequest'
       required:
       - address
-      - addressStatus
-      - addressStatusScore
       - database
       - dateOfBirth
-      - dateOfBirthStatus
       - firstName
-      - firstNameStatus
-      - id
       - lastName
-      - lastNameStatus
+    LithuaniaRegistryCenterCheck:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        checkedPersonalNumber:
+          type: string
+          maxLength: 30
+        checkedDocumentType:
+          type: string
+          nullable: true
+          maxLength: 2
+        personalNumber:
+          type: string
+          readOnly: true
+          nullable: true
+        name:
+          type: string
+          readOnly: true
+          nullable: true
+        surname:
+          type: string
+          readOnly: true
+          nullable: true
+        documentNumber:
+          type: string
+          readOnly: true
+          nullable: true
+        documentExpiration:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        facePhoto:
+          type: string
+          format: uri
+          readOnly: true
+          nullable: true
+          description: Face photo from a document.
+        database:
+          $ref: '#/components/schemas/DatabaseEnum'
+        clientId:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - checkedPersonalNumber
+      - database
+      - documentExpiration
+      - documentNumber
+      - facePhoto
+      - id
+      - name
+      - personalNumber
+      - surname
     UsRegistryCenterCheckRequest:
       type: object
       properties:
@@ -506,41 +554,95 @@ components:
       - database
       - firstName
       - lastName
-    HungaryRegistryCenterCheckRequest:
+    DatabaseEnum:
+      enum:
+      - LT
+      - HU
+      - UK
+      - US_15
+      type: string
+    RegistryCenterCheck:
+      oneOf:
+      - $ref: '#/components/schemas/LithuaniaRegistryCenterCheck'
+      - $ref: '#/components/schemas/HungaryRegistryCenterCheck'
+      - $ref: '#/components/schemas/UkRegistryCenterCheck'
+      - $ref: '#/components/schemas/UsRegistryCenterCheck'
+      discriminator:
+        propertyName: database
+        mapping:
+          LT: '#/components/schemas/LithuaniaRegistryCenterCheck'
+          HU: '#/components/schemas/HungaryRegistryCenterCheck'
+          UK: '#/components/schemas/UkRegistryCenterCheck'
+          US_15: '#/components/schemas/UsRegistryCenterCheck'
+    UkRegistryCenterCheck:
       type: object
       properties:
-        checkedMrz:
+        id:
           type: string
-          maxLength: 100
+          format: uuid
+          readOnly: true
         database:
           $ref: '#/components/schemas/DatabaseEnum'
         clientId:
           type: string
           nullable: true
           maxLength: 100
+        firstName:
+          type: string
+          maxLength: 255
+        lastName:
+          type: string
+          maxLength: 255
+        dateOfBirth:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/UkAddress'
+        firstNameStatus:
+          allOf:
+          - $ref: '#/components/schemas/FirstNameStatus5e4Enum'
+          readOnly: true
+        lastNameStatus:
+          allOf:
+          - $ref: '#/components/schemas/LastNameStatus5e4Enum'
+          readOnly: true
+        dateOfBirthStatus:
+          allOf:
+          - $ref: '#/components/schemas/DateOfBirthStatusEnum'
+          readOnly: true
+        addressStatus:
+          allOf:
+          - $ref: '#/components/schemas/AddressStatusEnum'
+          readOnly: true
+        addressStatusScore:
+          type: number
+          format: double
+          readOnly: true
       required:
-      - checkedMrz
+      - address
+      - addressStatus
+      - addressStatusScore
       - database
-    LithuaniaRegistryCenterCheckRequest:
-      type: object
-      properties:
-        checkedPersonalNumber:
-          type: string
-          minLength: 1
-          maxLength: 30
-        checkedDocumentType:
-          type: string
-          nullable: true
-          maxLength: 2
-        database:
-          $ref: '#/components/schemas/DatabaseEnum'
-        clientId:
-          type: string
-          nullable: true
-          maxLength: 100
-      required:
-      - checkedPersonalNumber
-      - database
+      - dateOfBirth
+      - dateOfBirthStatus
+      - firstName
+      - firstNameStatus
+      - id
+      - lastName
+      - lastNameStatus
+    RegistryCenterCheckRequest:
+      oneOf:
+      - $ref: '#/components/schemas/LithuaniaRegistryCenterCheckRequest'
+      - $ref: '#/components/schemas/HungaryRegistryCenterCheckRequest'
+      - $ref: '#/components/schemas/UkRegistryCenterCheckRequest'
+      - $ref: '#/components/schemas/UsRegistryCenterCheckRequest'
+      discriminator:
+        propertyName: database
+        mapping:
+          LT: '#/components/schemas/LithuaniaRegistryCenterCheckRequest'
+          HU: '#/components/schemas/HungaryRegistryCenterCheckRequest'
+          UK: '#/components/schemas/UkRegistryCenterCheckRequest'
+          US_15: '#/components/schemas/UsRegistryCenterCheckRequest'
     CountryEnum:
       enum:
       - AF
@@ -794,108 +896,12 @@ components:
       - ZM
       - ZW
       type: string
-    UkRegistryCenterCheckRequest:
+    HungaryRegistryCenterCheckRequest:
       type: object
       properties:
-        database:
-          $ref: '#/components/schemas/DatabaseEnum'
-        clientId:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 100
-        firstName:
-          type: string
-          minLength: 1
-          maxLength: 255
-        lastName:
-          type: string
-          minLength: 1
-          maxLength: 255
-        dateOfBirth:
-          type: string
-          format: date
-        address:
-          $ref: '#/components/schemas/UkAddressRequest'
-      required:
-      - address
-      - database
-      - dateOfBirth
-      - firstName
-      - lastName
-    RegistryCenterCheckRequest:
-      oneOf:
-      - $ref: '#/components/schemas/LithuaniaRegistryCenterCheckRequest'
-      - $ref: '#/components/schemas/HungaryRegistryCenterCheckRequest'
-      - $ref: '#/components/schemas/UkRegistryCenterCheckRequest'
-      - $ref: '#/components/schemas/UsRegistryCenterCheckRequest'
-      discriminator:
-        propertyName: database
-        mapping:
-          LT: '#/components/schemas/LithuaniaRegistryCenterCheckRequest'
-          HU: '#/components/schemas/HungaryRegistryCenterCheckRequest'
-          UK: '#/components/schemas/UkRegistryCenterCheckRequest'
-          US_15: '#/components/schemas/UsRegistryCenterCheckRequest'
-    HungaryRegistryCenterCheck:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
         checkedMrz:
           type: string
           maxLength: 100
-        firstName:
-          type: string
-          readOnly: true
-          nullable: true
-        lastName:
-          type: string
-          readOnly: true
-          nullable: true
-        maidenName:
-          type: string
-          readOnly: true
-          nullable: true
-        mothersMaidenName:
-          type: string
-          readOnly: true
-          nullable: true
-        birthDate:
-          type: string
-          format: date
-          readOnly: true
-          nullable: true
-        birthPlace:
-          type: string
-          readOnly: true
-          nullable: true
-        address:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        residentialAddress:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        nationality:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          readOnly: true
-          nullable: true
-        idCard:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        passport:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        additionalData:
-          type: object
-          additionalProperties: {}
-          readOnly: true
         database:
           $ref: '#/components/schemas/DatabaseEnum'
         clientId:
@@ -903,34 +909,28 @@ components:
           nullable: true
           maxLength: 100
       required:
-      - additionalData
-      - address
-      - birthDate
-      - birthPlace
       - checkedMrz
       - database
-      - firstName
-      - id
-      - idCard
-      - lastName
-      - maidenName
-      - mothersMaidenName
-      - nationality
-      - passport
-      - residentialAddress
-    RegistryCenterCheck:
-      oneOf:
-      - $ref: '#/components/schemas/LithuaniaRegistryCenterCheck'
-      - $ref: '#/components/schemas/HungaryRegistryCenterCheck'
-      - $ref: '#/components/schemas/UkRegistryCenterCheck'
-      - $ref: '#/components/schemas/UsRegistryCenterCheck'
-      discriminator:
-        propertyName: database
-        mapping:
-          LT: '#/components/schemas/LithuaniaRegistryCenterCheck'
-          HU: '#/components/schemas/HungaryRegistryCenterCheck'
-          UK: '#/components/schemas/UkRegistryCenterCheck'
-          US_15: '#/components/schemas/UsRegistryCenterCheck'
+    LithuaniaRegistryCenterCheckRequest:
+      type: object
+      properties:
+        checkedPersonalNumber:
+          type: string
+          minLength: 1
+          maxLength: 30
+        checkedDocumentType:
+          type: string
+          nullable: true
+          maxLength: 2
+        database:
+          $ref: '#/components/schemas/DatabaseEnum'
+        clientId:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - checkedPersonalNumber
+      - database
   securitySchemes:
     apiKeyPair:
       type: http

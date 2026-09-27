@@ -97,34 +97,6 @@ paths:
           description: ''
 components:
   schemas:
-    SosReportParameterRequest:
-      type: object
-      properties:
-        companyName:
-          type: string
-          minLength: 1
-          maxLength: 200
-        state:
-          $ref: '#/components/schemas/StateEnum'
-        city:
-          type: string
-          minLength: 1
-          maxLength: 100
-        street:
-          type: string
-          minLength: 1
-          maxLength: 255
-        postalCode:
-          type: string
-          minLength: 1
-          pattern: ^\d{5}$
-          maxLength: 10
-      required:
-      - city
-      - companyName
-      - postalCode
-      - state
-      - street
     GovDocumentOrderStatusEnum:
       enum:
       - NOT_ORDERED
@@ -236,6 +208,34 @@ components:
           nullable: true
       required:
       - id
+    SosReportParameterRequest:
+      type: object
+      properties:
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        state:
+          $ref: '#/components/schemas/StateEnum'
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+        street:
+          type: string
+          minLength: 1
+          maxLength: 255
+        postalCode:
+          type: string
+          minLength: 1
+          pattern: ^\d{5}$
+          maxLength: 10
+      required:
+      - city
+      - companyName
+      - postalCode
+      - state
+      - street
   securitySchemes:
     apiKeyPair:
       type: http

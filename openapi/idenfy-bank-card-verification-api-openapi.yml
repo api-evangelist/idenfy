@@ -45,63 +45,28 @@ paths:
           description: Your finances cannot cover a bank card verification. Note that insufficient funds return `402`, not `403`.
 components:
   schemas:
-    BankCardToken:
+    InsufficientFinancesDetail:
       type: object
       properties:
-        tokenString:
-          type: string
-          readOnly: true
-          description: Token string identifying the bank card verification session.
-        expiration:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Date and time when this token will become expired.
-        isValid:
-          type: boolean
-          readOnly: true
-          description: Indicates whether this token is valid.
-        sessionUrl:
-          type: string
-          format: uri
-          readOnly: true
-          description: The URL to send your end user to in order to complete the card check.
-        mobileCode:
-          type: string
-          nullable: true
-          readOnly: true
-          description: Eight-digit code the end user can enter in the iDenfy mobile app to open this session. Returned only when `generateMobileCode` was set.
-      required:
-      - expiration
-      - isValid
-      - sessionUrl
-      - tokenString
-    InsufficientFinances:
-      type: object
-      properties:
-        message:
-          type: string
-          examples:
-          - Action not allowed due to lack of funds or exceeded limit.
-        code:
-          type: string
-          examples:
-          - insufficient_finances
         detail:
-          $ref: '#/components/schemas/InsufficientFinancesDetail'
-    MissingPoolFund:
-      type: object
-      properties:
-        fund_pool:
           type: string
+        missing_limits:
+          type: array
+          items: {}
+        missing_additional_step_limits:
+          type: array
+          items: {}
+        missing_funds:
+          nullable: true
+          description: General account funds only. Stays `null` when feature-specific finances are exhausted, so do not read it to detect that.
+        missing_pool_funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissingPoolFund'
           description: Identifies which finances are short.
-        missing:
-          type: number
-          format: float
-          description: Shortfall in your account currency. `0` when no finances are configured for the feature at all, because nothing has been priced yet.
-      required:
-      - fund_pool
-      - missing
+        expired_expenses:
+          type: array
+          items: {}
     BankCardTokenRequest:
       type: object
       properties:
@@ -147,28 +112,63 @@ components:
           description: Where the end user is redirected after an unsuccessful check. An expired session never redirects.
       required:
       - expectedName
-    InsufficientFinancesDetail:
+    InsufficientFinances:
       type: object
       properties:
-        detail:
+        message:
           type: string
-        missing_limits:
-          type: array
-          items: {}
-        missing_additional_step_limits:
-          type: array
-          items: {}
-        missing_funds:
+          examples:
+          - Action not allowed due to lack of funds or exceeded limit.
+        code:
+          type: string
+          examples:
+          - insufficient_finances
+        detail:
+          $ref: '#/components/schemas/InsufficientFinancesDetail'
+    BankCardToken:
+      type: object
+      properties:
+        tokenString:
+          type: string
+          readOnly: true
+          description: Token string identifying the bank card verification session.
+        expiration:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time when this token will become expired.
+        isValid:
+          type: boolean
+          readOnly: true
+          description: Indicates whether this token is valid.
+        sessionUrl:
+          type: string
+          format: uri
+          readOnly: true
+          description: The URL to send your end user to in order to complete the card check.
+        mobileCode:
+          type: string
           nullable: true
-          description: General account funds only. Stays `null` when feature-specific finances are exhausted, so do not read it to detect that.
-        missing_pool_funds:
-          type: array
-          items:
-            $ref: '#/components/schemas/MissingPoolFund'
+          readOnly: true
+          description: Eight-digit code the end user can enter in the iDenfy mobile app to open this session. Returned only when `generateMobileCode` was set.
+      required:
+      - expiration
+      - isValid
+      - sessionUrl
+      - tokenString
+    MissingPoolFund:
+      type: object
+      properties:
+        fund_pool:
+          type: string
           description: Identifies which finances are short.
-        expired_expenses:
-          type: array
-          items: {}
+        missing:
+          type: number
+          format: float
+          description: Shortfall in your account currency. `0` when no finances are configured for the feature at all, because nothing has been priced yet.
+      required:
+      - fund_pool
+      - missing
   securitySchemes:
     apiKeyPair:
       type: http

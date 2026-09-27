@@ -75,58 +75,6 @@ paths:
           description: ''
 components:
   schemas:
-    IdentificationStatusEnum:
-      description: Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
-      enum:
-      - APPROVED
-      - DENIED
-      - SUSPECTED
-      - REVIEWING
-      - EXPIRED
-      - ACTIVE
-      - DELETED
-      - ARCHIVED
-      type: string
-    PartnerIdentificationList:
-      type: object
-      properties:
-        scanRef:
-          type: string
-          readOnly: true
-        status:
-          allOf:
-          - $ref: '#/components/schemas/IdentificationStatusEnum'
-          readOnly: true
-        suspected:
-          type: boolean
-          readOnly: true
-      required:
-      - scanRef
-      - status
-      - suspected
-    PaginatedPartnerIdentificationListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartnerIdentificationList'
     IdentificationRequestInformation:
       type: object
       properties:
@@ -169,6 +117,58 @@ components:
           nullable: true
           minLength: 4
           maxLength: 4
+    PartnerIdentificationList:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/IdentificationStatusEnum'
+          readOnly: true
+        suspected:
+          type: boolean
+          readOnly: true
+      required:
+      - scanRef
+      - status
+      - suspected
+    IdentificationStatusEnum:
+      description: Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
+      enum:
+      - APPROVED
+      - DENIED
+      - SUSPECTED
+      - REVIEWING
+      - EXPIRED
+      - ACTIVE
+      - DELETED
+      - ARCHIVED
+      type: string
+    PaginatedPartnerIdentificationListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerIdentificationList'
   securitySchemes:
     apiKeyPair:
       type: http

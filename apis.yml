@@ -37,7 +37,7 @@ tags:
 - Bank Verification
 - Biometrics
 - Compliance
-- Fraud Detection
+- Fraud Prevention
 - Identity Verification
 - KYB
 - KYC
@@ -46,6 +46,7 @@ tags:
 - RegTech
 - Sanctions Screening
 - Webhook
+- A2A
 tags_raw:
 - AML
 - Age Verification
@@ -61,6 +62,7 @@ tags_raw:
 - RegTech
 - Sanctions Screening
 - Webhooks
+- A2A
 created: '2024-11-13'
 modified: '2026-09-13'
 url: https://raw.githubusercontent.com/api-evangelist/idenfy/refs/heads/main/apis.yml
@@ -76,6 +78,12 @@ apis:
   humanURL: https://documentation.idenfy.com/fraud-prevention/overview
   baseURL: https://ivs.idenfy.com
   tags:
+  - Fraud Prevention
+  - Risk Scoring
+  - Proxy Detection
+  - Phone Verification
+  - Address Verification
+  tags_raw:
   - Fraud Detection
   - Risk Scoring
   - Proxy Detection
@@ -756,3 +764,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 39
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://documentation.idenfy.com/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3"
+  control: 404

@@ -75,30 +75,46 @@ paths:
           description: ''
 components:
   schemas:
-    BankAccessRequest:
+    BankPartyIdentification:
       type: object
       properties:
-        accounts:
-          type: boolean
-          default: false
-        balances:
-          type: boolean
-          default: false
-        transactions:
-          type: boolean
-          default: false
-    BankAccess:
+        fullName:
+          type: string
+          nullable: true
+          maxLength: 128
+    BankTransactionAmount:
       type: object
       properties:
-        accounts:
-          type: boolean
-          default: false
-        balances:
-          type: boolean
-          default: false
-        transactions:
-          type: boolean
-          default: false
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        currency:
+          type: string
+          maxLength: 3
+      required:
+      - amount
+      - currency
+    BankTokenRequest:
+      type: object
+      properties:
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of bank verification token validity.
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccessRequest'
     BankTokenCountryEnum:
       enum:
       - AT
@@ -160,54 +176,6 @@ components:
       - expiration
       - isValid
       - tokenString
-    BankPartyIdentification:
-      type: object
-      properties:
-        fullName:
-          type: string
-          nullable: true
-          maxLength: 128
-    BankTransaction:
-      type: object
-      properties:
-        creditor:
-          $ref: '#/components/schemas/BankPartyIdentification'
-        debtor:
-          $ref: '#/components/schemas/BankPartyIdentification'
-        bookingDate:
-          type: string
-          format: date
-          nullable: true
-        transactionDate:
-          type: string
-          format: date
-          nullable: true
-        transactionAmount:
-          $ref: '#/components/schemas/BankTransactionAmount'
-      required:
-      - creditor
-      - debtor
-      - transactionAmount
-    BankTokenRequest:
-      type: object
-      properties:
-        lifetime:
-          type: integer
-          maximum: 2592000
-          minimum: 0
-          writeOnly: true
-          default: 3600
-          description: The duration in seconds of bank verification token validity.
-        country:
-          allOf:
-          - $ref: '#/components/schemas/BankTokenCountryEnum'
-          nullable: true
-        bank:
-          type: string
-          nullable: true
-          maxLength: 32
-        access:
-          $ref: '#/components/schemas/BankAccessRequest'
     PaginatedBankTransactionList:
       type: object
       required:
@@ -231,19 +199,51 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BankTransaction'
-    BankTransactionAmount:
+    BankTransaction:
       type: object
       properties:
-        amount:
+        creditor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        debtor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        bookingDate:
           type: string
-          format: decimal
-          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
-        currency:
+          format: date
+          nullable: true
+        transactionDate:
           type: string
-          maxLength: 3
+          format: date
+          nullable: true
+        transactionAmount:
+          $ref: '#/components/schemas/BankTransactionAmount'
       required:
-      - amount
-      - currency
+      - creditor
+      - debtor
+      - transactionAmount
+    BankAccessRequest:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    BankAccess:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
   securitySchemes:
     apiKeyPair:
       type: http
