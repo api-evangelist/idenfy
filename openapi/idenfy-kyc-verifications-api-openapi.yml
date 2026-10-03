@@ -75,19 +75,6 @@ paths:
           description: ''
 components:
   schemas:
-    IdentificationRequestInformation:
-      type: object
-      properties:
-        sessionUrl:
-          type: string
-          format: uri
-          readOnly: true
-        tokenString:
-          type: string
-          readOnly: true
-      required:
-      - sessionUrl
-      - tokenString
     IdentificationRequestInformationRequest:
       type: object
       properties:
@@ -117,23 +104,6 @@ components:
           nullable: true
           minLength: 4
           maxLength: 4
-    PartnerIdentificationList:
-      type: object
-      properties:
-        scanRef:
-          type: string
-          readOnly: true
-        status:
-          allOf:
-          - $ref: '#/components/schemas/IdentificationStatusEnum'
-          readOnly: true
-        suspected:
-          type: boolean
-          readOnly: true
-      required:
-      - scanRef
-      - status
-      - suspected
     IdentificationStatusEnum:
       description: Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
       enum:
@@ -169,6 +139,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PartnerIdentificationList'
+    PartnerIdentificationList:
+      type: object
+      properties:
+        scanRef:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/IdentificationStatusEnum'
+          readOnly: true
+        suspected:
+          type: boolean
+          readOnly: true
+      required:
+      - scanRef
+      - status
+      - suspected
+    IdentificationRequestInformation:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          format: uri
+          readOnly: true
+        tokenString:
+          type: string
+          readOnly: true
+      required:
+      - sessionUrl
+      - tokenString
   securitySchemes:
     apiKeyPair:
       type: http

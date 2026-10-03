@@ -77,6 +77,10 @@ paths:
           description: No response body
 components:
   schemas:
+    IdentificationBlacklistEntry:
+      oneOf:
+      - $ref: '#/components/schemas/IdentificationBlacklist'
+      - $ref: '#/components/schemas/IdentificationDataBlacklistResponse'
     IdentificationBlacklist:
       type: object
       properties:
@@ -138,10 +142,6 @@ components:
       - nationality
       - personalNumber
       - reason
-    IdentificationBlacklistEntry:
-      oneOf:
-      - $ref: '#/components/schemas/IdentificationBlacklist'
-      - $ref: '#/components/schemas/IdentificationDataBlacklistResponse'
     IdentificationBlacklistRequest:
       type: object
       properties:

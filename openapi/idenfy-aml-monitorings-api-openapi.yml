@@ -298,35 +298,22 @@ paths:
           description: No response body
 components:
   schemas:
-    PaginatedAmlMonitoringListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlMonitoringList'
-    AmlMonitoringPdfRequest:
+    AmlMonitoringPersonAmlCheckRequest:
       type: object
       properties:
-        password:
+        clientId:
           type: string
           minLength: 1
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/PersonAmlCheckInputRequest'
+      required:
+      - clientId
+      - input
+      - userType
     AmlMonitoring:
       type: object
       properties:
@@ -367,52 +354,60 @@ components:
       - id
       - isSubscribed
       - status
-    AmlMonitoringAmlCheckRequest:
-      oneOf:
-      - $ref: '#/components/schemas/AmlMonitoringPersonAmlCheckRequest'
-      - $ref: '#/components/schemas/AmlMonitoringCompanyAmlCheckRequest'
-      discriminator:
-        propertyName: userType
-        mapping:
-          PERSON: '#/components/schemas/AmlMonitoringPersonAmlCheckRequest'
-          COMPANY: '#/components/schemas/AmlMonitoringCompanyAmlCheckRequest'
-    MonitoringStatusEnum:
-      enum:
-      - ACTIVE
-      - STOPPED
-      - PENDING
-      - ALERT
-      type: string
-    CompanyAmlCheckFilter:
+    AmlMonitoringCompanyAmlCheckRequest:
       type: object
       properties:
-        threshold:
-          type: integer
-          maximum: 100
-          minimum: 75
-          nullable: true
-          default: 85
-        datasets:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompanyAmlCheckFilterDatasetsEnum'
-          description: Required. Specifies which screening datasets to include in the check.
-        sanctionBodies:
-          type: array
-          items:
-            type: integer
-            maximum: 80
-            minimum: 1
-          nullable: true
-          description: When searching `SAN` dataset, specify the values of sanctioning bodies that should be included when screening `SAN` dataset. The full list of supported sanction bodies and their values are provided by the API info endpoint. If none sanction bodies are provided the system will search sanctions issued by any sanctioning body.
-    AmlMonitoringStartStopRequest:
-      type: object
-      properties:
-        comment:
+        clientId:
           type: string
-          writeOnly: true
           minLength: 1
-          maxLength: 10000
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        input:
+          $ref: '#/components/schemas/CompanyAmlCheckInputRequest'
+      required:
+      - clientId
+      - input
+      - userType
+    CompanyAmlCheckInputRequest:
+      type: object
+      properties:
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - companyName
+    PersonAmlCheckFilterDatasetsEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      type: string
+    CompanyAmlCheckFilterDatasetsEnum:
+      enum:
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - POI
+      - REL
+      - SOE_CURRENT
+      - SOE_FORMER
+      type: string
     IndividualDatasetEnum:
       enum:
       - PEP_CURRENT
@@ -427,131 +422,21 @@ components:
       - REL
       - GRI
       type: string
-    AmlMonitoringPersonAmlCheckRequest:
+    SearchAddress:
       type: object
       properties:
-        clientId:
+        geography:
           type: string
-          minLength: 1
-          description: A unique string identifying a client on your side.
-          maxLength: 100
-        userType:
-          $ref: '#/components/schemas/UserMonitoringTypeEnum'
-        input:
-          $ref: '#/components/schemas/PersonAmlCheckInputRequest'
+          description: An upper-case two-letter ISO-3166-2 code of a country or dependent territory of the profile address or profile nationality.
+        city:
+          type: string
+          description: The city name of the profile address.
       required:
-      - clientId
-      - input
-      - userType
-    AmlMonitoringList:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 100
-        status:
-          $ref: '#/components/schemas/MonitoringStatusEnum'
-        userType:
-          $ref: '#/components/schemas/UserMonitoringTypeEnum'
-        isSubscribed:
-          type: boolean
-        checkedAt:
-          type: string
-          format: date-time
-        expiration:
-          type: string
-          format: date-time
-        tags:
-          type: array
-          items:
-            type: string
-            maxLength: 32
-            pattern: ^[^,]+$
-          default: []
-          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
-          maxItems: 5
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - checkedAt
-      - created
-      - id
-      - name
-      - userType
-    AmlMonitoringRequest:
-      type: object
-      properties:
-        isSubscribed:
-          type: boolean
-          description: Should the expiration of this AML monitoring be automatically extended or not.
-        amlCheck:
-          $ref: '#/components/schemas/AmlMonitoringAmlCheckRequest'
-        tags:
-          type: array
-          items:
-            type: string
-            minLength: 1
-            maxLength: 32
-            pattern: ^[^,]+$
-          default: []
-          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
-          maxItems: 5
-      required:
-      - amlCheck
-      - isSubscribed
-    BusinessSearchResult:
-      type: object
-      properties:
-        version:
-          type: integer
-          description: The version number can be used by clients to detect when a profile has been changed by our research team.
-        resourceId:
-          type: string
-          description: The resource ID can be used to retrieve the full profile or the PDF of the business.
-        score:
-          type: integer
-          description: The match score of the profile.
-        match:
-          type: string
-          description: The name of the profile that has been matched in the search.
-        name:
-          type: string
-          description: The primary name of the profile.
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchAddress'
-          description: The list of profile addresses.
-        datasets:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessSearchDatasetEnum'
-          description: "The profile datasets\n * PEP - (Deprecated - ignore)\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN - (Deprecated - ignore)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * SOE - (Deprecated - ignore)\n * SOE_CURRENT - Only current SOE\n * SOE_FORMER - Only former SOE.\n"
-        currentSanBodyIds:
-          type: array
-          items:
-            type: integer
-          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
-        formerSanBodyIds:
-          type: array
-          items:
-            type: integer
-          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
-      required:
-      - addresses
-      - currentSanBodyIds
-      - datasets
-      - formerSanBodyIds
-      - match
-      - name
-      - resourceId
-      - score
+      - geography
+    AmlArticleTypeEnum:
+      enum:
+      - NEGATIVE
+      type: string
     AdverseMediaSearchResult:
       type: object
       properties:
@@ -582,11 +467,76 @@ components:
       - title
       - type
       - url
-    UserMonitoringTypeEnum:
-      enum:
-      - COMPANY
-      - PERSON
-      type: string
+    IndividualSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a profile has changed.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or the PDF of the Individual.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses and nationalities.
+        nationalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          description: List of the individual's nationalities.
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          description: Gender (for individuals), if known.
+        profileImage:
+          type: string
+          description: The primary profile image.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        pepTier:
+          allOf:
+          - $ref: '#/components/schemas/PepTierEnum'
+          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - datesOfBirth
+      - formerSanBodyIds
+      - match
+      - name
+      - nationalities
+      - resourceId
+      - score
     AmlMonitoringCompanyAmlCheck:
       type: object
       properties:
@@ -644,69 +594,6 @@ components:
       - input
       - overallStatus
       - userType
-    AmlCheckStatusEnum:
-      enum:
-      - NOT_CHECKED
-      - NO_FLAGS
-      - FALSE_POSITIVE
-      - TRUE_POSITIVE
-      - FLAGS_FOUND
-      type: string
-    DateOfBirthMatchingEnum:
-      enum:
-      - EXACT
-      - SAME_YEAR
-      - WITHIN_ONE_YEAR
-      - WITHIN_TWO_YEARS
-      - WITHIN_THREE_YEARS
-      - WITHIN_FOUR_YEARS
-      - WITHIN_FIVE_YEARS
-      type: string
-    MainSexEnum:
-      enum:
-      - MALE
-      - FEMALE
-      type: string
-    CompanyAmlCheckFilterDatasetsEnum:
-      enum:
-      - PEP_LINKED
-      - SAN_CURRENT
-      - SAN_FORMER
-      - INS
-      - RRE
-      - POI
-      - REL
-      - SOE_CURRENT
-      - SOE_FORMER
-      type: string
-    CompanyAmlCheckInput:
-      type: object
-      properties:
-        companyName:
-          type: string
-          maxLength: 200
-        country:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          nullable: true
-      required:
-      - companyName
-    PatchedAmlMonitoringUpdateRequest:
-      type: object
-      properties:
-        isSubscribed:
-          type: boolean
-          description: Should the expiration of this AML monitoring be automatically extended or not.
-        tags:
-          type: array
-          items:
-            type: string
-            minLength: 1
-            maxLength: 32
-            pattern: ^[^,]+$
-          default: []
-          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
-          maxItems: 5
     AmlMonitoringPersonAmlCheck:
       type: object
       properties:
@@ -764,17 +651,176 @@ components:
       - input
       - overallStatus
       - userType
-    SearchAddress:
+    PersonAmlCheckInput:
       type: object
       properties:
-        geography:
+        fullName:
           type: string
-          description: An upper-case two-letter ISO-3166-2 code of a country or dependent territory of the profile address or profile nationality.
-        city:
+          maxLength: 200
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        dateOfBirth:
           type: string
-          description: The city name of the profile address.
+          format: date
+          nullable: true
+        sex:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          nullable: true
       required:
-      - geography
+      - fullName
+    UserMonitoringTypeEnum:
+      enum:
+      - COMPANY
+      - PERSON
+      type: string
+    CompanyAmlCheckInput:
+      type: object
+      properties:
+        companyName:
+          type: string
+          maxLength: 200
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+      required:
+      - companyName
+    AmlMonitoringAmlCheckRequest:
+      oneOf:
+      - $ref: '#/components/schemas/AmlMonitoringPersonAmlCheckRequest'
+      - $ref: '#/components/schemas/AmlMonitoringCompanyAmlCheckRequest'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/AmlMonitoringPersonAmlCheckRequest'
+          COMPANY: '#/components/schemas/AmlMonitoringCompanyAmlCheckRequest'
+    BusinessSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a profile has been changed by our research team.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or the PDF of the business.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchDatasetEnum'
+          description: "The profile datasets\n * PEP - (Deprecated - ignore)\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN - (Deprecated - ignore)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * SOE - (Deprecated - ignore)\n * SOE_CURRENT - Only current SOE\n * SOE_FORMER - Only former SOE.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - formerSanBodyIds
+      - match
+      - name
+      - resourceId
+      - score
+    AmlMonitoringRequest:
+      type: object
+      properties:
+        isSubscribed:
+          type: boolean
+          description: Should the expiration of this AML monitoring be automatically extended or not.
+        amlCheck:
+          $ref: '#/components/schemas/AmlMonitoringAmlCheckRequest'
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+      required:
+      - amlCheck
+      - isSubscribed
+    MonitoringStatusEnum:
+      enum:
+      - ACTIVE
+      - STOPPED
+      - PENDING
+      - ALERT
+      type: string
+    AmlMonitoringStartStopRequest:
+      type: object
+      properties:
+        comment:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 10000
+    AmlMonitoringList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        status:
+          $ref: '#/components/schemas/MonitoringStatusEnum'
+        userType:
+          $ref: '#/components/schemas/UserMonitoringTypeEnum'
+        isSubscribed:
+          type: boolean
+        checkedAt:
+          type: string
+          format: date-time
+        expiration:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - checkedAt
+      - created
+      - id
+      - name
+      - userType
     AmlMonitoringAmlCheck:
       oneOf:
       - $ref: '#/components/schemas/AmlMonitoringPersonAmlCheck'
@@ -1037,119 +1083,13 @@ components:
       - ZM
       - ZW
       type: string
-    CompanyAmlCheckInputRequest:
-      type: object
-      properties:
-        companyName:
-          type: string
-          minLength: 1
-          maxLength: 200
-        country:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          nullable: true
-      required:
-      - companyName
-    PersonAmlCheckInputRequest:
-      type: object
-      properties:
-        fullName:
-          type: string
-          minLength: 1
-          maxLength: 200
-        nationality:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          nullable: true
-        dateOfBirth:
-          type: string
-          format: date
-          nullable: true
-        sex:
-          allOf:
-          - $ref: '#/components/schemas/MainSexEnum'
-          nullable: true
-      required:
-      - fullName
-    IndividualSearchResult:
-      type: object
-      properties:
-        version:
-          type: integer
-          description: The version number can be used by clients to detect when a profile has changed.
-        resourceId:
-          type: string
-          description: The resource ID can be used to retrieve the full profile or the PDF of the Individual.
-        score:
-          type: integer
-          description: The match score of the profile.
-        match:
-          type: string
-          description: The name of the profile that has been matched in the search.
-        name:
-          type: string
-          description: The primary name of the profile.
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchAddress'
-          description: The list of profile addresses and nationalities.
-        nationalities:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryEnum'
-          description: List of the individual's nationalities.
-        datesOfBirth:
-          type: array
-          items:
-            type: string
-            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
-        gender:
-          allOf:
-          - $ref: '#/components/schemas/MainSexEnum'
-          description: Gender (for individuals), if known.
-        profileImage:
-          type: string
-          description: The primary profile image.
-        datasets:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndividualDatasetEnum'
-          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
-        currentSanBodyIds:
-          type: array
-          items:
-            type: integer
-          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
-        formerSanBodyIds:
-          type: array
-          items:
-            type: integer
-          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
-        pepTier:
-          allOf:
-          - $ref: '#/components/schemas/PepTierEnum'
-          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
-      required:
-      - addresses
-      - currentSanBodyIds
-      - datasets
-      - datesOfBirth
-      - formerSanBodyIds
-      - match
-      - name
-      - nationalities
-      - resourceId
-      - score
-    PepTierEnum:
+    AmlCheckStatusEnum:
       enum:
-      - PEP_TIER_1
-      - PEP_TIER_2
-      - PEP_TIER_3
-      type: string
-    AmlArticleTypeEnum:
-      enum:
-      - NEGATIVE
+      - NOT_CHECKED
+      - NO_FLAGS
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE
+      - FLAGS_FOUND
       type: string
     PersonAmlCheckFilter:
       type: object
@@ -1183,55 +1123,94 @@ components:
           items:
             $ref: '#/components/schemas/PepTierEnum'
           nullable: true
-    PersonAmlCheckInput:
+    PaginatedAmlMonitoringListList:
       type: object
-      properties:
-        fullName:
-          type: string
-          maxLength: 200
-        nationality:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          nullable: true
-        dateOfBirth:
-          type: string
-          format: date
-          nullable: true
-        sex:
-          allOf:
-          - $ref: '#/components/schemas/MainSexEnum'
-          nullable: true
       required:
-      - fullName
-    PersonAmlCheckFilterDatasetsEnum:
-      enum:
-      - PEP_CURRENT
-      - PEP_FORMER
-      - PEP_LINKED
-      - SAN_CURRENT
-      - SAN_FORMER
-      - INS
-      - RRE
-      - DD
-      - POI
-      - REL
-      type: string
-    AmlMonitoringCompanyAmlCheckRequest:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlMonitoringList'
+    CompanyAmlCheckFilter:
       type: object
       properties:
-        clientId:
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 75
+          nullable: true
+          default: 85
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlCheckFilterDatasetsEnum'
+          description: Required. Specifies which screening datasets to include in the check.
+        sanctionBodies:
+          type: array
+          items:
+            type: integer
+            maximum: 80
+            minimum: 1
+          nullable: true
+          description: When searching `SAN` dataset, specify the values of sanctioning bodies that should be included when screening `SAN` dataset. The full list of supported sanction bodies and their values are provided by the API info endpoint. If none sanction bodies are provided the system will search sanctions issued by any sanctioning body.
+    MainSexEnum:
+      enum:
+      - MALE
+      - FEMALE
+      type: string
+    PepTierEnum:
+      enum:
+      - PEP_TIER_1
+      - PEP_TIER_2
+      - PEP_TIER_3
+      type: string
+    DateOfBirthMatchingEnum:
+      enum:
+      - EXACT
+      - SAME_YEAR
+      - WITHIN_ONE_YEAR
+      - WITHIN_TWO_YEARS
+      - WITHIN_THREE_YEARS
+      - WITHIN_FOUR_YEARS
+      - WITHIN_FIVE_YEARS
+      type: string
+    AmlMonitoringPdfRequest:
+      type: object
+      properties:
+        password:
           type: string
           minLength: 1
-          description: A unique string identifying a client on your side.
-          maxLength: 100
-        userType:
-          $ref: '#/components/schemas/UserMonitoringTypeEnum'
-        input:
-          $ref: '#/components/schemas/CompanyAmlCheckInputRequest'
-      required:
-      - clientId
-      - input
-      - userType
+    PatchedAmlMonitoringUpdateRequest:
+      type: object
+      properties:
+        isSubscribed:
+          type: boolean
+          description: Should the expiration of this AML monitoring be automatically extended or not.
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 32
+            pattern: ^[^,]+$
+          default: []
+          description: List of case-sensitive strings. Each tag can not be longer than 32 characters.
+          maxItems: 5
     BusinessSearchDatasetEnum:
       enum:
       - PEP
@@ -1247,6 +1226,27 @@ components:
       - SOE_CURRENT
       - SOE_FORMER
       type: string
+    PersonAmlCheckInputRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        nationality:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        sex:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          nullable: true
+      required:
+      - fullName
   securitySchemes:
     apiKeyPair:
       type: http

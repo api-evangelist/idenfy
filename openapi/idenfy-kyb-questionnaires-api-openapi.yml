@@ -179,23 +179,18 @@ paths:
           description: ''
 components:
   schemas:
-    QuestionnaireTypeEnum:
-      enum:
-      - KYC
-      - KYB
-      type: string
-    QuestionnaireAnswersDisplaySections:
+    KybFormAnswersRequest:
       type: object
       properties:
-        title:
-          type: string
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
+        sections:
+          type: object
+          additionalProperties:
+            type: object
+            description: Section keys from a questionnaire.
+            additionalProperties:
+              $ref: '#/components/schemas/QuestionnaireAnswersQuestionRequest'
       required:
-      - questions
-      - title
+      - sections
     KybAnswersDisplay:
       type: object
       properties:
@@ -214,45 +209,6 @@ components:
       - id
       - name
       - sections
-      - title
-    Choice:
-      type: object
-      properties:
-        key:
-          type: string
-          pattern: ^[\w_*-]+$
-          maxLength: 32
-        title:
-          type: string
-          maxLength: 512
-      required:
-      - key
-      - title
-    Section:
-      type: object
-      properties:
-        key:
-          type: string
-          pattern: ^[\w_*-]+$
-          maxLength: 32
-        title:
-          type: string
-          maxLength: 512
-        description:
-          type: string
-          nullable: true
-          default: ''
-          maxLength: 512
-        condition:
-          type: string
-          nullable: true
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-      required:
-      - key
-      - questions
       - title
     TypeB9cEnum:
       enum:
@@ -278,6 +234,29 @@ components:
       - TIME
       - URL
       type: string
+    QuestionnaireAnswersDisplayQuestions:
+      type: object
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/TypeB9cEnum'
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+          - type: boolean
+          nullable: true
+          readOnly: true
+      required:
+      - key
+      - title
+      - type
+      - value
     Questionnaire:
       type: object
       properties:
@@ -313,15 +292,19 @@ components:
       - name
       - sections
       - title
-    QuestionnaireAnswersQuestionRequest:
+    Choice:
       type: object
-      description: Question keys from a questionnaire.
       properties:
-        value:
-          nullable: true
-          description: Question answer. Value depends on the question type.
+        key:
+          type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
+        title:
+          type: string
+          maxLength: 512
       required:
-      - value
+      - key
+      - title
     QuestionnaireAnswersQuestion:
       type: object
       description: Question keys from a questionnaire.
@@ -331,18 +314,6 @@ components:
           description: Question answer. Value depends on the question type.
       required:
       - value
-    KybFormAnswersRequest:
-      type: object
-      properties:
-        sections:
-          type: object
-          additionalProperties:
-            type: object
-            description: Section keys from a questionnaire.
-            additionalProperties:
-              $ref: '#/components/schemas/QuestionnaireAnswersQuestionRequest'
-      required:
-      - sections
     Question:
       type: object
       properties:
@@ -390,28 +361,57 @@ components:
               $ref: '#/components/schemas/QuestionnaireAnswersQuestion'
       required:
       - sections
-    QuestionnaireAnswersDisplayQuestions:
+    QuestionnaireAnswersDisplaySections:
+      type: object
+      properties:
+        title:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
+      required:
+      - questions
+      - title
+    Section:
       type: object
       properties:
         key:
           type: string
+          pattern: ^[\w_*-]+$
+          maxLength: 32
         title:
           type: string
-        type:
-          $ref: '#/components/schemas/TypeB9cEnum'
-        value:
-          oneOf:
-          - type: array
-            items:
-              type: string
-          - type: string
-          - type: boolean
+          maxLength: 512
+        description:
+          type: string
           nullable: true
-          readOnly: true
+          default: ''
+          maxLength: 512
+        condition:
+          type: string
+          nullable: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
       required:
       - key
+      - questions
       - title
-      - type
+    QuestionnaireTypeEnum:
+      enum:
+      - KYC
+      - KYB
+      type: string
+    QuestionnaireAnswersQuestionRequest:
+      type: object
+      description: Question keys from a questionnaire.
+      properties:
+        value:
+          nullable: true
+          description: Question answer. Value depends on the question type.
+      required:
       - value
   securitySchemes:
     apiKeyPair:

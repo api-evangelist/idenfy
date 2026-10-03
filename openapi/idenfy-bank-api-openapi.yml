@@ -75,46 +75,27 @@ paths:
           description: ''
 components:
   schemas:
-    BankPartyIdentification:
+    BankTransaction:
       type: object
       properties:
-        fullName:
+        creditor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        debtor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        bookingDate:
           type: string
+          format: date
           nullable: true
-          maxLength: 128
-    BankTransactionAmount:
-      type: object
-      properties:
-        amount:
+        transactionDate:
           type: string
-          format: decimal
-          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
-        currency:
-          type: string
-          maxLength: 3
+          format: date
+          nullable: true
+        transactionAmount:
+          $ref: '#/components/schemas/BankTransactionAmount'
       required:
-      - amount
-      - currency
-    BankTokenRequest:
-      type: object
-      properties:
-        lifetime:
-          type: integer
-          maximum: 2592000
-          minimum: 0
-          writeOnly: true
-          default: 3600
-          description: The duration in seconds of bank verification token validity.
-        country:
-          allOf:
-          - $ref: '#/components/schemas/BankTokenCountryEnum'
-          nullable: true
-        bank:
-          type: string
-          nullable: true
-          maxLength: 32
-        access:
-          $ref: '#/components/schemas/BankAccessRequest'
+      - creditor
+      - debtor
+      - transactionAmount
     BankTokenCountryEnum:
       enum:
       - AT
@@ -146,6 +127,68 @@ components:
       - ES
       - SE
       type: string
+    BankTokenRequest:
+      type: object
+      properties:
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of bank verification token validity.
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
+          nullable: true
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccessRequest'
+    BankAccessRequest:
+      type: object
+      properties:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    PaginatedBankTransactionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransaction'
+    BankPartyIdentification:
+      type: object
+      properties:
+        fullName:
+          type: string
+          nullable: true
+          maxLength: 128
     BankToken:
       type: object
       properties:
@@ -176,62 +219,19 @@ components:
       - expiration
       - isValid
       - tokenString
-    PaginatedBankTransactionList:
+    BankTransactionAmount:
       type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        currency:
+          type: string
+          maxLength: 3
       required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankTransaction'
-    BankTransaction:
-      type: object
-      properties:
-        creditor:
-          $ref: '#/components/schemas/BankPartyIdentification'
-        debtor:
-          $ref: '#/components/schemas/BankPartyIdentification'
-        bookingDate:
-          type: string
-          format: date
-          nullable: true
-        transactionDate:
-          type: string
-          format: date
-          nullable: true
-        transactionAmount:
-          $ref: '#/components/schemas/BankTransactionAmount'
-      required:
-      - creditor
-      - debtor
-      - transactionAmount
-    BankAccessRequest:
-      type: object
-      properties:
-        accounts:
-          type: boolean
-          default: false
-        balances:
-          type: boolean
-          default: false
-        transactions:
-          type: boolean
-          default: false
+      - amount
+      - currency
     BankAccess:
       type: object
       properties:

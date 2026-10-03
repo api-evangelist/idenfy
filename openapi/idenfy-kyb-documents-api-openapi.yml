@@ -465,10 +465,40 @@ paths:
           description: No response body
 components:
   schemas:
-    BeneficiaryDocumentCreateRequest:
+    IndividualKybDoc:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
+    BeneficiaryDocumentRequest:
       oneOf:
-      - $ref: '#/components/schemas/IndividualKybDocCreateRequest'
-      - $ref: '#/components/schemas/CompanyKybDocCreateRequest'
+      - $ref: '#/components/schemas/IndividualKybDocRequest'
+      - $ref: '#/components/schemas/CompanyKybDocRequest'
+    PatchedIndividualKybDocRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
     KybDocumentTypeEnum:
       enum:
       - INCORPORATION_CERT
@@ -503,6 +533,23 @@ components:
       - INDIVIDUAL_ADVERSE_MEDIA
       - EMAIL_CHECK
       - SOURCE_OF_WEALTH
+      - OTHER
+      type: string
+    IndividualKybDocRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - type
+    IndividualKybDocTypeEnum:
+      enum:
+      - IDENTITY_DOCUMENT
+      - PROOF_OF_ADDRESS
       - OTHER
       type: string
     KybFormDocumentCreate:
@@ -541,31 +588,10 @@ components:
       required:
       - file
       - type
-    BeneficiaryDocumentCreate:
+    PatchedBeneficiaryDocumentRequest:
       oneOf:
-      - $ref: '#/components/schemas/IndividualKybDocCreate'
-      - $ref: '#/components/schemas/CompanyKybDocCreate'
-    KybFormDocument:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        type:
-          $ref: '#/components/schemas/KybDocumentTypeEnum'
-        filename:
-          type: string
-          nullable: true
-          maxLength: 100
-        file:
-          type: string
-          format: uri
-          readOnly: true
-          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
-      required:
-      - file
-      - id
-      - type
+      - $ref: '#/components/schemas/PatchedIndividualKybDocRequest'
+      - $ref: '#/components/schemas/PatchedCompanyKybDocRequest'
     PatchedCompanyKybDocRequest:
       type: object
       properties:
@@ -575,42 +601,14 @@ components:
           type: string
           nullable: true
           maxLength: 100
-    PatchedIndividualKybDocRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
-        filename:
-          type: string
-          nullable: true
-          maxLength: 100
-    PatchedBeneficiaryDocumentRequest:
-      oneOf:
-      - $ref: '#/components/schemas/PatchedIndividualKybDocRequest'
-      - $ref: '#/components/schemas/PatchedCompanyKybDocRequest'
-    BeneficiaryDocumentRequest:
-      oneOf:
-      - $ref: '#/components/schemas/IndividualKybDocRequest'
-      - $ref: '#/components/schemas/CompanyKybDocRequest'
-    IndividualKybDocRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
-        filename:
-          type: string
-          nullable: true
-          maxLength: 100
-      required:
-      - type
-    CompanyKybDocCreate:
+    IndividualKybDocCreate:
       type: object
       properties:
         id:
           type: string
           readOnly: true
         type:
-          $ref: '#/components/schemas/KybDocumentTypeEnum'
+          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
         filename:
           type: string
           nullable: true
@@ -644,10 +642,6 @@ components:
       - file
       - id
       - type
-    BeneficiaryDocument:
-      oneOf:
-      - $ref: '#/components/schemas/IndividualKybDoc'
-      - $ref: '#/components/schemas/CompanyKybDoc'
     PatchedKybFormDocumentRequest:
       type: object
       properties:
@@ -657,33 +651,6 @@ components:
           type: string
           nullable: true
           maxLength: 100
-    KybFormDocumentRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/KybDocumentTypeEnum'
-        filename:
-          type: string
-          nullable: true
-          maxLength: 100
-      required:
-      - type
-    CompanyKybDocCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/KybDocumentTypeEnum'
-        filename:
-          type: string
-          nullable: true
-          maxLength: 100
-        file:
-          type: string
-          format: byte
-          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
-      required:
-      - file
-      - type
     KybFormDocumentCreateRequest:
       type: object
       properties:
@@ -700,14 +667,49 @@ components:
       required:
       - file
       - type
-    IndividualKybDoc:
+    BeneficiaryDocumentCreateRequest:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDocCreateRequest'
+      - $ref: '#/components/schemas/CompanyKybDocCreateRequest'
+    CompanyKybDocCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: byte
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - type
+    BeneficiaryDocument:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDoc'
+      - $ref: '#/components/schemas/CompanyKybDoc'
+    KybFormDocumentRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - type
+    CompanyKybDocCreate:
       type: object
       properties:
         id:
           type: string
           readOnly: true
         type:
-          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
         filename:
           type: string
           nullable: true
@@ -715,32 +717,15 @@ components:
         file:
           type: string
           format: uri
-          readOnly: true
           description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
       required:
       - file
       - id
       - type
-    IndividualKybDocCreate:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        type:
-          $ref: '#/components/schemas/IndividualKybDocTypeEnum'
-        filename:
-          type: string
-          nullable: true
-          maxLength: 100
-        file:
-          type: string
-          format: uri
-          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
-      required:
-      - file
-      - id
-      - type
+    BeneficiaryDocumentCreate:
+      oneOf:
+      - $ref: '#/components/schemas/IndividualKybDocCreate'
+      - $ref: '#/components/schemas/CompanyKybDocCreate'
     CompanyKybDocRequest:
       type: object
       properties:
@@ -752,12 +737,27 @@ components:
           maxLength: 100
       required:
       - type
-    IndividualKybDocTypeEnum:
-      enum:
-      - IDENTITY_DOCUMENT
-      - PROOF_OF_ADDRESS
-      - OTHER
-      type: string
+    KybFormDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/KybDocumentTypeEnum'
+        filename:
+          type: string
+          nullable: true
+          maxLength: 100
+        file:
+          type: string
+          format: uri
+          readOnly: true
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files.'
+      required:
+      - file
+      - id
+      - type
   securitySchemes:
     apiKeyPair:
       type: http

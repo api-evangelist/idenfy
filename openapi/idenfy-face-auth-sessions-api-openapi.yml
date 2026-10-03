@@ -56,6 +56,16 @@ paths:
           description: ''
 components:
   schemas:
+    FacialAuthenticationMethodEnum:
+      enum:
+      - ACTIVE_LIVENESS
+      - FACE_MATCHING
+      type: string
+    FacialAuthenticationStatusTypeEnum:
+      enum:
+      - ENROLLMENT
+      - AUTHENTICATION
+      type: string
     FacialAuthenticationSession:
       type: object
       properties:
@@ -85,16 +95,6 @@ components:
       required:
       - givenScanRef
       - id
-    FacialAuthenticationMethodEnum:
-      enum:
-      - ACTIVE_LIVENESS
-      - FACE_MATCHING
-      type: string
-    FacialAuthenticationStatusTypeEnum:
-      enum:
-      - ENROLLMENT
-      - AUTHENTICATION
-      type: string
   securitySchemes:
     apiKeyPair:
       type: http

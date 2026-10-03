@@ -836,114 +836,167 @@ components:
       - COMPLETED
       - FAILED
       type: string
-    AmlCommentTypeEnum:
-      enum:
-      - ADVERSE_MEDIA
-      - AML_PROFILE
-      type: string
-    AmlNewsResults:
+    AdverseMediaData:
       type: object
       properties:
-        status:
-          $ref: '#/components/schemas/FraudStatus'
-        serviceName:
-          type: string
-        serviceGroupType:
-          type: string
-        uid:
-          type: string
-        errorMessage:
+        title:
           type: string
           nullable: true
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdverseMediaData'
+        url:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AmlArticleTypeEnum'
+          nullable: true
+        checkDate:
+          type: string
+        publishDate:
+          type: string
+          nullable: true
       required:
-      - errorMessage
-      - serviceGroupType
-      - serviceName
-      - status
-      - uid
-    MonitoringStatusEnum:
-      enum:
-      - ACTIVE
-      - STOPPED
-      - PENDING
-      - ALERT
-      type: string
-    AmlCheckSuspicionEnum:
-      enum:
-      - SUSPECTED
-      - NOT_SUSPECTED
-      type: string
-    AmlCompanyNameResults:
+      - checkDate
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    AmlMonitoringWebhook:
       type: object
       properties:
-        status:
-          $ref: '#/components/schemas/FraudStatus'
-        serviceName:
+        monitoringId:
           type: string
-        serviceGroupType:
+        name:
           type: string
-        uid:
+        surname:
           type: string
-        errorMessage:
+        nationality:
+          type: string
+        dob:
           type: string
           nullable: true
-        data:
+        isActive:
+          type: boolean
+        expiration:
+          type: string
+          nullable: true
+        scanRefList:
           type: array
           items:
-            $ref: '#/components/schemas/CompanyAmlData'
+            type: string
+        alertStatus:
+          allOf:
+          - $ref: '#/components/schemas/MonitoringAlertTypeEnum'
+          description: AML monitoring v2 status
+          deprecated: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/MonitoringStatusEnum'
+          description: AML monitoring v3 status
+        pepsStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          nullable: true
+        sanctionsStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          nullable: true
+        adverseMediaStatus:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckStatusEnum'
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlResults'
+        amlCheck:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckV3Data'
+          nullable: true
       required:
-      - errorMessage
-      - serviceGroupType
-      - serviceName
+      - adverseMediaStatus
+      - alertStatus
+      - amlCheck
+      - dob
+      - expiration
+      - isActive
+      - monitoringId
+      - name
+      - nationality
+      - pepsStatus
+      - results
+      - sanctionsStatus
+      - scanRefList
       - status
-      - uid
-    IndividualDatasetEnum:
-      enum:
-      - PEP_CURRENT
-      - PEP_FORMER
-      - PEP_LINKED
-      - SAN_CURRENT
-      - SAN_FORMER
-      - INS
-      - RRE
-      - DD
-      - POI
-      - REL
-      - GRI
-      type: string
-    AmlCheckV3BusinessData:
+      - surname
+    AmlCheckV3Data:
+      oneOf:
+      - $ref: '#/components/schemas/AmlCheckV3IndividualData'
+      - $ref: '#/components/schemas/AmlCheckV3BusinessData'
+      discriminator:
+        propertyName: userType
+        mapping:
+          PERSON: '#/components/schemas/AmlCheckV3IndividualData'
+          COMPANY: '#/components/schemas/AmlCheckV3BusinessData'
+    AmlAdverseMediaData:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        publishDate:
+          type: string
+          nullable: true
+        status:
+          type: string
+        comment:
+          $ref: '#/components/schemas/AmlComment'
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    ManagerAccount:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
           readOnly: true
-        overallStatus:
-          $ref: '#/components/schemas/AmlCheckStatusEnum'
-        statusSetBy:
-          allOf:
-          - $ref: '#/components/schemas/ManagerAccount'
-          nullable: true
-        statusSetAt:
+        name:
           type: string
-          format: date-time
-          nullable: true
-        adverseMedia:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlAdverseMediaData'
-          nullable: true
-        amlCheck:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessSearchResult'
-          nullable: true
+          maxLength: 100
+        surname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
       required:
+      - email
       - id
+      - name
+      - surname
     AmlData:
       type: object
       properties:
@@ -1024,6 +1077,242 @@ components:
       - score
       - surname
       - suspicion
+    IndividualDatasetEnum:
+      enum:
+      - PEP_CURRENT
+      - PEP_FORMER
+      - PEP_LINKED
+      - SAN_CURRENT
+      - SAN_FORMER
+      - INS
+      - RRE
+      - DD
+      - POI
+      - REL
+      - GRI
+      type: string
+    AmlSuspicionTypeEnum:
+      enum:
+      - SANCTION
+      - INTERPOL
+      - PEPS
+      - ADVERSE_MEDIA
+      - OTHER
+      type: string
+    AmlCompanyNameResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAmlData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    SearchAddress:
+      type: object
+      properties:
+        geography:
+          type: string
+          description: An upper-case two-letter ISO-3166-2 code of a country or dependent territory of the profile address or profile nationality.
+        city:
+          type: string
+          description: The city name of the profile address.
+      required:
+      - geography
+    AmlArticleTypeEnum:
+      enum:
+      - NEGATIVE
+      type: string
+    IndividualSearchResult:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The version number can be used by clients to detect when a profile has changed.
+        resourceId:
+          type: string
+          description: The resource ID can be used to retrieve the full profile or the PDF of the Individual.
+        score:
+          type: integer
+          description: The match score of the profile.
+        match:
+          type: string
+          description: The name of the profile that has been matched in the search.
+        name:
+          type: string
+          description: The primary name of the profile.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchAddress'
+          description: The list of profile addresses and nationalities.
+        nationalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryEnum'
+          description: List of the individual's nationalities.
+        datesOfBirth:
+          type: array
+          items:
+            type: string
+            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/MainSexEnum'
+          description: Gender (for individuals), if known.
+        profileImage:
+          type: string
+          description: The primary profile image.
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualDatasetEnum'
+          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
+        currentSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        formerSanBodyIds:
+          type: array
+          items:
+            type: integer
+          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
+        pepTier:
+          allOf:
+          - $ref: '#/components/schemas/PepTierEnum'
+          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
+      required:
+      - addresses
+      - currentSanBodyIds
+      - datasets
+      - datesOfBirth
+      - formerSanBodyIds
+      - match
+      - name
+      - nationalities
+      - resourceId
+      - score
+    AmlCheckV3IndividualData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckStatusEnum'
+        statusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          nullable: true
+        statusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlAdverseMediaData'
+          nullable: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualSearchResult'
+          nullable: true
+      required:
+      - id
+    AmlNameResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlCheckV3BusinessData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckStatusEnum'
+        statusSetBy:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
+          nullable: true
+        statusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        adverseMedia:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlAdverseMediaData'
+          nullable: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessSearchResult'
+          nullable: true
+      required:
+      - id
+    AmlComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        manager:
+          $ref: '#/components/schemas/ManagerAccount'
+        content:
+          type: string
+          maxLength: 10000
+        type:
+          $ref: '#/components/schemas/AmlCommentTypeEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - created
+      - id
+      - manager
+      - type
     BusinessSearchResult:
       type: object
       properties:
@@ -1071,80 +1360,6 @@ components:
       - name
       - resourceId
       - score
-    FraudStatus:
-      type: object
-      properties:
-        serviceSuspected:
-          type: boolean
-        serviceUsed:
-          type: boolean
-        serviceFound:
-          type: boolean
-        checkSuccessful:
-          type: boolean
-        overallStatus:
-          $ref: '#/components/schemas/AmlCheckSuspicionEnum'
-      required:
-      - checkSuccessful
-      - overallStatus
-      - serviceFound
-      - serviceSuspected
-      - serviceUsed
-    AmlCheckStatusEnum:
-      enum:
-      - NOT_CHECKED
-      - NO_FLAGS
-      - FALSE_POSITIVE
-      - TRUE_POSITIVE
-      - FLAGS_FOUND
-      type: string
-    MainSexEnum:
-      enum:
-      - MALE
-      - FEMALE
-      type: string
-    AmlSuspicionTypeEnum:
-      enum:
-      - SANCTION
-      - INTERPOL
-      - PEPS
-      - ADVERSE_MEDIA
-      - OTHER
-      type: string
-    SearchAddress:
-      type: object
-      properties:
-        geography:
-          type: string
-          description: An upper-case two-letter ISO-3166-2 code of a country or dependent territory of the profile address or profile nationality.
-        city:
-          type: string
-          description: The city name of the profile address.
-      required:
-      - geography
-    AmlComment:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        manager:
-          $ref: '#/components/schemas/ManagerAccount'
-        content:
-          type: string
-          maxLength: 10000
-        type:
-          $ref: '#/components/schemas/AmlCommentTypeEnum'
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - content
-      - created
-      - id
-      - manager
-      - type
     CompanyAmlData:
       type: object
       properties:
@@ -1221,68 +1436,92 @@ components:
       - score
       - surname
       - suspicion
-    AdverseMediaData:
-      type: object
-      properties:
-        title:
-          type: string
-          nullable: true
-        url:
-          type: string
-          nullable: true
-        text:
-          type: string
-          nullable: true
-        score:
-          type: string
-          nullable: true
-        type:
-          allOf:
-          - $ref: '#/components/schemas/AmlArticleTypeEnum'
-          nullable: true
-        checkDate:
-          type: string
-        publishDate:
-          type: string
-          nullable: true
-      required:
-      - checkDate
-      - publishDate
-      - score
-      - text
-      - title
-      - type
-      - url
-    AmlCheckV3Data:
+    AmlResults:
       oneOf:
-      - $ref: '#/components/schemas/AmlCheckV3IndividualData'
-      - $ref: '#/components/schemas/AmlCheckV3BusinessData'
+      - $ref: '#/components/schemas/AmlNameResults'
+      - $ref: '#/components/schemas/AmlNameResults'
+      - $ref: '#/components/schemas/AmlCompanyNameResults'
+      - $ref: '#/components/schemas/AmlNewsResults'
+      - $ref: '#/components/schemas/AmlNewsResults'
       discriminator:
-        propertyName: userType
+        propertyName: serviceName
         mapping:
-          PERSON: '#/components/schemas/AmlCheckV3IndividualData'
-          COMPANY: '#/components/schemas/AmlCheckV3BusinessData'
-    ManagerAccount:
+          AML_NAMES_CHECK: '#/components/schemas/AmlNameResults'
+          AML_OPEN_SANCTIONS: '#/components/schemas/AmlNameResults'
+          COMPANY_CHECK: '#/components/schemas/AmlCompanyNameResults'
+          AML_NEWS: '#/components/schemas/AmlNewsResults'
+          INHOUSE_ADVERSE_MEDIA: '#/components/schemas/AmlNewsResults'
+    MonitoringAlertTypeEnum:
+      enum:
+      - ALERT
+      - DECLINED
+      - ACCEPTED
+      - PENDING
+      - STATUS
+      type: string
+    MonitoringStatusEnum:
+      enum:
+      - ACTIVE
+      - STOPPED
+      - PENDING
+      - ALERT
+      type: string
+    AmlCommentTypeEnum:
+      enum:
+      - ADVERSE_MEDIA
+      - AML_PROFILE
+      type: string
+    FraudStatus:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 100
-        surname:
-          type: string
-          maxLength: 100
-        email:
-          type: string
-          format: email
-          maxLength: 254
+        serviceSuspected:
+          type: boolean
+        serviceUsed:
+          type: boolean
+        serviceFound:
+          type: boolean
+        checkSuccessful:
+          type: boolean
+        overallStatus:
+          $ref: '#/components/schemas/AmlCheckSuspicionEnum'
       required:
-      - email
-      - id
-      - name
-      - surname
+      - checkSuccessful
+      - overallStatus
+      - serviceFound
+      - serviceSuspected
+      - serviceUsed
+    AmlNewsResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdverseMediaData'
+      required:
+      - errorMessage
+      - serviceGroupType
+      - serviceName
+      - status
+      - uid
+    AmlCheckStatusEnum:
+      enum:
+      - NOT_CHECKED
+      - NO_FLAGS
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE
+      - FLAGS_FOUND
+      type: string
     CountryEnum:
       enum:
       - AF
@@ -1536,193 +1775,11 @@ components:
       - ZM
       - ZW
       type: string
-    AmlMonitoringWebhook:
-      type: object
-      properties:
-        monitoringId:
-          type: string
-        name:
-          type: string
-        surname:
-          type: string
-        nationality:
-          type: string
-        dob:
-          type: string
-          nullable: true
-        isActive:
-          type: boolean
-        expiration:
-          type: string
-          nullable: true
-        scanRefList:
-          type: array
-          items:
-            type: string
-        alertStatus:
-          allOf:
-          - $ref: '#/components/schemas/MonitoringAlertTypeEnum'
-          description: AML monitoring v2 status
-          deprecated: true
-        status:
-          allOf:
-          - $ref: '#/components/schemas/MonitoringStatusEnum'
-          description: AML monitoring v3 status
-        pepsStatus:
-          allOf:
-          - $ref: '#/components/schemas/AmlCheckStatusEnum'
-          nullable: true
-        sanctionsStatus:
-          allOf:
-          - $ref: '#/components/schemas/AmlCheckStatusEnum'
-          nullable: true
-        adverseMediaStatus:
-          allOf:
-          - $ref: '#/components/schemas/AmlCheckStatusEnum'
-          nullable: true
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlResults'
-        amlCheck:
-          allOf:
-          - $ref: '#/components/schemas/AmlCheckV3Data'
-          nullable: true
-      required:
-      - adverseMediaStatus
-      - alertStatus
-      - amlCheck
-      - dob
-      - expiration
-      - isActive
-      - monitoringId
-      - name
-      - nationality
-      - pepsStatus
-      - results
-      - sanctionsStatus
-      - scanRefList
-      - status
-      - surname
-    IndividualSearchResult:
-      type: object
-      properties:
-        version:
-          type: integer
-          description: The version number can be used by clients to detect when a profile has changed.
-        resourceId:
-          type: string
-          description: The resource ID can be used to retrieve the full profile or the PDF of the Individual.
-        score:
-          type: integer
-          description: The match score of the profile.
-        match:
-          type: string
-          description: The name of the profile that has been matched in the search.
-        name:
-          type: string
-          description: The primary name of the profile.
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchAddress'
-          description: The list of profile addresses and nationalities.
-        nationalities:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryEnum'
-          description: List of the individual's nationalities.
-        datesOfBirth:
-          type: array
-          items:
-            type: string
-            description: Date in either YYYY-MM-DD or YYYY-MM or YYYY ISO format.
-        gender:
-          allOf:
-          - $ref: '#/components/schemas/MainSexEnum'
-          description: Gender (for individuals), if known.
-        profileImage:
-          type: string
-          description: The primary profile image.
-        datasets:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndividualDatasetEnum'
-          description: "The profile datasets\n * PEP_CURRENT - Only current PEPs\n * PEP_FORMER - Only former PEPs\n * PEP_LINKED - Only linked PEPs (PEP by Association)\n * SAN_CURRENT - Only current Sanctions\n * SAN_FORMER - Only former Sanctions\n * INS - Insolvency\n * RRE - Reputational Risk Exposure\n * DD - Disqualified Director\n * POI - Profile Of Interest\n * REL - Regulatory Enforcement List\n * GRI - Gambling Risk Intelligence.\n"
-        currentSanBodyIds:
-          type: array
-          items:
-            type: integer
-          description: The list of IDs of all sanctioning bodies, that are currently sanctioning the given profile. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
-        formerSanBodyIds:
-          type: array
-          items:
-            type: integer
-          description: The list of IDs of all sanctioning bodies, that were sanctioning the given profile in the past, but do not currently sanction them. The full list of supported sanction bodies and their IDs is provided by /dictionaries/sanction-bodies endpoint.
-        pepTier:
-          allOf:
-          - $ref: '#/components/schemas/PepTierEnum'
-          description: Defines the PEP tier of the individual. Where PEP Tier 1 indicates senior roles, PEP Tier 2 - middle-ranking, and PEP Tier 3 - junior officials.
-      required:
-      - addresses
-      - currentSanBodyIds
-      - datasets
-      - datesOfBirth
-      - formerSanBodyIds
-      - match
-      - name
-      - nationalities
-      - resourceId
-      - score
-    PepTierEnum:
+    AmlCheckSuspicionEnum:
       enum:
-      - PEP_TIER_1
-      - PEP_TIER_2
-      - PEP_TIER_3
+      - SUSPECTED
+      - NOT_SUSPECTED
       type: string
-    AmlArticleTypeEnum:
-      enum:
-      - NEGATIVE
-      type: string
-    MonitoringAlertTypeEnum:
-      enum:
-      - ALERT
-      - DECLINED
-      - ACCEPTED
-      - PENDING
-      - STATUS
-      type: string
-    AmlAdverseMediaData:
-      type: object
-      properties:
-        title:
-          type: string
-          nullable: true
-        url:
-          type: string
-        text:
-          type: string
-          nullable: true
-        score:
-          type: string
-          nullable: true
-        type:
-          type: string
-          nullable: true
-        publishDate:
-          type: string
-          nullable: true
-        status:
-          type: string
-        comment:
-          $ref: '#/components/schemas/AmlComment'
-      required:
-      - publishDate
-      - score
-      - text
-      - title
-      - type
-      - url
     AmlMonitoringExpirationWebhook:
       type: object
       properties:
@@ -1733,30 +1790,17 @@ components:
       required:
       - usersToExpire
       - usersToExtend
-    AmlNameResults:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/FraudStatus'
-        serviceName:
-          type: string
-        serviceGroupType:
-          type: string
-        uid:
-          type: string
-        errorMessage:
-          type: string
-          nullable: true
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlData'
-      required:
-      - errorMessage
-      - serviceGroupType
-      - serviceName
-      - status
-      - uid
+    MainSexEnum:
+      enum:
+      - MALE
+      - FEMALE
+      type: string
+    PepTierEnum:
+      enum:
+      - PEP_TIER_1
+      - PEP_TIER_2
+      - PEP_TIER_3
+      type: string
     BusinessSearchDatasetEnum:
       enum:
       - PEP
@@ -1772,55 +1816,19 @@ components:
       - SOE_CURRENT
       - SOE_FORMER
       type: string
-    AmlCheckV3IndividualData:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        overallStatus:
-          $ref: '#/components/schemas/AmlCheckStatusEnum'
-        statusSetBy:
-          allOf:
-          - $ref: '#/components/schemas/ManagerAccount'
-          nullable: true
-        statusSetAt:
-          type: string
-          format: date-time
-          nullable: true
-        adverseMedia:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlAdverseMediaData'
-          nullable: true
-        amlCheck:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndividualSearchResult'
-          nullable: true
-      required:
-      - id
-    AmlResults:
-      oneOf:
-      - $ref: '#/components/schemas/AmlNameResults'
-      - $ref: '#/components/schemas/AmlNameResults'
-      - $ref: '#/components/schemas/AmlCompanyNameResults'
-      - $ref: '#/components/schemas/AmlNewsResults'
-      - $ref: '#/components/schemas/AmlNewsResults'
-      discriminator:
-        propertyName: serviceName
-        mapping:
-          AML_NAMES_CHECK: '#/components/schemas/AmlNameResults'
-          AML_OPEN_SANCTIONS: '#/components/schemas/AmlNameResults'
-          COMPANY_CHECK: '#/components/schemas/AmlCompanyNameResults'
-          AML_NEWS: '#/components/schemas/AmlNewsResults'
-          INHOUSE_ADVERSE_MEDIA: '#/components/schemas/AmlNewsResults'
     BankCardVerificationStatusEnum:
       enum:
       - NOT_COMPARED
       - MATCH
       - NO_MATCH
+      type: string
+    BankCardNoMatchReasonEnum:
+      enum:
+      - NAME_MISMATCH
+      - NUMBER_MISMATCH
+      - NAME_NOT_FOUND
+      - NUMBER_NOT_FOUND
+      - LIVENESS_FAILED
       type: string
     BankCardVerificationWebhook:
       type: object
@@ -1863,28 +1871,6 @@ components:
       - nameMatch
       - noMatchReason
       - status
-    BankCardNoMatchReasonEnum:
-      enum:
-      - NAME_MISMATCH
-      - NUMBER_MISMATCH
-      - NAME_NOT_FOUND
-      - NUMBER_NOT_FOUND
-      - LIVENESS_FAILED
-      type: string
-    BankBalancesOverviewWebhook:
-      type: object
-      properties:
-        bookedBalance:
-          type: number
-          format: double
-          nullable: true
-        availableBalance:
-          type: number
-          format: double
-          nullable: true
-      required:
-      - availableBalance
-      - bookedBalance
     AccountCheckWebhook:
       type: object
       properties:
@@ -1953,13 +1939,6 @@ components:
       - accounts
       - id
       - riskLevel
-    AccountCheckWebhookStatusEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
     BankAccountWebhook:
       type: object
       properties:
@@ -2000,10 +1979,40 @@ components:
       - VERY_HIGH
       - NOT_CHECKED
       type: string
+    AccountCheckWebhookStatusEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    BankBalancesOverviewWebhook:
+      type: object
+      properties:
+        bookedBalance:
+          type: number
+          format: double
+          nullable: true
+        availableBalance:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - availableBalance
+      - bookedBalance
+    FacialAuthenticationMethodEnum:
+      enum:
+      - ACTIVE_LIVENESS
+      - FACE_MATCHING
+      type: string
     FacialAuthenticationStatusTypeEnum:
       enum:
       - ENROLLMENT
       - AUTHENTICATION
+      type: string
+    RiskTagEnum:
+      enum:
+      - UNTRUSTED_ENVIRONMENT
       type: string
     FacialAuthenticationWebhookStatusEnum:
       enum:
@@ -2012,11 +2021,6 @@ components:
       - Expired
       - Canceled
       - Pending
-    FacialAuthenticationMethodEnum:
-      enum:
-      - ACTIVE_LIVENESS
-      - FACE_MATCHING
-      type: string
     FacialAuthenticationWebhook:
       type: object
       properties:
@@ -2065,10 +2069,6 @@ components:
       - id
       - scanRef
       - status
-    RiskTagEnum:
-      enum:
-      - UNTRUSTED_ENVIRONMENT
-      type: string
     GovDocumentOrderStatusEnum:
       enum:
       - NOT_ORDERED
@@ -2076,15 +2076,6 @@ components:
       - FINISHED
       - FAILED
       - TIMED_OUT
-      type: string
-    SosEntityTypeEnum:
-      enum:
-      - CORPORATION
-      - LLC
-      - PARTNERSHIP
-      - NON_PROFIT
-      - TRUST
-      - SOLE_PROPRIETORSHIP
       type: string
     CompanyReviewWebhook:
       type: object
@@ -2207,6 +2198,117 @@ components:
       - sanctionsStatusSetBy
       - shareholderCheck
       - statusChangedBy
+    CompanyInfoRequestStatusEnum:
+      enum:
+      - REQUESTED
+      - EXPIRED
+      - CANCELED
+      type: string
+    SosReportWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        companyName:
+          type: string
+          maxLength: 200
+          nullable: true
+        entityType:
+          allOf:
+          - $ref: '#/components/schemas/SosEntityTypeEnum'
+          nullable: true
+        formationDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        reportFile:
+          type: string
+          format: uri
+          pattern: (?:pdf)$
+          nullable: true
+        dataFile:
+          type: string
+          format: uri
+          pattern: (?:json)$
+          nullable: true
+        watchlistHitsCount:
+          type: integer
+          minimum: -2147483648
+          maximum: 2147483647
+          nullable: true
+      required:
+      - id
+    AmlReviewSubjectEnum:
+      enum:
+      - COMPANY
+      - BENEFICIARY
+      - SHAREHOLDER
+      type: string
+    GovPartnerOrderedDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          nullable: true
+        documentFormat:
+          type: string
+          maxLength: 5
+        productKey:
+          type: string
+        expectedDeliveryTime:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: double
+          minimum: 0
+        deliveredAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        file:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - expectedDeliveryTime
+      - id
+      - price
+      - productKey
+    CompanySubmitWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        submissionTime:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when KYB form submit endpoint was called.
+        soleProprietor:
+          type: boolean
+        clientId:
+          type: string
+          description: A unique string identifying a client on your side.
+          maxLength: 100
+        externalRef:
+          type: string
+          nullable: true
+          description: Any additional value chosen by you.
+          maxLength: 40
+      required:
+      - clientId
+      - id
     BeneficiaryWebhook:
       type: object
       properties:
@@ -2287,12 +2389,6 @@ components:
       - pepsStatusSetBy
       - sanctionsStatusSetBy
       - scanRef
-    CompanyInfoRequestStatusEnum:
-      enum:
-      - REQUESTED
-      - EXPIRED
-      - CANCELED
-      type: string
     CompanyExpirationWebhook:
       type: object
       properties:
@@ -2305,6 +2401,20 @@ components:
           nullable: true
       required:
       - id
+    CompanyExpirationStatusEnum:
+      enum:
+      - PENDING
+      - EXPIRED
+      type: string
+    SosEntityTypeEnum:
+      enum:
+      - CORPORATION
+      - LLC
+      - PARTNERSHIP
+      - NON_PROFIT
+      - TRUST
+      - SOLE_PROPRIETORSHIP
+      type: string
     ManagerAccountOld:
       type: object
       properties:
@@ -2333,48 +2443,22 @@ components:
       - name
       - surname
       - username
-    GovPartnerOrderedDocument:
+    CompanyDeleteWebhook:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        title:
-          type: string
-          nullable: true
-        documentFormat:
-          type: string
-          maxLength: 5
-        productKey:
-          type: string
-        expectedDeliveryTime:
+        date:
           type: string
           format: date-time
-        price:
-          type: number
-          format: double
-          minimum: 0
-        deliveredAt:
-          type: string
-          format: date-time
+        manager:
+          allOf:
+          - $ref: '#/components/schemas/ManagerAccount'
           nullable: true
-        status:
-          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
-        file:
+        companyId:
           type: string
-          format: uri
-          nullable: true
       required:
-      - expectedDeliveryTime
-      - id
-      - price
-      - productKey
-    ApprovalStatusEnum:
-      enum:
-      - APPROVED
-      - DENIED
-      type: string
+      - companyId
+      - date
+      - manager
     CompanyInfoRequestWebhook:
       type: object
       properties:
@@ -2403,11 +2487,10 @@ components:
       - manager
       - status
       - token
-    AmlReviewSubjectEnum:
+    ApprovalStatusEnum:
       enum:
-      - COMPANY
-      - BENEFICIARY
-      - SHAREHOLDER
+      - APPROVED
+      - DENIED
       type: string
     AmlReviewWebhook:
       type: object
@@ -2481,89 +2564,388 @@ components:
       - amlReviewSubjectType
       - companyId
       - id
-    SosReportWebhook:
+    EmailVerificationWebhook:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        emailVerified:
+          type: boolean
+      required:
+      - email
+      - emailVerified
+    KycDocumentTypeEnum:
+      enum:
+      - ID_CARD
+      - PASSPORT
+      - RESIDENCE_PERMIT
+      - DRIVER_LICENSE
+      - PAN_CARD
+      - AADHAAR
+      - VISA
+      - NATIONAL_PASSPORT
+      - PROVISIONAL_DRIVER_LICENSE
+      - OLD_ID_CARD
+      - MILITARY_CARD
+      - ADDRESS_CARD
+      - SMART_ID
+      - CLEAR
+      - ONE_ID
+      - BANK_ID_SE
+      - BANK_ID_NO
+      - BANK_ID_CZ
+      - FTN
+      - MIT_ID
+      - VERIMI
+      - LA_WALLET
+      - SAMSUNG_WALLET
+      - MOJE_ID_CZ
+      - YOTI_ID
+      - OTHER
+      - BORDER_CROSSING
+      - ASYLUM
+      - PHOTO_CARD
+      - PROOF_OF_AGE_CARD
+      - TRAVEL_CARD
+      - SOCIAL_SECURITY_CARD
+      - VOTER_CARD
+      - DIPLOMATIC_ID
+      - WORK_PERMIT
+      type: string
+    IdentificationStatusEnum:
+      description: Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
+      enum:
+      - APPROVED
+      - DENIED
+      - SUSPECTED
+      - REVIEWING
+      - EXPIRED
+      - ACTIVE
+      - DELETED
+      - ARCHIVED
+      type: string
+    BankVerificationWebhook_2:
       type: object
       properties:
         id:
           type: string
-          readOnly: true
-        companyName:
-          type: string
-          maxLength: 200
-          nullable: true
-        entityType:
+          format: uuid
+        country:
           allOf:
-          - $ref: '#/components/schemas/SosEntityTypeEnum'
+          - $ref: '#/components/schemas/CountryEnum'
           nullable: true
-        formationDate:
+        bank:
           type: string
-          format: date
           nullable: true
-        status:
-          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
-        reportFile:
-          type: string
-          format: uri
-          pattern: (?:pdf)$
-          nullable: true
-        dataFile:
-          type: string
-          format: uri
-          pattern: (?:json)$
-          nullable: true
-        watchlistHitsCount:
-          type: integer
-          minimum: -2147483648
-          maximum: 2147483647
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccountWebhook_2'
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
           nullable: true
       required:
+      - accounts
+      - bank
+      - country
       - id
-    CompanyExpirationStatusEnum:
-      enum:
-      - PENDING
-      - EXPIRED
-      type: string
-    CompanySubmitWebhook:
+      - riskLevel
+    AmlV3AddressWebhook:
       type: object
       properties:
-        id:
+        city:
           type: string
-          readOnly: true
-        submissionTime:
-          type: string
-          format: date-time
           nullable: true
-          description: Date and time when KYB form submit endpoint was called.
-        soleProprietor:
-          type: boolean
-        clientId:
+        geography:
           type: string
-          description: A unique string identifying a client on your side.
-          maxLength: 100
+          nullable: true
+      required:
+      - city
+      - geography
+    IdentificationWebhook:
+      type: object
+      properties:
+        final:
+          type: boolean
+        platform:
+          $ref: '#/components/schemas/DeviceTypeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/IdentificationStatusWebhook'
+          description: See [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with `overall`, and especially how to handle a `SUSPECTED` result using `fraudTags`/`mismatchTags`.
+        data:
+          $ref: '#/components/schemas/IdentificationDataWebhook'
+        fileUrls:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        additionalStepPdfUrls:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        AML:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlResults'
+          nullable: true
+          description: Legacy (v2) object structure. If enabled, use `amlCheck` (v3), which better aligns with our new schema.
+        amlCheck:
+          allOf:
+          - $ref: '#/components/schemas/AmlCheckV3Webhook'
+          nullable: true
+        LID:
+          type: array
+          items:
+            $ref: '#/components/schemas/LidResults'
+          nullable: true
+        CRIMINAL_CHECK:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriminalCheckResults'
+          nullable: true
+        scanRef:
+          type: string
+          maxLength: 36
         externalRef:
           type: string
           nullable: true
-          description: Any additional value chosen by you.
           maxLength: 40
-      required:
-      - clientId
-      - id
-    CompanyDeleteWebhook:
-      type: object
-      properties:
-        date:
+        clientId:
           type: string
-          format: date-time
-        manager:
-          allOf:
-          - $ref: '#/components/schemas/ManagerAccount'
-          nullable: true
+          maxLength: 100
         companyId:
           type: string
+          maxLength: 36
+        beneficiaryId:
+          type: string
+          maxLength: 36
+        startTime:
+          type: integer
+        finishTime:
+          type: integer
+        clientIp:
+          type: string
+          nullable: true
+          maxLength: 39
+        clientIpCountry:
+          type: string
+          nullable: true
+          maxLength: 2
+        clientLocation:
+          type: string
+          nullable: true
+          maxLength: 100
+        gdcMatch:
+          type: boolean
+          nullable: true
+        manualAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        manualAddressMatch:
+          type: boolean
+        registryCenterCheck:
+          allOf:
+          - $ref: '#/components/schemas/RegistryCenterCheckWebhook'
+          nullable: true
+        addressVerification:
+          allOf:
+          - $ref: '#/components/schemas/AddressVerificationWebhook'
+          nullable: true
+        questionnaireAnswers:
+          allOf:
+          - $ref: '#/components/schemas/QuestionnaireAnswersWebhook'
+          nullable: true
+        riskAssessment:
+          allOf:
+          - $ref: '#/components/schemas/RiskAssessmentWebhook'
+          nullable: true
+        bankVerification:
+          allOf:
+          - $ref: '#/components/schemas/BankVerificationWebhook_2'
+          nullable: true
+        emailVerification:
+          allOf:
+          - $ref: '#/components/schemas/EmailVerificationWebhook'
+          nullable: true
+        phoneVerification:
+          allOf:
+          - $ref: '#/components/schemas/PhoneVerificationWebhook'
+          nullable: true
+        driverLicenseCheck:
+          allOf:
+          - $ref: '#/components/schemas/DriverLicenseCheckWebhook'
+          nullable: true
+        bankCardVerification:
+          allOf:
+          - $ref: '#/components/schemas/BankCardVerificationWebhook'
+          nullable: true
+        additionalSteps:
+          type: object
+          additionalProperties:
+            enum:
+            - UPLOAD
+            - COMPARE
+            - EXTRACT
+            - null
+            type: string
+            nullable: true
+          nullable: true
       required:
+      - beneficiaryId
+      - clientId
+      - clientIp
+      - clientIpCountry
+      - clientLocation
       - companyId
-      - date
-      - manager
+      - data
+      - fileUrls
+      - final
+      - finishTime
+      - platform
+      - scanRef
+      - startTime
+      - status
+    ResourceTypeEnum:
+      enum:
+      - HungaryRegistryCenterCheck
+      - LithuaniaRegistryCenterCheck
+      - Us15RegistryCenterCheck
+      type: string
+    AgeGroupEnum:
+      enum:
+      - UNDER_13
+      - UNDER_8
+      - OVER_8
+      - OVER_13
+      - OVER_16
+      - OVER_18
+      - OVER_21
+      - OVER_22
+      - OVER_25
+      - OVER_30
+      type: string
+    LidData:
+      type: object
+      properties:
+        documentNumber:
+          type: string
+        documentType:
+          type: string
+          nullable: true
+        valid:
+          type: boolean
+        expiryDate:
+          type: string
+        checkDate:
+          type: string
+      required:
+      - checkDate
+      - documentNumber
+      - documentType
+      - expiryDate
+      - valid
+    RiskAssessmentWebhook:
+      type: object
+      properties:
+        riskScore:
+          type: integer
+          maximum: 100
+          minimum: 0
+          nullable: true
+        riskLevel:
+          allOf:
+          - $ref: '#/components/schemas/RiskLevelEnum'
+          nullable: true
+      required:
+      - riskLevel
+      - riskScore
+    DeviceTypeEnum:
+      enum:
+      - PC
+      - MOBILE
+      - TABLET
+      - MOBILE_APP
+      - MOBILE_SDK
+      - OTHER
+      type: string
+    CriminalCheckData:
+      type: object
+      properties:
+        offenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriminalCheckOffense'
+        fullName:
+          type: string
+          nullable: true
+        county:
+          type: string
+          nullable: true
+        region:
+          allOf:
+          - $ref: '#/components/schemas/RegionEnum'
+          nullable: true
+      required:
+      - county
+      - fullName
+      - offenses
+      - region
+    AmlV3AdverseMediaDataWebhook:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+        text:
+          type: string
+          nullable: true
+        score:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        publishDate:
+          type: string
+          nullable: true
+      required:
+      - publishDate
+      - score
+      - text
+      - title
+      - type
+      - url
+    CriminalCheckResults:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FraudStatus'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriminalCheckData'
+        serviceName:
+          type: string
+        serviceGroupType:
+          type: string
+          default: CRIMINAL_CHECK
+        uid:
+          type: string
+        errorMessage:
+          type: string
+          nullable: true
+      required:
+      - data
+      - errorMessage
+      - serviceName
+      - status
+      - uid
     LidResults:
       type: object
       properties:
@@ -2589,18 +2971,61 @@ components:
       - serviceName
       - status
       - uid
-    AmlV3AddressWebhook:
+    DocumentExpirationEnum:
+      enum:
+      - DOCUMENT_EXPIRES_WITHIN_30_DAYS
+      - DOCUMENT_EXPIRES_WITHIN_7_DAYS
+      - DOCUMENT_EXPIRES_WITHIN_1_DAY
+      - DOCUMENT_EXPIRED
+      type: string
+    BankAccountWebhook_2:
       type: object
       properties:
-        city:
+        id:
+          type: string
+          format: uuid
+        name:
           type: string
           nullable: true
-        geography:
+          maxLength: 128
+        iban:
           type: string
+          nullable: true
+          maxLength: 34
+        currency:
+          type: string
+          maxLength: 3
+        balancesOverview:
+          allOf:
+          - $ref: '#/components/schemas/BankBalancesOverviewWebhook'
+          nullable: true
+        transactionsCount:
+          type: integer
           nullable: true
       required:
-      - city
-      - geography
+      - balancesOverview
+      - currency
+      - iban
+      - id
+      - name
+      - transactionsCount
+    SoftKycMatchStatusEnum:
+      enum:
+      - MATCH
+      - NO_MATCH
+      - PARTIAL_MATCH
+      - NO_DATA
+      - NO_INPUT
+      - INVALID
+      type: string
+    AddressVerificationQualityEnum:
+      enum:
+      - EXCELLENT
+      - GOOD
+      - AVERAGE
+      - POOR
+      - BAD
+      type: string
     InfoMismatchEnum:
       description: Data mismatches between the information submitted at session creation and the document. See [Verification Statuses → Mismatch Tags](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#mismatch-tags) for what each value means, and [Suspected Status](https://documentation.idenfy.com/kyc/suspected-status) for worked examples and how to resolve them.
       enum:
@@ -2632,112 +3057,6 @@ components:
       - POA_COUNTRIES_MISMATCH
       - POA_SCREENSHOT_DETECTED
       type: string
-    RiskAssessmentWebhook:
-      type: object
-      properties:
-        riskScore:
-          type: integer
-          maximum: 100
-          minimum: 0
-          nullable: true
-        riskLevel:
-          allOf:
-          - $ref: '#/components/schemas/RiskLevelEnum'
-          nullable: true
-      required:
-      - riskLevel
-      - riskScore
-    ResourceTypeEnum:
-      enum:
-      - HungaryRegistryCenterCheck
-      - LithuaniaRegistryCenterCheck
-      - Us15RegistryCenterCheck
-      type: string
-    CriminalCheckOffense:
-      type: object
-      properties:
-        offense:
-          type: string
-          nullable: true
-        offenseClass:
-          type: string
-          nullable: true
-        offenseDescription:
-          type: string
-          nullable: true
-        offenseLevel:
-          type: string
-          nullable: true
-        sentenceDate:
-          type: string
-          nullable: true
-        courtName:
-          type: string
-          nullable: true
-        courtCaseNumber:
-          type: string
-          nullable: true
-        releaseDate:
-          type: string
-          nullable: true
-      required:
-      - courtCaseNumber
-      - courtName
-      - offense
-      - offenseClass
-      - offenseDescription
-      - offenseLevel
-      - releaseDate
-      - sentenceDate
-    FaceStatusEnum:
-      description: Automated or manual face-match check result. See [Verification Statuses → Face Status Values](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#face-status-values) for what each value means.
-      enum:
-      - FACE_MATCH
-      - FACE_NOT_CHECKED
-      - FACE_MISMATCH
-      - NO_FACE_FOUND
-      - TOO_MANY_FACES
-      - FACE_TOO_BLURRY
-      - FACE_GLARED
-      - FACE_UNCERTAIN
-      - FACE_NOT_ANALYSED
-      - FACE_ERROR
-      - AUTO_UNVERIFIABLE
-      - FAKE_FACE
-      type: string
-    CriminalCheckData:
-      type: object
-      properties:
-        offenses:
-          type: array
-          items:
-            $ref: '#/components/schemas/CriminalCheckOffense'
-        fullName:
-          type: string
-          nullable: true
-        county:
-          type: string
-          nullable: true
-        region:
-          allOf:
-          - $ref: '#/components/schemas/RegionEnum'
-          nullable: true
-      required:
-      - county
-      - fullName
-      - offenses
-      - region
-    RegistryCenterCheckWebhook:
-      oneOf:
-      - $ref: '#/components/schemas/HungaryRegistryCenterWebhook'
-      - $ref: '#/components/schemas/LithuaniaRegistryCenterWebhook'
-      - $ref: '#/components/schemas/Us15RegistryCenterWebhook'
-      discriminator:
-        propertyName: resourceType
-        mapping:
-          HungaryRegistryCenterCheck: '#/components/schemas/HungaryRegistryCenterWebhook'
-          LithuaniaRegistryCenterCheck: '#/components/schemas/LithuaniaRegistryCenterWebhook'
-          Us15RegistryCenterCheck: '#/components/schemas/Us15RegistryCenterWebhook'
     HungaryRegistryCenterWebhook:
       type: object
       properties:
@@ -2809,71 +3128,12 @@ components:
       - passport
       - residentialAddress
       - resourceType
-    EmailVerificationWebhook:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        emailVerified:
-          type: boolean
-      required:
-      - email
-      - emailVerified
-    LithuaniaRegistryCenterWebhook:
-      type: object
-      properties:
-        checkedPersonalNumber:
-          type: string
-          maxLength: 30
-        checkedDocumentType:
-          type: string
-          maxLength: 2
-        personalNumber:
-          type: string
-          nullable: true
-          maxLength: 30
-        name:
-          type: string
-          nullable: true
-          maxLength: 100
-        surname:
-          type: string
-          nullable: true
-          maxLength: 100
-        documentNumber:
-          type: string
-          nullable: true
-          maxLength: 100
-        documentExpiration:
-          type: string
-          format: date
-          nullable: true
-        facePhoto:
-          type: string
-          format: uri
-          nullable: true
-        resourceType:
-          $ref: '#/components/schemas/ResourceTypeEnum'
-      required:
-      - checkedDocumentType
-      - checkedPersonalNumber
-      - documentExpiration
-      - documentNumber
-      - facePhoto
-      - name
-      - personalNumber
-      - resourceType
-      - surname
-    SoftKycMatchStatusEnum:
+    AdditionalStepStatusEnum:
+      description: Result of an additional step document (e.g. proof of address). See [Verification Statuses → Additional Step Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#additional-step-statuses) for what each value means.
       enum:
-      - MATCH
-      - NO_MATCH
-      - PARTIAL_MATCH
-      - NO_DATA
-      - NO_INPUT
+      - VALID
       - INVALID
+      - NOT_FOUND
       type: string
     SexEnum:
       enum:
@@ -2881,128 +3141,68 @@ components:
       - FEMALE
       - UNDEFINED
       type: string
-    AmlV3AdverseMediaDataWebhook:
+    AddressVerificationWebhook:
       type: object
       properties:
-        title:
+        address:
           type: string
+          maxLength: 255
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
           nullable: true
-        url:
-          type: string
-        text:
-          type: string
+        status:
+          allOf:
+          - $ref: '#/components/schemas/AddressVerificationStatusEnum'
+          readOnly: true
+        accuracy:
+          type: integer
+          readOnly: true
           nullable: true
-        score:
-          type: string
-          nullable: true
-        type:
-          type: string
-          nullable: true
-        publishDate:
-          type: string
+        quality:
+          allOf:
+          - $ref: '#/components/schemas/AddressVerificationQualityEnum'
+          readOnly: true
           nullable: true
       required:
-      - publishDate
-      - score
-      - text
-      - title
-      - type
-      - url
-    DeviceTypeEnum:
-      enum:
-      - PC
-      - MOBILE
-      - TABLET
-      - MOBILE_APP
-      - MOBILE_SDK
-      - OTHER
-      type: string
-    KycDocumentTypeEnum:
-      enum:
-      - ID_CARD
-      - PASSPORT
-      - RESIDENCE_PERMIT
-      - DRIVER_LICENSE
-      - PAN_CARD
-      - AADHAAR
-      - VISA
-      - NATIONAL_PASSPORT
-      - PROVISIONAL_DRIVER_LICENSE
-      - OLD_ID_CARD
-      - MILITARY_CARD
-      - ADDRESS_CARD
-      - SMART_ID
-      - CLEAR
-      - ONE_ID
-      - BANK_ID_SE
-      - BANK_ID_NO
-      - BANK_ID_CZ
-      - FTN
-      - MIT_ID
-      - VERIMI
-      - LA_WALLET
-      - SAMSUNG_WALLET
-      - MOJE_ID_CZ
-      - YOTI_ID
-      - OTHER
-      - BORDER_CROSSING
-      - ASYLUM
-      - PHOTO_CARD
-      - PROOF_OF_AGE_CARD
-      - TRAVEL_CARD
-      - SOCIAL_SECURITY_CARD
-      - VOTER_CARD
-      - DIPLOMATIC_ID
-      - WORK_PERMIT
-      type: string
-    AgeGroupEnum:
-      enum:
-      - UNDER_13
-      - UNDER_8
-      - OVER_8
-      - OVER_13
-      - OVER_16
-      - OVER_18
-      - OVER_21
-      - OVER_22
-      - OVER_25
-      - OVER_30
-      type: string
-    QuestionnaireAnswersWebhook:
+      - accuracy
+      - address
+      - quality
+      - status
+    AmlCheckV3Webhook:
       type: object
       properties:
-        title:
+        id:
           type: string
-        sections:
+          nullable: true
+        overallStatus:
+          type: string
+          nullable: true
+        statusSetBy:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        statusSetAt:
+          type: string
+          format: date-time
+          nullable: true
+        adverseMedia:
           type: array
           items:
-            $ref: '#/components/schemas/QuestionnaireAnswersDisplaySections'
-      required:
-      - sections
-      - title
-    QuestionnaireAnswersDisplayQuestions:
-      type: object
-      properties:
-        key:
-          type: string
-        title:
-          type: string
-        type:
-          $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestionsTypeEnum'
-        value:
-          oneOf:
-          - type: array
-            items:
-              type: string
-          - type: string
-          - type: boolean
+            $ref: '#/components/schemas/AmlV3AdverseMediaDataWebhook'
           nullable: true
-          readOnly: true
+        amlCheck:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmlV3CheckDataWebhook'
+          nullable: true
       required:
-      - key
-      - title
-      - type
-      - value
+      - adverseMedia
+      - amlCheck
+      - id
+      - overallStatus
+      - statusSetAt
+      - statusSetBy
     QuestionnaireAnswersDisplayQuestionsTypeEnum:
       enum:
       - CHECKBOX
@@ -3026,67 +3226,6 @@ components:
       - TEXT_AREA
       - TIME
       - URL
-      type: string
-    PhoneVerificationWebhook:
-      type: object
-      properties:
-        phone:
-          type: string
-          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
-        phoneVerified:
-          type: boolean
-      required:
-      - phone
-      - phoneVerified
-    DocumentStatusEnum:
-      description: Automated or manual document check result. See [Verification Statuses → Document Status Values](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#document-status-values) for what each value means.
-      enum:
-      - DOC_VALIDATED
-      - DOC_INFO_MISMATCH
-      - DOC_NOT_FOUND
-      - DOC_NOT_FULLY_VISIBLE
-      - DOC_FACE_NOT_FOUND
-      - DOC_TOO_BLURRY
-      - DOC_GLARED
-      - DOC_FACE_GLARED
-      - MRZ_NOT_FOUND
-      - MRZ_OCR_READING_ERROR
-      - BARCODE_NOT_FOUND
-      - DOC_EXPIRED
-      - DOC_NOT_SUPPORTED
-      - COUNTRY_NOT_SUPPORTED
-      - COUNTRY_MISMATCH
-      - DOC_TYPE_MISMATCH
-      - DOC_SUBTYPE_MISMATCH
-      - DOC_SIDE_MISMATCH
-      - DOC_DAMAGED
-      - DOC_FAKE
-      - DOC_PERSONAL_CODE_INVALID
-      - DOC_NOT_ALLOWED
-      - DOC_NAME_ERROR
-      - DOC_SURNAME_ERROR
-      - DOC_EXPIRY_ERROR
-      - DOC_DOB_ERROR
-      - DOC_PERSONAL_NUMBER_ERROR
-      - DOC_NUMBER_ERROR
-      - DOC_DATE_OF_ISSUE_ERROR
-      - DOC_SEX_ERROR
-      - DOC_NATIONALITY_ERROR
-      - DOC_NOT_ANALYSED
-      - DOC_ERROR
-      - AUTO_UNVERIFIABLE
-      - DOC_SPOOF_DETECTED
-      - MRZ_INVALID
-      - EID_FAILED
-      - NFC_INIT_FAILED
-      - NFC_FAILED
-      - NFC_TIMEOUT
-      type: string
-    AddressVerificationStatusEnum:
-      enum:
-      - VERIFIED
-      - PARTIALLY_VERIFIED
-      - UNVERIFIED
       type: string
     RegionEnum:
       enum:
@@ -3142,182 +3281,6 @@ components:
       - AK
       - HI
       type: string
-    BankVerificationWebhook_2:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        country:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          nullable: true
-        bank:
-          type: string
-          nullable: true
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankAccountWebhook_2'
-        riskLevel:
-          allOf:
-          - $ref: '#/components/schemas/RiskLevelEnum'
-          nullable: true
-      required:
-      - accounts
-      - bank
-      - country
-      - id
-      - riskLevel
-    LidData:
-      type: object
-      properties:
-        documentNumber:
-          type: string
-        documentType:
-          type: string
-          nullable: true
-        valid:
-          type: boolean
-        expiryDate:
-          type: string
-        checkDate:
-          type: string
-      required:
-      - checkDate
-      - documentNumber
-      - documentType
-      - expiryDate
-      - valid
-    AddressVerificationQualityEnum:
-      enum:
-      - EXCELLENT
-      - GOOD
-      - AVERAGE
-      - POOR
-      - BAD
-      type: string
-    DriverLicenseCheckWebhook:
-      type: object
-      properties:
-        name:
-          type: string
-        surname:
-          type: string
-        dateOfBirth:
-          type: string
-          format: date
-        state:
-          type: string
-          maxLength: 2
-        gender:
-          type: string
-          nullable: true
-          maxLength: 1
-        dateOfIssue:
-          type: string
-          format: date
-          nullable: true
-        dateOfExpiry:
-          type: string
-          format: date
-          nullable: true
-        documentNumber:
-          type: string
-          nullable: true
-        nameMatch:
-          type: boolean
-          nullable: true
-        surnameMatch:
-          type: boolean
-          nullable: true
-        dateOfBirthMatch:
-          type: boolean
-          nullable: true
-        dateOfIssueMatch:
-          type: boolean
-          nullable: true
-        dateOfExpiryMatch:
-          type: boolean
-          nullable: true
-        documentNumberMatch:
-          type: boolean
-          nullable: true
-        genderMatch:
-          type: boolean
-          nullable: true
-      required:
-      - dateOfBirth
-      - dateOfBirthMatch
-      - dateOfExpiry
-      - dateOfExpiryMatch
-      - dateOfIssue
-      - dateOfIssueMatch
-      - documentNumber
-      - documentNumberMatch
-      - gender
-      - genderMatch
-      - name
-      - nameMatch
-      - state
-      - surname
-      - surnameMatch
-    BankAccountWebhook_2:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-          nullable: true
-          maxLength: 128
-        iban:
-          type: string
-          nullable: true
-          maxLength: 34
-        currency:
-          type: string
-          maxLength: 3
-        balancesOverview:
-          allOf:
-          - $ref: '#/components/schemas/BankBalancesOverviewWebhook'
-          nullable: true
-        transactionsCount:
-          type: integer
-          nullable: true
-      required:
-      - balancesOverview
-      - currency
-      - iban
-      - id
-      - name
-      - transactionsCount
-    CriminalCheckResults:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/FraudStatus'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CriminalCheckData'
-        serviceName:
-          type: string
-        serviceGroupType:
-          type: string
-          default: CRIMINAL_CHECK
-        uid:
-          type: string
-        errorMessage:
-          type: string
-          nullable: true
-      required:
-      - data
-      - errorMessage
-      - serviceName
-      - status
-      - uid
     AmlV3CheckDataWebhook:
       type: object
       properties:
@@ -3391,13 +3354,48 @@ components:
       - resourceId
       - score
       - version
-    DocumentExpirationEnum:
+    AddressVerificationStatusEnum:
       enum:
-      - DOCUMENT_EXPIRES_WITHIN_30_DAYS
-      - DOCUMENT_EXPIRES_WITHIN_7_DAYS
-      - DOCUMENT_EXPIRES_WITHIN_1_DAY
-      - DOCUMENT_EXPIRED
+      - VERIFIED
+      - PARTIALLY_VERIFIED
+      - UNVERIFIED
       type: string
+    CriminalCheckOffense:
+      type: object
+      properties:
+        offense:
+          type: string
+          nullable: true
+        offenseClass:
+          type: string
+          nullable: true
+        offenseDescription:
+          type: string
+          nullable: true
+        offenseLevel:
+          type: string
+          nullable: true
+        sentenceDate:
+          type: string
+          nullable: true
+        courtName:
+          type: string
+          nullable: true
+        courtCaseNumber:
+          type: string
+          nullable: true
+        releaseDate:
+          type: string
+          nullable: true
+      required:
+      - courtCaseNumber
+      - courtName
+      - offense
+      - offenseClass
+      - offenseDescription
+      - offenseLevel
+      - releaseDate
+      - sentenceDate
     DocumentExpirationWebhook:
       type: object
       properties:
@@ -3414,85 +3412,6 @@ components:
       - documentExpiration
       - expirationThreshold
       - scanRef
-    QuestionnaireAnswersDisplaySections:
-      type: object
-      properties:
-        title:
-          type: string
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
-      required:
-      - questions
-      - title
-    FraudTagsEnum:
-      description: Fraud indicators that can trigger a `SUSPECTED` status. See [Verification Statuses → Fraud Tags](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#fraud-tags) for what each value means, and [Suspected Status](https://documentation.idenfy.com/kyc/suspected-status) for worked examples and how to resolve them.
-      enum:
-      - FACE_IN_BLACKLIST
-      - DOC_FACE_IN_BLACKLIST
-      - DATA_BLACKLISTED
-      - DATA_IN_BLACKLIST
-      - DUPLICATE_FACE
-      - DUPLICATE_DOC_FACE
-      - DUPLICATE_PERSONAL_DATA
-      - VIRTUAL_CAMERA
-      - ADDRESS_UNVERIFIED
-      - PORTRAIT_SUBSTITUTION
-      - FACE_SUSPECTED
-      - FACE_BLACKLISTED
-      - DOC_FACE_BLACKLISTED
-      - DOC_MOBILE_PHOTO
-      - DEV_TOOLS_OPENED
-      - DOC_PRINT_SPOOFED
-      - FAKE_PHOTO
-      - AML_SUSPECTION
-      - AML_FAILED
-      - LID_SUSPECTION
-      - LID_FAILED
-      - SANCTIONS_SUSPECTION
-      - SANCTIONS_FAILED
-      - CRIMINAL_SUSPECTED
-      - CRIMINAL_CHECK_FAILED
-      - RC_FAILED
-      - DL_FAILED
-      - AUTO_UNVERIFIABLE
-      type: string
-    AddressVerificationWebhook:
-      type: object
-      properties:
-        address:
-          type: string
-          maxLength: 255
-        country:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          nullable: true
-        status:
-          allOf:
-          - $ref: '#/components/schemas/AddressVerificationStatusEnum'
-          readOnly: true
-        accuracy:
-          type: integer
-          readOnly: true
-          nullable: true
-        quality:
-          allOf:
-          - $ref: '#/components/schemas/AddressVerificationQualityEnum'
-          readOnly: true
-          nullable: true
-      required:
-      - accuracy
-      - address
-      - quality
-      - status
-    AdditionalStepStatusEnum:
-      description: Result of an additional step document (e.g. proof of address). See [Verification Statuses → Additional Step Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#additional-step-statuses) for what each value means.
-      enum:
-      - VALID
-      - INVALID
-      - NOT_FOUND
-      type: string
     IdentificationStatusWebhook:
       type: object
       properties:
@@ -3527,40 +3446,152 @@ components:
       - manualFace
       - mismatchTags
       - overall
-    AmlCheckV3Webhook:
+    PhoneVerificationWebhook:
       type: object
       properties:
-        id:
+        phone:
           type: string
-          nullable: true
-        overallStatus:
-          type: string
-          nullable: true
-        statusSetBy:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        statusSetAt:
-          type: string
-          format: date-time
-          nullable: true
-        adverseMedia:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlV3AdverseMediaDataWebhook'
-          nullable: true
-        amlCheck:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlV3CheckDataWebhook'
-          nullable: true
+          description: Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.
+        phoneVerified:
+          type: boolean
       required:
-      - adverseMedia
-      - amlCheck
-      - id
-      - overallStatus
-      - statusSetAt
-      - statusSetBy
+      - phone
+      - phoneVerified
+    DocumentStatusEnum:
+      description: Automated or manual document check result. See [Verification Statuses → Document Status Values](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#document-status-values) for what each value means.
+      enum:
+      - DOC_VALIDATED
+      - DOC_INFO_MISMATCH
+      - DOC_NOT_FOUND
+      - DOC_NOT_FULLY_VISIBLE
+      - DOC_FACE_NOT_FOUND
+      - DOC_TOO_BLURRY
+      - DOC_GLARED
+      - DOC_FACE_GLARED
+      - MRZ_NOT_FOUND
+      - MRZ_OCR_READING_ERROR
+      - BARCODE_NOT_FOUND
+      - DOC_EXPIRED
+      - DOC_NOT_SUPPORTED
+      - COUNTRY_NOT_SUPPORTED
+      - COUNTRY_MISMATCH
+      - DOC_TYPE_MISMATCH
+      - DOC_SUBTYPE_MISMATCH
+      - DOC_SIDE_MISMATCH
+      - DOC_DAMAGED
+      - DOC_FAKE
+      - DOC_PERSONAL_CODE_INVALID
+      - DOC_NOT_ALLOWED
+      - DOC_NAME_ERROR
+      - DOC_SURNAME_ERROR
+      - DOC_EXPIRY_ERROR
+      - DOC_DOB_ERROR
+      - DOC_PERSONAL_NUMBER_ERROR
+      - DOC_NUMBER_ERROR
+      - DOC_DATE_OF_ISSUE_ERROR
+      - DOC_SEX_ERROR
+      - DOC_NATIONALITY_ERROR
+      - DOC_NOT_ANALYSED
+      - DOC_ERROR
+      - AUTO_UNVERIFIABLE
+      - DOC_SPOOF_DETECTED
+      - MRZ_INVALID
+      - EID_FAILED
+      - NFC_INIT_FAILED
+      - NFC_FAILED
+      - NFC_TIMEOUT
+      type: string
+    QuestionnaireAnswersDisplayQuestions:
+      type: object
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestionsTypeEnum'
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+          - type: boolean
+          nullable: true
+          readOnly: true
+      required:
+      - key
+      - title
+      - type
+      - value
+    QuestionnaireAnswersWebhook:
+      type: object
+      properties:
+        title:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplaySections'
+      required:
+      - sections
+      - title
+    RegistryCenterCheckWebhook:
+      oneOf:
+      - $ref: '#/components/schemas/HungaryRegistryCenterWebhook'
+      - $ref: '#/components/schemas/LithuaniaRegistryCenterWebhook'
+      - $ref: '#/components/schemas/Us15RegistryCenterWebhook'
+      discriminator:
+        propertyName: resourceType
+        mapping:
+          HungaryRegistryCenterCheck: '#/components/schemas/HungaryRegistryCenterWebhook'
+          LithuaniaRegistryCenterCheck: '#/components/schemas/LithuaniaRegistryCenterWebhook'
+          Us15RegistryCenterCheck: '#/components/schemas/Us15RegistryCenterWebhook'
+    LithuaniaRegistryCenterWebhook:
+      type: object
+      properties:
+        checkedPersonalNumber:
+          type: string
+          maxLength: 30
+        checkedDocumentType:
+          type: string
+          maxLength: 2
+        personalNumber:
+          type: string
+          nullable: true
+          maxLength: 30
+        name:
+          type: string
+          nullable: true
+          maxLength: 100
+        surname:
+          type: string
+          nullable: true
+          maxLength: 100
+        documentNumber:
+          type: string
+          nullable: true
+          maxLength: 100
+        documentExpiration:
+          type: string
+          format: date
+          nullable: true
+        facePhoto:
+          type: string
+          format: uri
+          nullable: true
+        resourceType:
+          $ref: '#/components/schemas/ResourceTypeEnum'
+      required:
+      - checkedDocumentType
+      - checkedPersonalNumber
+      - documentExpiration
+      - documentNumber
+      - facePhoto
+      - name
+      - personalNumber
+      - resourceType
+      - surname
     Us15RegistryCenterWebhook:
       type: object
       properties:
@@ -3695,6 +3726,131 @@ components:
       - yobStatus
       - zip
       - zipStatus
+    FaceStatusEnum:
+      description: Automated or manual face-match check result. See [Verification Statuses → Face Status Values](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#face-status-values) for what each value means.
+      enum:
+      - FACE_MATCH
+      - FACE_NOT_CHECKED
+      - FACE_MISMATCH
+      - NO_FACE_FOUND
+      - TOO_MANY_FACES
+      - FACE_TOO_BLURRY
+      - FACE_GLARED
+      - FACE_UNCERTAIN
+      - FACE_NOT_ANALYSED
+      - FACE_ERROR
+      - AUTO_UNVERIFIABLE
+      - FAKE_FACE
+      type: string
+    FraudTagsEnum:
+      description: Fraud indicators that can trigger a `SUSPECTED` status. See [Verification Statuses → Fraud Tags](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#fraud-tags) for what each value means, and [Suspected Status](https://documentation.idenfy.com/kyc/suspected-status) for worked examples and how to resolve them.
+      enum:
+      - FACE_IN_BLACKLIST
+      - DOC_FACE_IN_BLACKLIST
+      - DATA_BLACKLISTED
+      - DATA_IN_BLACKLIST
+      - DUPLICATE_FACE
+      - DUPLICATE_DOC_FACE
+      - DUPLICATE_PERSONAL_DATA
+      - VIRTUAL_CAMERA
+      - ADDRESS_UNVERIFIED
+      - PORTRAIT_SUBSTITUTION
+      - FACE_SUSPECTED
+      - FACE_BLACKLISTED
+      - DOC_FACE_BLACKLISTED
+      - DOC_MOBILE_PHOTO
+      - DEV_TOOLS_OPENED
+      - DOC_PRINT_SPOOFED
+      - FAKE_PHOTO
+      - AML_SUSPECTION
+      - AML_FAILED
+      - LID_SUSPECTION
+      - LID_FAILED
+      - SANCTIONS_SUSPECTION
+      - SANCTIONS_FAILED
+      - CRIMINAL_SUSPECTED
+      - CRIMINAL_CHECK_FAILED
+      - RC_FAILED
+      - DL_FAILED
+      - AUTO_UNVERIFIABLE
+      type: string
+    DriverLicenseCheckWebhook:
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        state:
+          type: string
+          maxLength: 2
+        gender:
+          type: string
+          nullable: true
+          maxLength: 1
+        dateOfIssue:
+          type: string
+          format: date
+          nullable: true
+        dateOfExpiry:
+          type: string
+          format: date
+          nullable: true
+        documentNumber:
+          type: string
+          nullable: true
+        nameMatch:
+          type: boolean
+          nullable: true
+        surnameMatch:
+          type: boolean
+          nullable: true
+        dateOfBirthMatch:
+          type: boolean
+          nullable: true
+        dateOfIssueMatch:
+          type: boolean
+          nullable: true
+        dateOfExpiryMatch:
+          type: boolean
+          nullable: true
+        documentNumberMatch:
+          type: boolean
+          nullable: true
+        genderMatch:
+          type: boolean
+          nullable: true
+      required:
+      - dateOfBirth
+      - dateOfBirthMatch
+      - dateOfExpiry
+      - dateOfExpiryMatch
+      - dateOfIssue
+      - dateOfIssueMatch
+      - documentNumber
+      - documentNumberMatch
+      - gender
+      - genderMatch
+      - name
+      - nameMatch
+      - state
+      - surname
+      - surnameMatch
+    QuestionnaireAnswersDisplaySections:
+      type: object
+      properties:
+        title:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswersDisplayQuestions'
+      required:
+      - questions
+      - title
     IdentificationDataWebhook:
       type: object
       properties:
@@ -3878,162 +4034,6 @@ components:
       - orgPatronymic
       - orgTemporaryAddress
       - selectedCountry
-    IdentificationStatusEnum:
-      description: Overall verification status. See [Verification Statuses](https://documentation.idenfy.com/guides/dashboard/kyc/verification-statuses#overall-status) for what each value means, or [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with it.
-      enum:
-      - APPROVED
-      - DENIED
-      - SUSPECTED
-      - REVIEWING
-      - EXPIRED
-      - ACTIVE
-      - DELETED
-      - ARCHIVED
-      type: string
-    IdentificationWebhook:
-      type: object
-      properties:
-        final:
-          type: boolean
-        platform:
-          $ref: '#/components/schemas/DeviceTypeEnum'
-        status:
-          allOf:
-          - $ref: '#/components/schemas/IdentificationStatusWebhook'
-          description: See [Status Handling](https://documentation.idenfy.com/kyc/status-handling) for what to do with `overall`, and especially how to handle a `SUSPECTED` result using `fraudTags`/`mismatchTags`.
-        data:
-          $ref: '#/components/schemas/IdentificationDataWebhook'
-        fileUrls:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        additionalStepPdfUrls:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        AML:
-          type: array
-          items:
-            $ref: '#/components/schemas/AmlResults'
-          nullable: true
-          description: Legacy (v2) object structure. If enabled, use `amlCheck` (v3), which better aligns with our new schema.
-        amlCheck:
-          allOf:
-          - $ref: '#/components/schemas/AmlCheckV3Webhook'
-          nullable: true
-        LID:
-          type: array
-          items:
-            $ref: '#/components/schemas/LidResults'
-          nullable: true
-        CRIMINAL_CHECK:
-          type: array
-          items:
-            $ref: '#/components/schemas/CriminalCheckResults'
-          nullable: true
-        scanRef:
-          type: string
-          maxLength: 36
-        externalRef:
-          type: string
-          nullable: true
-          maxLength: 40
-        clientId:
-          type: string
-          maxLength: 100
-        companyId:
-          type: string
-          maxLength: 36
-        beneficiaryId:
-          type: string
-          maxLength: 36
-        startTime:
-          type: integer
-        finishTime:
-          type: integer
-        clientIp:
-          type: string
-          nullable: true
-          maxLength: 39
-        clientIpCountry:
-          type: string
-          nullable: true
-          maxLength: 2
-        clientLocation:
-          type: string
-          nullable: true
-          maxLength: 100
-        gdcMatch:
-          type: boolean
-          nullable: true
-        manualAddress:
-          type: string
-          nullable: true
-          maxLength: 255
-        manualAddressMatch:
-          type: boolean
-        registryCenterCheck:
-          allOf:
-          - $ref: '#/components/schemas/RegistryCenterCheckWebhook'
-          nullable: true
-        addressVerification:
-          allOf:
-          - $ref: '#/components/schemas/AddressVerificationWebhook'
-          nullable: true
-        questionnaireAnswers:
-          allOf:
-          - $ref: '#/components/schemas/QuestionnaireAnswersWebhook'
-          nullable: true
-        riskAssessment:
-          allOf:
-          - $ref: '#/components/schemas/RiskAssessmentWebhook'
-          nullable: true
-        bankVerification:
-          allOf:
-          - $ref: '#/components/schemas/BankVerificationWebhook_2'
-          nullable: true
-        emailVerification:
-          allOf:
-          - $ref: '#/components/schemas/EmailVerificationWebhook'
-          nullable: true
-        phoneVerification:
-          allOf:
-          - $ref: '#/components/schemas/PhoneVerificationWebhook'
-          nullable: true
-        driverLicenseCheck:
-          allOf:
-          - $ref: '#/components/schemas/DriverLicenseCheckWebhook'
-          nullable: true
-        bankCardVerification:
-          allOf:
-          - $ref: '#/components/schemas/BankCardVerificationWebhook'
-          nullable: true
-        additionalSteps:
-          type: object
-          additionalProperties:
-            enum:
-            - UPLOAD
-            - COMPARE
-            - EXTRACT
-            - null
-            type: string
-            nullable: true
-          nullable: true
-      required:
-      - beneficiaryId
-      - clientId
-      - clientIp
-      - clientIpCountry
-      - clientLocation
-      - companyId
-      - data
-      - fileUrls
-      - final
-      - finishTime
-      - platform
-      - scanRef
-      - startTime
-      - status
   securitySchemes:
     apiKeyPair:
       type: http
