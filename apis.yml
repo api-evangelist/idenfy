@@ -31,6 +31,10 @@ accessModel:
   generated: '2026-09-03'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/idenfy.png
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
+x-docs-hosting: vercel
 tags:
 - AML
 - Age Verification
@@ -642,6 +646,9 @@ apis:
   - type: Documentation
     url: https://documentation.idenfy.com/age-estimation/create-session
 common:
+- type: CapabilityMap
+  url: capabilities/idenfy-capability-edges.yml
+  name: iDenfy Business Capability Map
 - type: Overlay
   url: overlays/idenfy-kyc-overlay.yaml
 - type: Overlay
