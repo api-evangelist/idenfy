@@ -55,110 +55,6 @@ components:
           maxLength: 255
       required:
       - file
-    PoaCheckDetail:
-      type: object
-      properties:
-        file:
-          type: string
-          format: uri
-          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `webp`, `heic`, `heif`, `pdf` files.'
-        providedName:
-          type: string
-          nullable: true
-          maxLength: 255
-        providedAddress:
-          type: string
-          nullable: true
-          maxLength: 255
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-        issueDate:
-          type: string
-          format: date
-          readOnly: true
-          nullable: true
-        documentType:
-          type: string
-          readOnly: true
-          nullable: true
-        country:
-          allOf:
-          - $ref: '#/components/schemas/CountryEnum'
-          readOnly: true
-          nullable: true
-        hasLogo:
-          type: boolean
-          readOnly: true
-          nullable: true
-        isScreenshot:
-          type: boolean
-          readOnly: true
-          nullable: true
-        nameMatch:
-          type: boolean
-          readOnly: true
-          nullable: true
-        addressMatch:
-          type: boolean
-          readOnly: true
-          nullable: true
-        dateValid:
-          type: boolean
-          readOnly: true
-          nullable: true
-        overallStatus:
-          allOf:
-          - $ref: '#/components/schemas/PoaCheckStatusEnum'
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-          nullable: true
-        address:
-          type: string
-          readOnly: true
-          nullable: true
-        orgName:
-          type: string
-          readOnly: true
-          nullable: true
-        orgAddress:
-          type: string
-          readOnly: true
-          nullable: true
-        documentTypeSupported:
-          type: boolean
-          readOnly: true
-          nullable: true
-        countrySupported:
-          type: boolean
-          readOnly: true
-          nullable: true
-      required:
-      - address
-      - addressMatch
-      - country
-      - countrySupported
-      - created
-      - dateValid
-      - documentType
-      - documentTypeSupported
-      - file
-      - hasLogo
-      - id
-      - isScreenshot
-      - issueDate
-      - name
-      - nameMatch
-      - orgAddress
-      - orgName
-      - overallStatus
     CountryEnum:
       enum:
       - AF
@@ -412,6 +308,110 @@ components:
       - ZM
       - ZW
       type: string
+    PoaCheckDetail:
+      type: object
+      properties:
+        file:
+          type: string
+          format: uri
+          description: 'Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `webp`, `heic`, `heif`, `pdf` files.'
+        providedName:
+          type: string
+          nullable: true
+          maxLength: 255
+        providedAddress:
+          type: string
+          nullable: true
+          maxLength: 255
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        issueDate:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        documentType:
+          type: string
+          readOnly: true
+          nullable: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryEnum'
+          readOnly: true
+          nullable: true
+        hasLogo:
+          type: boolean
+          readOnly: true
+          nullable: true
+        isScreenshot:
+          type: boolean
+          readOnly: true
+          nullable: true
+        nameMatch:
+          type: boolean
+          readOnly: true
+          nullable: true
+        addressMatch:
+          type: boolean
+          readOnly: true
+          nullable: true
+        dateValid:
+          type: boolean
+          readOnly: true
+          nullable: true
+        overallStatus:
+          allOf:
+          - $ref: '#/components/schemas/PoaCheckStatusEnum'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+          nullable: true
+        address:
+          type: string
+          readOnly: true
+          nullable: true
+        orgName:
+          type: string
+          readOnly: true
+          nullable: true
+        orgAddress:
+          type: string
+          readOnly: true
+          nullable: true
+        documentTypeSupported:
+          type: boolean
+          readOnly: true
+          nullable: true
+        countrySupported:
+          type: boolean
+          readOnly: true
+          nullable: true
+      required:
+      - address
+      - addressMatch
+      - country
+      - countrySupported
+      - created
+      - dateValid
+      - documentType
+      - documentTypeSupported
+      - file
+      - hasLogo
+      - id
+      - isScreenshot
+      - issueDate
+      - name
+      - nameMatch
+      - orgAddress
+      - orgName
+      - overallStatus
     PoaCheckStatusEnum:
       enum:
       - MATCH

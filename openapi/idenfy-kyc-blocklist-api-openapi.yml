@@ -77,32 +77,12 @@ paths:
           description: No response body
 components:
   schemas:
-    IdentificationBlacklistEntry:
-      oneOf:
-      - $ref: '#/components/schemas/IdentificationBlacklist'
-      - $ref: '#/components/schemas/IdentificationDataBlacklistResponse'
-    IdentificationBlacklist:
+    IdentificationBlacklistRequest:
       type: object
       properties:
-        id:
-          type: string
-          readOnly: true
-          description: The `scan_ref` of the blocklisted face image; use it as the `id` path parameter.
         reason:
           type: string
           nullable: true
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-        faceImageUrl:
-          type: string
-          nullable: true
-          readOnly: true
-      required:
-      - created
-      - faceImageUrl
-      - id
     IdentificationDataBlacklistResponse:
       type: object
       properties:
@@ -142,12 +122,32 @@ components:
       - nationality
       - personalNumber
       - reason
-    IdentificationBlacklistRequest:
+    IdentificationBlacklistEntry:
+      oneOf:
+      - $ref: '#/components/schemas/IdentificationBlacklist'
+      - $ref: '#/components/schemas/IdentificationDataBlacklistResponse'
+    IdentificationBlacklist:
       type: object
       properties:
+        id:
+          type: string
+          readOnly: true
+          description: The `scan_ref` of the blocklisted face image; use it as the `id` path parameter.
         reason:
           type: string
           nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        faceImageUrl:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - created
+      - faceImageUrl
+      - id
   securitySchemes:
     apiKeyPair:
       type: http

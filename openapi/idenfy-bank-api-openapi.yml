@@ -75,27 +75,36 @@ paths:
           description: ''
 components:
   schemas:
-    BankTransaction:
+    BankToken:
       type: object
       properties:
-        creditor:
-          $ref: '#/components/schemas/BankPartyIdentification'
-        debtor:
-          $ref: '#/components/schemas/BankPartyIdentification'
-        bookingDate:
+        tokenString:
           type: string
-          format: date
-          nullable: true
-        transactionDate:
+          readOnly: true
+          description: Token string used for authentication.
+        expiration:
           type: string
-          format: date
+          format: date-time
+          readOnly: true
+          description: Date and time when this token will become expired.
+        isValid:
+          type: boolean
+          description: Indicates whether this token is valid.
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/BankTokenCountryEnum'
           nullable: true
-        transactionAmount:
-          $ref: '#/components/schemas/BankTransactionAmount'
+        bank:
+          type: string
+          nullable: true
+          maxLength: 32
+        access:
+          $ref: '#/components/schemas/BankAccess'
       required:
-      - creditor
-      - debtor
-      - transactionAmount
+      - expiration
+      - isValid
+      - tokenString
     BankTokenCountryEnum:
       enum:
       - AT
@@ -127,38 +136,47 @@ components:
       - ES
       - SE
       type: string
-    BankTokenRequest:
+    BankTransactionAmount:
       type: object
       properties:
-        lifetime:
-          type: integer
-          maximum: 2592000
-          minimum: 0
-          writeOnly: true
-          default: 3600
-          description: The duration in seconds of bank verification token validity.
-        country:
-          allOf:
-          - $ref: '#/components/schemas/BankTokenCountryEnum'
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        currency:
+          type: string
+          maxLength: 3
+      required:
+      - amount
+      - currency
+    BankTransaction:
+      type: object
+      properties:
+        creditor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        debtor:
+          $ref: '#/components/schemas/BankPartyIdentification'
+        bookingDate:
+          type: string
+          format: date
           nullable: true
-        bank:
+        transactionDate:
+          type: string
+          format: date
+          nullable: true
+        transactionAmount:
+          $ref: '#/components/schemas/BankTransactionAmount'
+      required:
+      - creditor
+      - debtor
+      - transactionAmount
+    BankPartyIdentification:
+      type: object
+      properties:
+        fullName:
           type: string
           nullable: true
-          maxLength: 32
-        access:
-          $ref: '#/components/schemas/BankAccessRequest'
-    BankAccessRequest:
-      type: object
-      properties:
-        accounts:
-          type: boolean
-          default: false
-        balances:
-          type: boolean
-          default: false
-        transactions:
-          type: boolean
-          default: false
+          maxLength: 128
     PaginatedBankTransactionList:
       type: object
       required:
@@ -182,29 +200,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BankTransaction'
-    BankPartyIdentification:
+    BankTokenRequest:
       type: object
       properties:
-        fullName:
-          type: string
-          nullable: true
-          maxLength: 128
-    BankToken:
-      type: object
-      properties:
-        tokenString:
-          type: string
-          readOnly: true
-          description: Token string used for authentication.
-        expiration:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Date and time when this token will become expired.
-        isValid:
-          type: boolean
-          description: Indicates whether this token is valid.
-          readOnly: true
+        lifetime:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          default: 3600
+          description: The duration in seconds of bank verification token validity.
         country:
           allOf:
           - $ref: '#/components/schemas/BankTokenCountryEnum'
@@ -214,25 +219,20 @@ components:
           nullable: true
           maxLength: 32
         access:
-          $ref: '#/components/schemas/BankAccess'
-      required:
-      - expiration
-      - isValid
-      - tokenString
-    BankTransactionAmount:
+          $ref: '#/components/schemas/BankAccessRequest'
+    BankAccess:
       type: object
       properties:
-        amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
-        currency:
-          type: string
-          maxLength: 3
-      required:
-      - amount
-      - currency
-    BankAccess:
+        accounts:
+          type: boolean
+          default: false
+        balances:
+          type: boolean
+          default: false
+        transactions:
+          type: boolean
+          default: false
+    BankAccessRequest:
       type: object
       properties:
         accounts:

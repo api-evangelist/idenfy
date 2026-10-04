@@ -97,6 +97,15 @@ paths:
           description: ''
 components:
   schemas:
+    SosEntityTypeEnum:
+      enum:
+      - CORPORATION
+      - LLC
+      - PARTNERSHIP
+      - NON_PROFIT
+      - TRUST
+      - SOLE_PROPRIETORSHIP
+      type: string
     GovDocumentOrderStatusEnum:
       enum:
       - NOT_ORDERED
@@ -227,15 +236,6 @@ components:
           nullable: true
       required:
       - id
-    SosEntityTypeEnum:
-      enum:
-      - CORPORATION
-      - LLC
-      - PARTNERSHIP
-      - NON_PROFIT
-      - TRUST
-      - SOLE_PROPRIETORSHIP
-      type: string
   securitySchemes:
     apiKeyPair:
       type: http

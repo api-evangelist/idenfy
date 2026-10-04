@@ -277,51 +277,6 @@ paths:
           description: No response body
 components:
   schemas:
-    GovPartnerOrderedDocument:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        title:
-          type: string
-          nullable: true
-        documentFormat:
-          type: string
-          maxLength: 5
-        productKey:
-          type: string
-        expectedDeliveryTime:
-          type: string
-          format: date-time
-        price:
-          type: number
-          format: double
-          minimum: 0
-        deliveredAt:
-          type: string
-          format: date-time
-          nullable: true
-        status:
-          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
-        file:
-          type: string
-          format: uri
-          nullable: true
-      required:
-      - expectedDeliveryTime
-      - id
-      - price
-      - productKey
-    GovDocumentOrderStatusEnum:
-      enum:
-      - NOT_ORDERED
-      - IN_PROGRESS
-      - FINISHED
-      - FAILED
-      - TIMED_OUT
-      type: string
     GovRegistersAvailableDocuments:
       type: object
       properties:
@@ -331,36 +286,6 @@ components:
             $ref: '#/components/schemas/GovRegistersFilingResult'
       required:
       - products
-    GovPartnerOrderDocumentRequest:
-      type: object
-      properties:
-        countryCode:
-          allOf:
-          - $ref: '#/components/schemas/CountryCodeEnum'
-          writeOnly: true
-        registrationNumber:
-          type: string
-          writeOnly: true
-          minLength: 1
-          description: External company ID from GOV registers search should be used.
-        region:
-          type: string
-          writeOnly: true
-          minLength: 1
-        companyName:
-          type: string
-          writeOnly: true
-          minLength: 1
-          maxLength: 200
-        productKey:
-          type: string
-          writeOnly: true
-          minLength: 1
-      required:
-      - companyName
-      - countryCode
-      - productKey
-      - registrationNumber
     GovRegistersFilingResult:
       type: object
       properties:
@@ -421,6 +346,44 @@ components:
       - id
       - price
       - productFormat
+    GovDocumentOrderStatusEnum:
+      enum:
+      - NOT_ORDERED
+      - IN_PROGRESS
+      - FINISHED
+      - FAILED
+      - TIMED_OUT
+      type: string
+    GovPartnerOrderDocumentRequest:
+      type: object
+      properties:
+        countryCode:
+          allOf:
+          - $ref: '#/components/schemas/CountryCodeEnum'
+          writeOnly: true
+        registrationNumber:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: External company ID from GOV registers search should be used.
+        region:
+          type: string
+          writeOnly: true
+          minLength: 1
+        companyName:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 200
+        productKey:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - companyName
+      - countryCode
+      - productKey
+      - registrationNumber
     CountryCodeEnum:
       enum:
       - AL
@@ -527,6 +490,43 @@ components:
       - WS
       - ZA
       type: string
+    GovPartnerOrderedDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          nullable: true
+        documentFormat:
+          type: string
+          maxLength: 5
+        productKey:
+          type: string
+        expectedDeliveryTime:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: double
+          minimum: 0
+        deliveredAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/GovDocumentOrderStatusEnum'
+        file:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - expectedDeliveryTime
+      - id
+      - price
+      - productKey
   securitySchemes:
     apiKeyPair:
       type: http

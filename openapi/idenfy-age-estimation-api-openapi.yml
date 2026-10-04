@@ -45,11 +45,6 @@ paths:
           description: Age Estimation finances cannot cover the session. Note that insufficient funds return `402`, not `403`.
 components:
   schemas:
-    AgeEstimationEscalationEnum:
-      enum:
-      - DOC
-      - NONE
-      type: string
     InsufficientFinances:
       type: object
       properties:
@@ -63,6 +58,46 @@ components:
           - insufficient_finances
         detail:
           $ref: '#/components/schemas/InsufficientFinancesDetail'
+    InsufficientFinancesDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        missing_limits:
+          type: array
+          items: {}
+        missing_additional_step_limits:
+          type: array
+          items: {}
+        missing_funds:
+          nullable: true
+          description: General account funds only. Stays `null` when feature-specific finances are exhausted, so do not read it to detect that.
+        missing_pool_funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissingPoolFund'
+          description: Identifies which finances are short. This is the field to read for an Age Estimation shortfall.
+        expired_expenses:
+          type: array
+          items: {}
+    MissingPoolFund:
+      type: object
+      properties:
+        fund_pool:
+          type: string
+          description: Identifies which finances are short, e.g. `AGE_ESTIMATION`.
+        missing:
+          type: number
+          format: float
+          description: Shortfall in your account currency. `0` when no finances are configured for the feature at all, because nothing has been priced yet.
+      required:
+      - fund_pool
+      - missing
+    AgeEstimationEscalationEnum:
+      enum:
+      - DOC
+      - NONE
+      type: string
     AgeEstimationTokenRequest:
       type: object
       properties:
@@ -177,41 +212,6 @@ components:
       - expires_at
       - min_age
       - confidence_threshold
-    MissingPoolFund:
-      type: object
-      properties:
-        fund_pool:
-          type: string
-          description: Identifies which finances are short, e.g. `AGE_ESTIMATION`.
-        missing:
-          type: number
-          format: float
-          description: Shortfall in your account currency. `0` when no finances are configured for the feature at all, because nothing has been priced yet.
-      required:
-      - fund_pool
-      - missing
-    InsufficientFinancesDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        missing_limits:
-          type: array
-          items: {}
-        missing_additional_step_limits:
-          type: array
-          items: {}
-        missing_funds:
-          nullable: true
-          description: General account funds only. Stays `null` when feature-specific finances are exhausted, so do not read it to detect that.
-        missing_pool_funds:
-          type: array
-          items:
-            $ref: '#/components/schemas/MissingPoolFund'
-          description: Identifies which finances are short. This is the field to read for an Age Estimation shortfall.
-        expired_expenses:
-          type: array
-          items: {}
   securitySchemes:
     apiKeyPair:
       type: http

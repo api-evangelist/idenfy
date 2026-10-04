@@ -45,6 +45,54 @@ paths:
           description: Your finances cannot cover a bank card verification. Note that insufficient funds return `402`, not `403`.
 components:
   schemas:
+    InsufficientFinances:
+      type: object
+      properties:
+        message:
+          type: string
+          examples:
+          - Action not allowed due to lack of funds or exceeded limit.
+        code:
+          type: string
+          examples:
+          - insufficient_finances
+        detail:
+          $ref: '#/components/schemas/InsufficientFinancesDetail'
+    InsufficientFinancesDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        missing_limits:
+          type: array
+          items: {}
+        missing_additional_step_limits:
+          type: array
+          items: {}
+        missing_funds:
+          nullable: true
+          description: General account funds only. Stays `null` when feature-specific finances are exhausted, so do not read it to detect that.
+        missing_pool_funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissingPoolFund'
+          description: Identifies which finances are short.
+        expired_expenses:
+          type: array
+          items: {}
+    MissingPoolFund:
+      type: object
+      properties:
+        fund_pool:
+          type: string
+          description: Identifies which finances are short.
+        missing:
+          type: number
+          format: float
+          description: Shortfall in your account currency. `0` when no finances are configured for the feature at all, because nothing has been priced yet.
+      required:
+      - fund_pool
+      - missing
     BankCardToken:
       type: object
       properties:
@@ -76,19 +124,6 @@ components:
       - isValid
       - sessionUrl
       - tokenString
-    InsufficientFinances:
-      type: object
-      properties:
-        message:
-          type: string
-          examples:
-          - Action not allowed due to lack of funds or exceeded limit.
-        code:
-          type: string
-          examples:
-          - insufficient_finances
-        detail:
-          $ref: '#/components/schemas/InsufficientFinancesDetail'
     BankCardTokenRequest:
       type: object
       properties:
@@ -134,41 +169,6 @@ components:
           description: Where the end user is redirected after an unsuccessful check. An expired session never redirects.
       required:
       - expectedName
-    MissingPoolFund:
-      type: object
-      properties:
-        fund_pool:
-          type: string
-          description: Identifies which finances are short.
-        missing:
-          type: number
-          format: float
-          description: Shortfall in your account currency. `0` when no finances are configured for the feature at all, because nothing has been priced yet.
-      required:
-      - fund_pool
-      - missing
-    InsufficientFinancesDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        missing_limits:
-          type: array
-          items: {}
-        missing_additional_step_limits:
-          type: array
-          items: {}
-        missing_funds:
-          nullable: true
-          description: General account funds only. Stays `null` when feature-specific finances are exhausted, so do not read it to detect that.
-        missing_pool_funds:
-          type: array
-          items:
-            $ref: '#/components/schemas/MissingPoolFund'
-          description: Identifies which finances are short.
-        expired_expenses:
-          type: array
-          items: {}
   securitySchemes:
     apiKeyPair:
       type: http
