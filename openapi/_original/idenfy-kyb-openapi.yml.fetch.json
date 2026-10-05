@@ -1,0 +1,12 @@
+{
+ "url": "https://documentation.idenfy.com/openapi/kyb.yaml",
+ "requested_url": "https://documentation.idenfy.com/openapi/kyb.yaml",
+ "status": 200,
+ "content_type": "text/yaml",
+ "bytes": 223602,
+ "sha256": "305f269828e77e6c2722eeea3e700ca094143d3e99ad283ec5793b7946d9ac97",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}

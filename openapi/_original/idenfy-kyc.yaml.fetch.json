@@ -1,0 +1,12 @@
+{
+ "url": "https://documentation.idenfy.com/openapi/kyc.yaml",
+ "requested_url": "https://documentation.idenfy.com/openapi/kyc.yaml",
+ "status": 200,
+ "content_type": "text/yaml",
+ "bytes": 83509,
+ "sha256": "ab49d2f805251ebcae2ef896c5059055a6c8332079f5359db015c3b6409ef778",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}

@@ -1,0 +1,12 @@
+{
+ "url": "https://documentation.idenfy.com/openapi/aml.yaml",
+ "requested_url": "https://documentation.idenfy.com/openapi/aml.yaml",
+ "status": 200,
+ "content_type": "text/yaml",
+ "bytes": 103450,
+ "sha256": "1401b2824d131a6166c0d23e4959abb549fbe30f29ec614f4f6bd693c12b9b62",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}

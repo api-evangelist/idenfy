@@ -1,0 +1,12 @@
+{
+ "url": "https://documentation.idenfy.com/openapi/bank.yaml",
+ "requested_url": "https://documentation.idenfy.com/openapi/bank.yaml",
+ "status": 200,
+ "content_type": "text/yaml",
+ "bytes": 14106,
+ "sha256": "f460a298727c20a51e83a1c584e1226e0e6ea923ae50b1dd5b4e5d26969ca01a",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
