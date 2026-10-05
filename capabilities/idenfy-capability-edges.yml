@@ -1,0 +1,45 @@
+slug: idenfy
+provider: iDenfy
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Companies
+  spec_file: idenfy-companies-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.75
+  evidence: '''Change company status'', ''Re-run company automation''; schemas CompanyGovChecks, AdverseMediaSearchResult,
+    PersonAmlCheckInput, BlacklistStatus, ManualReview'
+  reason: The company record carries AML checks, adverse-media screening, government checks and manual
+    review — business verification for KYB/AML regulatory compliance rather than CRM or master data.
+- tag: KYB Forms
+  spec_file: idenfy-kyb-forms-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.7
+  evidence: POST /kyb/forms/ 'Create new KYB form', POST /kyb/forms/{id}/submit/ 'Submit KYB form'; schemas
+    CompanyInfoRequest, ApplicantFlow
+  reason: Lifecycle of the know-your-business due-diligence form (create, update, submit) that drives
+    the vendor's KYB/AML compliance checks; maps to regulatory compliance management.
+- tag: KYC Verifications
+  spec_file: idenfy-kyc-verifications-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.7
+  evidence: GET /kyc/identifications/ 'List identifications', POST /kyc/identifications/{scanRef}/request-information/
+    'Request additional information from client'; schema IdentificationStatusEnum
+  reason: Core know-your-customer identification review surface, including requesting further information
+    from the applicant — customer identity verification performed to satisfy KYC/AML regulation.
