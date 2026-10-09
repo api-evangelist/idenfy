@@ -97,3 +97,29 @@ unpublished:
 - Per-verification unit prices for KYC, KYB, AML, age estimation, bank and bank-card verification.
 - Volume tiers and discount breakpoints for Enterprise.
 - Any published rate limit or request quota attached to a tier.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  - negotiated
+  units: []
+  plans:
+  - name: Basic
+    access: other
+    model: metered
+    model_how: stated
+    units: []
+    periods: []
+  - name: Premium
+    access: other
+    model: metered
+    model_how: stated
+    units: []
+    periods: []
+  - name: Enterprise
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units: []
+    periods: []
