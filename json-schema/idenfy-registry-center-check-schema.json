@@ -1,0 +1,857 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-registry-center-check-schema.json",
+  "title": "RegistryCenterCheck",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-registry-center-checks-api-openapi.yml#/components/schemas/RegistryCenterCheck",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/LithuaniaRegistryCenterCheck"
+    },
+    {
+      "$ref": "#/$defs/HungaryRegistryCenterCheck"
+    },
+    {
+      "$ref": "#/$defs/UkRegistryCenterCheck"
+    },
+    {
+      "$ref": "#/$defs/UsRegistryCenterCheck"
+    }
+  ],
+  "$defs": {
+    "AddressStatusEnum": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "CountryEnum": {
+      "enum": [
+        "AF",
+        "AX",
+        "AL",
+        "DZ",
+        "AS",
+        "AD",
+        "AO",
+        "AI",
+        "AQ",
+        "AG",
+        "AR",
+        "AM",
+        "AW",
+        "AU",
+        "AT",
+        "AZ",
+        "BS",
+        "BH",
+        "BD",
+        "BB",
+        "BY",
+        "BE",
+        "BZ",
+        "BJ",
+        "BM",
+        "BT",
+        "BO",
+        "BQ",
+        "BA",
+        "BW",
+        "BV",
+        "BR",
+        "IO",
+        "BN",
+        "BG",
+        "BF",
+        "BI",
+        "CV",
+        "KH",
+        "CM",
+        "CA",
+        "KY",
+        "CF",
+        "TD",
+        "CL",
+        "CN",
+        "CX",
+        "CC",
+        "CO",
+        "KM",
+        "CG",
+        "CK",
+        "CR",
+        "CI",
+        "HR",
+        "CU",
+        "CW",
+        "CY",
+        "CZ",
+        "CD",
+        "DK",
+        "DJ",
+        "DM",
+        "DO",
+        "EC",
+        "EG",
+        "SV",
+        "GQ",
+        "ER",
+        "EE",
+        "SZ",
+        "ET",
+        "FK",
+        "FO",
+        "FJ",
+        "FI",
+        "FR",
+        "GF",
+        "PF",
+        "TF",
+        "GA",
+        "GM",
+        "GE",
+        "DE",
+        "GH",
+        "GI",
+        "GR",
+        "GL",
+        "GD",
+        "GP",
+        "GU",
+        "GT",
+        "GG",
+        "GN",
+        "GW",
+        "GY",
+        "HT",
+        "HM",
+        "HN",
+        "HK",
+        "HU",
+        "IS",
+        "IN",
+        "ID",
+        "IR",
+        "IQ",
+        "IE",
+        "IM",
+        "IL",
+        "IT",
+        "JM",
+        "JP",
+        "JE",
+        "JO",
+        "KZ",
+        "KE",
+        "KI",
+        "XK",
+        "KW",
+        "KG",
+        "LA",
+        "LV",
+        "LB",
+        "LS",
+        "LR",
+        "LY",
+        "LI",
+        "LT",
+        "LU",
+        "MO",
+        "MG",
+        "MW",
+        "MY",
+        "MV",
+        "ML",
+        "MT",
+        "MH",
+        "MQ",
+        "MR",
+        "MU",
+        "YT",
+        "MX",
+        "FM",
+        "MD",
+        "MC",
+        "MN",
+        "ME",
+        "MS",
+        "MA",
+        "MZ",
+        "MM",
+        "NA",
+        "NR",
+        "NP",
+        "NL",
+        "NC",
+        "NZ",
+        "NI",
+        "NE",
+        "NG",
+        "NU",
+        "NF",
+        "KP",
+        "MK",
+        "MP",
+        "NO",
+        "OM",
+        "PK",
+        "PW",
+        "PS",
+        "PA",
+        "PG",
+        "PY",
+        "PE",
+        "PH",
+        "PN",
+        "PL",
+        "PT",
+        "PR",
+        "QA",
+        "RE",
+        "RO",
+        "RU",
+        "RW",
+        "BL",
+        "SH",
+        "KN",
+        "LC",
+        "MF",
+        "PM",
+        "VC",
+        "WS",
+        "SM",
+        "ST",
+        "SA",
+        "SN",
+        "RS",
+        "SC",
+        "SL",
+        "SG",
+        "SX",
+        "SK",
+        "SI",
+        "SB",
+        "SO",
+        "ZA",
+        "GS",
+        "KR",
+        "SS",
+        "ES",
+        "LK",
+        "SD",
+        "SR",
+        "SJ",
+        "SE",
+        "CH",
+        "SY",
+        "TW",
+        "TJ",
+        "TZ",
+        "TH",
+        "TL",
+        "TG",
+        "TK",
+        "TO",
+        "TT",
+        "TN",
+        "TR",
+        "TM",
+        "TC",
+        "TV",
+        "UG",
+        "UA",
+        "AE",
+        "GB",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VU",
+        "VA",
+        "VE",
+        "VN",
+        "VG",
+        "VI",
+        "WF",
+        "EH",
+        "YE",
+        "ZM",
+        "ZW"
+      ],
+      "type": "string"
+    },
+    "DatabaseEnum": {
+      "enum": [
+        "LT",
+        "HU",
+        "UK",
+        "US_15"
+      ],
+      "type": "string"
+    },
+    "DateOfBirthStatusEnum": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "FirstNameStatus5e4Enum": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "HungaryRegistryCenterCheck": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "checkedMrz": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "firstName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "lastName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "maidenName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "mothersMaidenName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "birthDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "readOnly": true
+        },
+        "birthPlace": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "address": {
+          "type": "object",
+          "additionalProperties": {},
+          "readOnly": true
+        },
+        "residentialAddress": {
+          "type": "object",
+          "additionalProperties": {},
+          "readOnly": true
+        },
+        "nationality": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "idCard": {
+          "type": "object",
+          "additionalProperties": {},
+          "readOnly": true
+        },
+        "passport": {
+          "type": "object",
+          "additionalProperties": {},
+          "readOnly": true
+        },
+        "additionalData": {
+          "type": "object",
+          "additionalProperties": {},
+          "readOnly": true
+        },
+        "database": {
+          "$ref": "#/$defs/DatabaseEnum"
+        },
+        "clientId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "additionalData",
+        "address",
+        "birthDate",
+        "birthPlace",
+        "checkedMrz",
+        "database",
+        "firstName",
+        "id",
+        "idCard",
+        "lastName",
+        "maidenName",
+        "mothersMaidenName",
+        "nationality",
+        "passport",
+        "residentialAddress"
+      ]
+    },
+    "LastNameStatus5e4Enum": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "LithuaniaRegistryCenterCheck": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "checkedPersonalNumber": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "checkedDocumentType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2
+        },
+        "personalNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "surname": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "documentNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "documentExpiration": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "readOnly": true
+        },
+        "facePhoto": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "readOnly": true,
+          "description": "Face photo from a document."
+        },
+        "database": {
+          "$ref": "#/$defs/DatabaseEnum"
+        },
+        "clientId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "checkedPersonalNumber",
+        "database",
+        "documentExpiration",
+        "documentNumber",
+        "facePhoto",
+        "id",
+        "name",
+        "personalNumber",
+        "surname"
+      ]
+    },
+    "SoftKycMatchStatusEnum": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "UkAddress": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "UkRegistryCenterCheck": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "database": {
+          "$ref": "#/$defs/DatabaseEnum"
+        },
+        "clientId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "firstName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "lastName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "format": "date"
+        },
+        "address": {
+          "$ref": "#/$defs/UkAddress"
+        },
+        "firstNameStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/FirstNameStatus5e4Enum"
+            }
+          ],
+          "readOnly": true
+        },
+        "lastNameStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/LastNameStatus5e4Enum"
+            }
+          ],
+          "readOnly": true
+        },
+        "dateOfBirthStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DateOfBirthStatusEnum"
+            }
+          ],
+          "readOnly": true
+        },
+        "addressStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AddressStatusEnum"
+            }
+          ],
+          "readOnly": true
+        },
+        "addressStatusScore": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "address",
+        "addressStatus",
+        "addressStatusScore",
+        "database",
+        "dateOfBirth",
+        "dateOfBirthStatus",
+        "firstName",
+        "firstNameStatus",
+        "id",
+        "lastName",
+        "lastNameStatus"
+      ]
+    },
+    "UsRegistryCenterCheck": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "database": {
+          "$ref": "#/$defs/DatabaseEnum"
+        },
+        "clientId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "firstName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "lastName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "middleName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "dob": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "yob": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2050,
+          "minimum": 1901
+        },
+        "address1": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "address2": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100,
+          "minLength": 2
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2
+        },
+        "zip": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9]*$",
+          "maxLength": 10
+        },
+        "idNum": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 9
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128,
+          "minLength": 10
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "maxLength": 254
+        },
+        "firstNameStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "lastNameStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "middleNameStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "dobStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "yobStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "address1Status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "address2Status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "cityStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "stateStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "zipStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "idNumStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "phoneStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        },
+        "emailStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SoftKycMatchStatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "nullable": true
+        }
+      },
+      "required": [
+        "address1Status",
+        "address2Status",
+        "cityStatus",
+        "database",
+        "dobStatus",
+        "emailStatus",
+        "firstName",
+        "firstNameStatus",
+        "id",
+        "idNumStatus",
+        "lastName",
+        "lastNameStatus",
+        "middleNameStatus",
+        "phoneStatus",
+        "stateStatus",
+        "yobStatus",
+        "zipStatus"
+      ]
+    }
+  }
+}

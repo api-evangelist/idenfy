@@ -5,21 +5,15 @@ source: https://idenfy.com/llms.txt
 url: https://idenfy.com/security/
 provider: iDenfy
 providerId: idenfy
-note: >-
-  Enriched 2026-09-13 from iDenfy's own llms.txt, which is the machine-readable statement of the
-  security page. https://idenfy.com/security/ itself returns 403 to a non-browser client behind the
-  Cloudflare bot challenge, so the certification list was read from the first-party llms.txt served
-  200 at https://idenfy.com/llms.txt rather than scraped from the rendered page.
+note: Enriched 2026-09-13 from iDenfy's own llms.txt, which is the machine-readable statement of the security page.
+  https://idenfy.com/security/ itself returns 403 to a non-browser client behind the Cloudflare bot challenge, so
+  the certification list was read from the first-party llms.txt served 200 at https://idenfy.com/llms.txt rather
+  than scraped from the rendered page.
 certifications:
-- name: ISO/IEC 27001:2022
-  detail: Certified since 2020.
-- name: SOC 2 Type II
-- name: eIDAS
-- name: iBeta / ISO 30107-3
-  detail: >-
-    Presentation attack detection level, listed as an integration badge on idenfy.com; not restated
-    in llms.txt, so recorded at lower confidence than the three above.
-  confidence: medium
+- ISO/IEC 27001:2022
+- SOC 2 Type II
+- eIDAS
+- iBeta / ISO 30107-3
 compliance_regimes:
 - GDPR
 - CCPA
@@ -32,23 +26,29 @@ controls:
   encryption_at_rest: AES-256
   data_residency: EU
   uptime_sla_claimed: 99.9%
-  uptime_sla_note: >-
-    Claimed on the security page. No SLA document, credit schedule or contractual uptime commitment
+  uptime_sla_note: Claimed on the security page. No SLA document, credit schedule or contractual uptime commitment
     is published anywhere on the documentation site.
   insurance: Cyber insurance and Technology E&O coverage from Lloyd's of London.
 evidence:
 - source: https://idenfy.com/llms.txt
   http_status: 200
   fetched: '2026-09-13'
-  quote: >-
-    Independently audited controls and certifications, including ISO/IEC 27001:2022 (certified since
-    2020), SOC 2 Type II, and eIDAS. Data is encrypted in transit (TLS 1.2+) and at rest (AES-256),
-    stored in the EU, with a 99.9% uptime SLA. Compliant with GDPR, CCPA, AMLD5/6, PSD2, and FATF.
+  quote: Independently audited controls and certifications, including ISO/IEC 27001:2022 (certified since 2020),
+    SOC 2 Type II, and eIDAS. Data is encrypted in transit (TLS 1.2+) and at rest (AES-256), stored in the EU, with
+    a 99.9% uptime SLA. Compliant with GDPR, CCPA, AMLD5/6, PSD2, and FATF.
 - source: https://idenfy.com/security/
   http_status: 403
   fetched: '2026-09-13'
   note: Cloudflare bot challenge ("Just a moment..."). The page exists; only our crawler was turned away.
 trust_center_portal: false
-trust_center_note: >-
-  No hosted trust centre (Vanta/Drata/SafeBase style) and no self-serve report request portal was
+trust_center_note: No hosted trust centre (Vanta/Drata/SafeBase style) and no self-serve report request portal was
   found. Certification evidence is prose on a marketing page.
+certification_detail:
+- name: ISO/IEC 27001:2022
+  detail: Certified since 2020.
+- name: SOC 2 Type II
+- name: eIDAS
+- name: iBeta / ISO 30107-3
+  detail: Presentation attack detection level, listed as an integration badge on idenfy.com; not restated in llms.txt,
+    so recorded at lower confidence than the three above.
+  confidence: medium

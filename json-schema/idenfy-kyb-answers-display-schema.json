@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-answers-display-schema.json",
+  "title": "KybAnswersDisplay",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-questionnaires-api-openapi.yml#/components/schemas/KybAnswersDisplay",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/QuestionnaireAnswersDisplaySections"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "A unique identifier for the questionnaire."
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "sections",
+    "title"
+  ],
+  "$defs": {
+    "QuestionnaireAnswersDisplayQuestions": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/TypeB9cEnum"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "nullable": true,
+          "readOnly": true
+        }
+      },
+      "required": [
+        "key",
+        "title",
+        "type",
+        "value"
+      ]
+    },
+    "QuestionnaireAnswersDisplaySections": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QuestionnaireAnswersDisplayQuestions"
+          }
+        }
+      },
+      "required": [
+        "questions",
+        "title"
+      ]
+    },
+    "TypeB9cEnum": {
+      "enum": [
+        "CHECKBOX",
+        "COLOR",
+        "COUNTRY",
+        "COUNTRY_MULTI",
+        "DATE",
+        "DATETIME",
+        "EMAIL",
+        "FILE",
+        "FILE_MULTI",
+        "FLOAT",
+        "LIST",
+        "INTEGER",
+        "PASSWORD",
+        "RADIO",
+        "SELECT",
+        "SELECT_MULTI",
+        "TEL",
+        "TEXT",
+        "TEXT_AREA",
+        "TIME",
+        "URL"
+      ],
+      "type": "string"
+    }
+  }
+}

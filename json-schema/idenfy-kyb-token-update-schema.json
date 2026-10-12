@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-token-update-schema.json",
+  "title": "KybTokenUpdate",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-token-api-openapi.yml#/components/schemas/KybTokenUpdate",
+  "type": "object",
+  "properties": {
+    "scanRefs": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": "^[^,]+$",
+        "maxLength": 40
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 32,
+        "pattern": "^[^,]+$"
+      },
+      "default": [],
+      "description": "List of case-sensitive strings. Each tag can not be longer than 32 characters.",
+      "maxItems": 5
+    }
+  }
+}

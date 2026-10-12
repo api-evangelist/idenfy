@@ -1,29 +1,25 @@
 generated: '2026-09-13'
 method: derived
-source: >-
-  Derived from the 414 component schemas and 73 operations across the seven OpenAPI 3.1.0 documents
-  iDenfy publishes at https://documentation.idenfy.com/openapi/, cross-read against the product
-  guides under https://documentation.idenfy.com/kyc/, /kyb/, /aml/ and /bank-verification/.
+source: Derived from the 414 component schemas and 73 operations across the seven OpenAPI 3.1.0 documents iDenfy
+  publishes at https://documentation.idenfy.com/openapi/, cross-read against the product guides under https://documentation.idenfy.com/kyc/,
+  /kyb/, /aml/ and /bank-verification/.
 provider: iDenfy
 providerId: idenfy
-note: >-
-  iDenfy's model is token-rooted: almost nothing is created directly. A caller mints a session token
-  for a product, the human (or the server, for Direct Processing) completes the flow, and the RESULT
-  entity comes into existence asynchronously and is announced by webhook. The identifiers a caller
-  holds are therefore its own clientId and the server-assigned scanRef / company id / token string.
+note: 'iDenfy''s model is token-rooted: almost nothing is created directly. A caller mints a session token for a
+  product, the human (or the server, for Direct Processing) completes the flow, and the RESULT entity comes into
+  existence asynchronously and is announced by webhook. The identifiers a caller holds are therefore its own clientId
+  and the server-assigned scanRef / company id / token string.'
 identifier_scheme:
   style: uuid-and-caller-string
   no_prefixes: true
-  note: >-
-    No Stripe-style typed prefixes. Identifiers are bare UUIDs or opaque strings, so an id does not
-    tell you what it points at.
+  note: No Stripe-style typed prefixes. Identifiers are bare UUIDs or opaque strings, so an id does not tell you
+    what it points at.
   identifiers:
   - name: clientId
     owner: caller
     scope: KYC and KYB session creation
-    note: >-
-      Caller-chosen and must be unique per active session; reusing one returns 409. It is the
-      correlation key echoed through every webhook.
+    note: Caller-chosen and must be unique per active session; reusing one returns 409. It is the correlation key
+      echoed through every webhook.
   - name: scanRef
     owner: iDenfy
     scope: KYC identification
@@ -44,9 +40,7 @@ entities:
   root: true
   created_by: kycTokensCreate
   path: POST /api/v2/token
-  note: >-
-    Session token. Returns authToken (client-side) and a redirect URL. The only way to start a KYC
-    verification.
+  note: Session token. Returns authToken (client-side) and a redirect URL. The only way to start a KYC verification.
   relationships:
   - has_one: Identification
     via: scanRef
@@ -56,9 +50,8 @@ entities:
   key: scanRef
   read_by:
   - kycIdentificationsList
-  note: >-
-    The KYC result — document data, face match, liveness outcome, status (APPROVED / DENIED /
-    SUSPECTED / EXPIRED), fraudTags and mismatchTags.
+  note: The KYC result — document data, face match, liveness outcome, status (APPROVED / DENIED / SUSPECTED / EXPIRED),
+    fraudTags and mismatchTags.
   relationships:
   - belongs_to: KycToken
     via: clientId
@@ -173,9 +166,8 @@ entities:
     via: id + profileId
 - name: AmlMonitoring
   created_by: amlMonitoringsCreate
-  note: >-
-    Ongoing screening. Carries BOTH a v3 `status` (ACTIVE/ALERT/STOPPED/PENDING) and a legacy v2
-    `alertStatus` (ACCEPTED/ALERT/DECLINED/PENDING) in every webhook payload.
+  note: Ongoing screening. Carries BOTH a v3 `status` (ACTIVE/ALERT/STOPPED/PENDING) and a legacy v2 `alertStatus`
+    (ACCEPTED/ALERT/DECLINED/PENDING) in every webhook payload.
   announced_by:
   - amlMonitoring
   - amlMonitoringExpiration
@@ -204,10 +196,9 @@ entities:
   read_by:
   - faceAuthSessionsList
   - faceAuthSessionsRetrieve
-  note: >-
-    Re-authenticates a returning user against a previously verified identity. Note the asymmetry —
-    the published spec exposes only READ operations; session creation is documented at
-    /face-authentication/token-generation but is not in the OpenAPI.
+  note: Re-authenticates a returning user against a previously verified identity. Note the asymmetry — the published
+    spec exposes only READ operations; session creation is documented at /face-authentication/token-generation but
+    is not in the OpenAPI.
   announced_by:
   - facialAuthentication
 - name: AgeEstimationToken
@@ -231,12 +222,116 @@ graph_summary:
   operations: 73
   webhook_events: 23
 gaps:
-- >-
-  Several documented operations are absent from the published specs and therefore absent from this
-  graph as first-class operations: KYC deletion (POST /api/v2/delete), the whole Fraud Prevention
-  surface (/fraud/proxy-check, /fraud/validate-phone, /fraud/send-sms, /fraud/verify-sms,
-  /fraud/estimate-fraud-probability, /api/v2/address-verification), the Risk Assessment surface
-  (/risk/assessment-profiles/, /risk/assessments/), and face-authentication token generation. They
-  are real — each has a reference page naming its ivs.idenfy.com endpoint — but iDenfy publishes no
-  OpenAPI for them.
+- 'Several documented operations are absent from the published specs and therefore absent from this graph as first-class
+  operations: KYC deletion (POST /api/v2/delete), the whole Fraud Prevention surface (/fraud/proxy-check, /fraud/validate-phone,
+  /fraud/send-sms, /fraud/verify-sms, /fraud/estimate-fraud-probability, /api/v2/address-verification), the Risk
+  Assessment surface (/risk/assessment-profiles/, /risk/assessments/), and face-authentication token generation.
+  They are real — each has a reference page naming its ivs.idenfy.com endpoint — but iDenfy publishes no OpenAPI
+  for them.'
 render: null
+relationships:
+- from: KycToken
+  via: scanRef
+  note: Materialises only once the verification runs.
+  to: Identification
+  type: has_one
+- from: Identification
+  via: clientId
+  to: KycToken
+  type: belongs_to
+- from: Identification
+  via: scanRef + blocklistSource
+  to: BlocklistEntry
+  type: has_many
+- from: Identification
+  via: scanRef
+  to: PoaCheck
+  type: has_many
+- from: BlocklistEntry
+  via: scanRef
+  to: Identification
+  type: belongs_to
+- from: KybToken
+  via: tokenString
+  to: KybForm
+  type: has_one
+- from: KybForm
+  via: tokenString
+  to: KybToken
+  type: belongs_to
+- from: KybForm
+  via: companyId
+  to: Beneficiary
+  type: has_many
+- from: KybForm
+  via: companyId
+  to: KybDocument
+  type: has_many
+- from: KybForm
+  via: companyId
+  to: Questionnaire
+  type: has_many
+- from: KybForm
+  via: companyId
+  to: Company
+  type: has_one
+- from: Beneficiary
+  via: companyId
+  to: KybForm
+  type: belongs_to
+- from: Beneficiary
+  via: beneficiaryId
+  to: KybDocument
+  type: has_many
+- from: KybDocument
+  via: companyId
+  to: KybForm
+  type: belongs_to
+- from: KybDocument
+  via: beneficiaryId
+  to: Beneficiary
+  type: belongs_to
+- from: Questionnaire
+  via: companyId
+  to: KybForm
+  type: belongs_to
+- from: Questionnaire
+  via: id
+  to: QuestionnaireAnswers
+  type: has_one
+- from: Company
+  to: GovOrderedDocument
+  type: has_many
+- from: Company
+  to: SosFilingDocument
+  type: has_many
+- from: Company
+  to: RegistryCenterCheck
+  type: has_many
+- from: Company
+  via: ongoing monitoring configured on approved companies
+  to: AmlMonitoring
+  type: has_many
+- from: AmlCheck
+  via: profileId
+  to: AmlProfile
+  type: has_many
+- from: AmlProfile
+  via: id + profileId
+  to: AmlCheck
+  type: belongs_to
+- from: AmlProfile
+  via: id + profileId
+  to: AmlMonitoring
+  type: belongs_to
+- from: BankToken
+  to: BankVerification
+  type: has_one
+- from: BankVerification
+  via: accountId
+  to: BankAccount
+  type: has_many
+- from: BankVerification
+  via: verificationId + accountId
+  to: BankTransaction
+  type: has_many

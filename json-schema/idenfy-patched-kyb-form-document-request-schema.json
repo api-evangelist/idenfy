@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-patched-kyb-form-document-request-schema.json",
+  "title": "PatchedKybFormDocumentRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-documents-api-openapi.yml#/components/schemas/PatchedKybFormDocumentRequest",
+  "type": "object",
+  "properties": {
+    "type": {
+      "$ref": "#/$defs/KybDocumentTypeEnum"
+    },
+    "filename": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 100
+    }
+  },
+  "$defs": {
+    "KybDocumentTypeEnum": {
+      "enum": [
+        "INCORPORATION_CERT",
+        "DIRECTOR_CERT",
+        "SHAREHOLDER_CERT",
+        "UBO_CERT",
+        "INCORPORATION_ARTICLES",
+        "SHAREHOLDER_REGISTRY",
+        "DIRECTORS_REGISTRY",
+        "STATE_REGISTRY",
+        "UBO_REGISTRY",
+        "OWNERSHIP_STRUCTURE",
+        "INCUMBENCY_CERT",
+        "TRUST_AGREEMENT",
+        "INFORMATION_STATEMENT",
+        "GOOD_STANDING_CERT",
+        "PROOF_OF_DOMAIN",
+        "PROOF_OF_ADDRESS",
+        "SOURCE_OF_FUNDS",
+        "BANK_STATEMENT",
+        "INVOICE",
+        "ONLINE_PRESENCE",
+        "DIRECTOR_ONLINE_PRESENCE",
+        "SHAREHOLDER_ONLINE_PRESENCE",
+        "WEBSITE_OVERVIEW",
+        "E_SIGNATURE_CERT",
+        "ANNUAL_REPORT",
+        "NAME_CHANGE_PROOF",
+        "TRADING_STATUS_PROOF",
+        "ORG_CHART",
+        "COMPANY_ADVERSE_MEDIA",
+        "INDIVIDUAL_ADVERSE_MEDIA",
+        "EMAIL_CHECK",
+        "SOURCE_OF_WEALTH",
+        "OTHER"
+      ],
+      "type": "string"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 ---
-name: Idenfy
+name: idenfy
 description: Use when building identity verification (KYC), business verification (KYB), AML screening, or fraud prevention workflows. Reach for this skill when integrating customer verification APIs, configuring verification sessions, handling webhook callbacks, testing verification flows, or troubleshooting verification failures.
 metadata:
     mintlify-proj: idenfy

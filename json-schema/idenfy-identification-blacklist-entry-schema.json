@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-identification-blacklist-entry-schema.json",
+  "title": "IdentificationBlacklistEntry",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyc-blocklist-api-openapi.yml#/components/schemas/IdentificationBlacklistEntry",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/IdentificationBlacklist"
+    },
+    {
+      "$ref": "#/$defs/IdentificationDataBlacklistResponse"
+    }
+  ],
+  "$defs": {
+    "IdentificationBlacklist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The `scan_ref` of the blocklisted face image; use it as the `id` path parameter."
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "faceImageUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "created",
+        "faceImageUrl",
+        "id"
+      ]
+    },
+    "IdentificationDataBlacklistResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The database `id` of the blocklisted data record; use it as the `id` path parameter."
+        },
+        "fullName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "format": "date",
+          "readOnly": true
+        },
+        "personalNumber": {
+          "type": "string",
+          "readOnly": true
+        },
+        "documentNumber": {
+          "type": "string",
+          "readOnly": true
+        },
+        "nationality": {
+          "type": "string",
+          "readOnly": true
+        },
+        "reason": {
+          "type": "string",
+          "readOnly": true
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "created",
+        "dateOfBirth",
+        "documentNumber",
+        "fullName",
+        "id",
+        "nationality",
+        "personalNumber",
+        "reason"
+      ]
+    }
+  }
+}

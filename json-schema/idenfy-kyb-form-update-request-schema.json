@@ -1,0 +1,440 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-form-update-request-schema.json",
+  "title": "KybFormUpdateRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-forms-api-openapi.yml#/components/schemas/KybFormUpdateRequest",
+  "type": "object",
+  "properties": {
+    "company": {
+      "$ref": "#/$defs/CompanyInfoRequest"
+    },
+    "clientSystem": {
+      "$ref": "#/$defs/ClientSystemRequest"
+    }
+  },
+  "required": [
+    "company"
+  ],
+  "$defs": {
+    "AdditionalFieldValueRequest": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "nullable": true
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "ClientSystemRequest": {
+      "type": "object",
+      "properties": {
+        "ipAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "[ipv4](https://wikipedia.org/wiki/IPv4#Addressing) or [ipv6](https://wikipedia.org/wiki/IPv6_address) address."
+        },
+        "timeZone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Time zone from [TZ database list](https://wikipedia.org/wiki/List_of_tz_database_time_zones#List)."
+        }
+      }
+    },
+    "CompanyInfoRequest": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "registrationNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "country": {
+          "$ref": "#/$defs/CountryEnum"
+        },
+        "region": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.",
+          "maxLength": 128
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "maxLength": 200
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "description": "Email address.",
+          "maxLength": 254
+        },
+        "brandNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "default": [],
+          "maxItems": 10
+        },
+        "activityCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 8
+        },
+        "tin": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Taxpayer identification number.",
+          "maxLength": 32
+        },
+        "operatingAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "postalAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Registration address.",
+          "maxLength": 255
+        },
+        "postcode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "street": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "additionalInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/AdditionalFieldValueRequest"
+          }
+        }
+      },
+      "required": [
+        "companyName",
+        "country"
+      ]
+    },
+    "CountryEnum": {
+      "enum": [
+        "AF",
+        "AX",
+        "AL",
+        "DZ",
+        "AS",
+        "AD",
+        "AO",
+        "AI",
+        "AQ",
+        "AG",
+        "AR",
+        "AM",
+        "AW",
+        "AU",
+        "AT",
+        "AZ",
+        "BS",
+        "BH",
+        "BD",
+        "BB",
+        "BY",
+        "BE",
+        "BZ",
+        "BJ",
+        "BM",
+        "BT",
+        "BO",
+        "BQ",
+        "BA",
+        "BW",
+        "BV",
+        "BR",
+        "IO",
+        "BN",
+        "BG",
+        "BF",
+        "BI",
+        "CV",
+        "KH",
+        "CM",
+        "CA",
+        "KY",
+        "CF",
+        "TD",
+        "CL",
+        "CN",
+        "CX",
+        "CC",
+        "CO",
+        "KM",
+        "CG",
+        "CK",
+        "CR",
+        "CI",
+        "HR",
+        "CU",
+        "CW",
+        "CY",
+        "CZ",
+        "CD",
+        "DK",
+        "DJ",
+        "DM",
+        "DO",
+        "EC",
+        "EG",
+        "SV",
+        "GQ",
+        "ER",
+        "EE",
+        "SZ",
+        "ET",
+        "FK",
+        "FO",
+        "FJ",
+        "FI",
+        "FR",
+        "GF",
+        "PF",
+        "TF",
+        "GA",
+        "GM",
+        "GE",
+        "DE",
+        "GH",
+        "GI",
+        "GR",
+        "GL",
+        "GD",
+        "GP",
+        "GU",
+        "GT",
+        "GG",
+        "GN",
+        "GW",
+        "GY",
+        "HT",
+        "HM",
+        "HN",
+        "HK",
+        "HU",
+        "IS",
+        "IN",
+        "ID",
+        "IR",
+        "IQ",
+        "IE",
+        "IM",
+        "IL",
+        "IT",
+        "JM",
+        "JP",
+        "JE",
+        "JO",
+        "KZ",
+        "KE",
+        "KI",
+        "XK",
+        "KW",
+        "KG",
+        "LA",
+        "LV",
+        "LB",
+        "LS",
+        "LR",
+        "LY",
+        "LI",
+        "LT",
+        "LU",
+        "MO",
+        "MG",
+        "MW",
+        "MY",
+        "MV",
+        "ML",
+        "MT",
+        "MH",
+        "MQ",
+        "MR",
+        "MU",
+        "YT",
+        "MX",
+        "FM",
+        "MD",
+        "MC",
+        "MN",
+        "ME",
+        "MS",
+        "MA",
+        "MZ",
+        "MM",
+        "NA",
+        "NR",
+        "NP",
+        "NL",
+        "NC",
+        "NZ",
+        "NI",
+        "NE",
+        "NG",
+        "NU",
+        "NF",
+        "KP",
+        "MK",
+        "MP",
+        "NO",
+        "OM",
+        "PK",
+        "PW",
+        "PS",
+        "PA",
+        "PG",
+        "PY",
+        "PE",
+        "PH",
+        "PN",
+        "PL",
+        "PT",
+        "PR",
+        "QA",
+        "RE",
+        "RO",
+        "RU",
+        "RW",
+        "BL",
+        "SH",
+        "KN",
+        "LC",
+        "MF",
+        "PM",
+        "VC",
+        "WS",
+        "SM",
+        "ST",
+        "SA",
+        "SN",
+        "RS",
+        "SC",
+        "SL",
+        "SG",
+        "SX",
+        "SK",
+        "SI",
+        "SB",
+        "SO",
+        "ZA",
+        "GS",
+        "KR",
+        "SS",
+        "ES",
+        "LK",
+        "SD",
+        "SR",
+        "SJ",
+        "SE",
+        "CH",
+        "SY",
+        "TW",
+        "TJ",
+        "TZ",
+        "TH",
+        "TL",
+        "TG",
+        "TK",
+        "TO",
+        "TT",
+        "TN",
+        "TR",
+        "TM",
+        "TC",
+        "TV",
+        "UG",
+        "UA",
+        "AE",
+        "GB",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VU",
+        "VA",
+        "VE",
+        "VN",
+        "VG",
+        "VI",
+        "WF",
+        "EH",
+        "YE",
+        "ZM",
+        "ZW"
+      ],
+      "type": "string"
+    }
+  }
+}

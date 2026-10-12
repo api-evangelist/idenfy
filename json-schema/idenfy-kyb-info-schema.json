@@ -1,0 +1,822 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-info-schema.json",
+  "title": "KybInfo",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-token-api-openapi.yml#/components/schemas/KybInfo",
+  "type": "object",
+  "properties": {
+    "locale": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/KybLocaleEnum"
+        }
+      ],
+      "nullable": true,
+      "readOnly": true,
+      "description": "Default locale to use when user opens the KYB form for the first time."
+    },
+    "theme": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ThemeCore"
+        }
+      ],
+      "nullable": true,
+      "readOnly": true,
+      "description": "Indicates the visual customization of the KYB form."
+    },
+    "flow": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/KybFormUnifiedFlow"
+        }
+      ],
+      "nullable": true,
+      "readOnly": true,
+      "description": "Indicates which fields/objects should be present in the KYB form.<br>If this field is `null`, then all possible fields/objects are present in this KYB form."
+    }
+  },
+  "required": [
+    "flow",
+    "locale",
+    "theme"
+  ],
+  "$defs": {
+    "ApplicantFlow": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IndividualFlow"
+        },
+        {
+          "$ref": "#/$defs/CompanyFlow"
+        }
+      ]
+    },
+    "ApplicantTypeEnum": {
+      "enum": [
+        "INDIVIDUAL",
+        "COMPANY"
+      ],
+      "type": "string"
+    },
+    "BeneficiaryField": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "field": {
+          "$ref": "#/$defs/BeneficiaryFieldEnum"
+        }
+      },
+      "required": [
+        "field"
+      ]
+    },
+    "BeneficiaryFieldEnum": {
+      "enum": [
+        "OWNERSHIP_PERCENTAGE"
+      ],
+      "type": "string"
+    },
+    "BeneficiaryTypeEnum": {
+      "enum": [
+        "CEO",
+        "REPRESENTATIVE",
+        "SHAREHOLDER",
+        "UBO",
+        "ABO"
+      ],
+      "type": "string"
+    },
+    "BeneficiaryUnifiedFlow": {
+      "type": "object",
+      "description": "Indicates which beneficiary types are editable.",
+      "properties": {
+        "beneficiaryType": {
+          "$ref": "#/$defs/BeneficiaryTypeEnum"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "fields": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/BeneficiaryField"
+          }
+        },
+        "applicants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApplicantFlow"
+          }
+        },
+        "description": {
+          "type": "string",
+          "description": "Note for the user to guide them on how the beneficiaries information (including documents uploading) should be filled/edited.",
+          "maxLength": 512
+        },
+        "readOnly": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "applicants",
+        "beneficiaryType"
+      ]
+    },
+    "Choice": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[\\w_*-]+$",
+          "maxLength": 32
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "key",
+        "title"
+      ]
+    },
+    "CompanyDocType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "docType": {
+          "type": "string",
+          "pattern": "^[\\u0000-\\u007F]+$",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "docType"
+      ]
+    },
+    "CompanyField": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "field": {
+          "$ref": "#/$defs/CompanyFieldEnum"
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "field"
+      ]
+    },
+    "CompanyFieldEnum": {
+      "enum": [
+        "COMPANY_NAME",
+        "REGISTRATION_NUMBER",
+        "COUNTRY",
+        "REGION",
+        "TYPE",
+        "PHONE",
+        "WEBSITE",
+        "EMAIL",
+        "BRAND_NAMES",
+        "ACTIVITY_CODE",
+        "TIN",
+        "OPERATING_ADDRESS",
+        "POSTAL_ADDRESS",
+        "POSTCODE",
+        "STREET",
+        "CITY"
+      ],
+      "type": "string"
+    },
+    "CompanyFieldUnified": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "field": {
+          "$ref": "#/$defs/CompanyFieldEnum"
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "readOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "changeFrom": {
+          "nullable": true,
+          "description": "KYB form field value must be changed from this field's value."
+        },
+        "changeRequired": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field"
+      ]
+    },
+    "CompanyFlow": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "applicantType": {
+          "$ref": "#/$defs/ApplicantTypeEnum"
+        },
+        "fieldsCustom": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CustomFieldAssignment"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CompanyField"
+          }
+        },
+        "documents": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CompanyDocType"
+          }
+        }
+      },
+      "required": [
+        "applicantType",
+        "fields"
+      ]
+    },
+    "CustomField": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^[\\w_*-]+$",
+          "maxLength": 32
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "",
+          "maxLength": 512
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "key",
+        "title",
+        "type"
+      ]
+    },
+    "CustomFieldAssignment": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/CustomField"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 4294967295,
+          "minimum": 0,
+          "format": "int64"
+        }
+      },
+      "required": [
+        "field"
+      ]
+    },
+    "CustomFieldAssignmentUnified": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/CustomField"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 4294967295,
+          "minimum": 0,
+          "format": "int64"
+        },
+        "readOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "changeFrom": {
+          "nullable": true,
+          "description": "KYB form field value must be changed from this field's value."
+        },
+        "changeRequired": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field"
+      ]
+    },
+    "CustomFieldTypeEnum": {
+      "enum": [
+        "CHECKBOX",
+        "COUNTRY",
+        "COUNTRY_MULTI",
+        "DATE",
+        "INTEGER",
+        "SELECT",
+        "SELECT_MULTI",
+        "TEXT"
+      ],
+      "type": "string"
+    },
+    "IndividualDocType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "docType": {
+          "type": "string",
+          "pattern": "^[\\u0000-\\u007F]+$",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "docType"
+      ]
+    },
+    "IndividualField": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "field": {
+          "$ref": "#/$defs/IndividualFieldEnum"
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "field"
+      ]
+    },
+    "IndividualFieldEnum": {
+      "enum": [
+        "NAME",
+        "SURNAME",
+        "COUNTRY",
+        "EMAIL",
+        "PHONE",
+        "DATE_OF_BIRTH",
+        "NATIONALITY",
+        "DOCUMENT_NUMBER",
+        "PERSONAL_NUMBER",
+        "CITIZENSHIP",
+        "COUNTRY_OF_BIRTH",
+        "RESIDENTIAL_ADDRESS",
+        "COUNTRY_OF_RESIDENCE",
+        "POSTCODE",
+        "ADDRESS",
+        "STREET",
+        "CITY",
+        "TIN",
+        "TAX_RESIDENCE",
+        "SELF_DECLARED_PEP",
+        "POSITIONS"
+      ],
+      "type": "string"
+    },
+    "IndividualFlow": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "applicantType": {
+          "$ref": "#/$defs/ApplicantTypeEnum"
+        },
+        "fieldsCustom": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CustomFieldAssignment"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IndividualField"
+          }
+        },
+        "documents": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/IndividualDocType"
+          }
+        }
+      },
+      "required": [
+        "applicantType",
+        "fields"
+      ]
+    },
+    "KybFormUnifiedFlow": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CompanyFieldUnified"
+          }
+        },
+        "fieldsCustom": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CustomFieldAssignmentUnified"
+          }
+        },
+        "documents": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CompanyDocType"
+          }
+        },
+        "beneficiaries": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/BeneficiaryUnifiedFlow"
+          }
+        },
+        "companySearch": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "bankVerification": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "emailVerification": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "ownershipFullStructure": {
+          "type": "boolean",
+          "description": "Indicates that the KYB form must contain at least one beneficiary (of any kind) and every company beneficiary of `SHAREHOLDER`, `UBO` and `ABO` type must have at least one individual beneficiary. This is validated when submitting the KYB form."
+        },
+        "ownershipPercentageThreshold": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "description": "Threshold to not require to add shareholders that are below this number."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Note for the user to guide them on how the company information (including documents uploading) should be filled/edited.",
+          "maxLength": 512
+        },
+        "questionnaireDescription": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Note for the user to guide them on how the questionnaire should be filled/edited.",
+          "maxLength": 512
+        }
+      }
+    },
+    "KybLocaleEnum": {
+      "enum": [
+        "en",
+        "es",
+        "fr",
+        "ru",
+        "de",
+        "it",
+        "pl",
+        "lt",
+        "lv",
+        "et",
+        "cs",
+        "ro",
+        "hu",
+        "ja",
+        "bg",
+        "nl",
+        "pt"
+      ],
+      "type": "string"
+    },
+    "ThemeColor": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "secondary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "primaryBackground": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "secondaryBackground": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "hoveredButton": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "disabledIconButton": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Disabled icon",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "disabledButtonTypography": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Disabled typography",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "disabledButton": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Disabled background",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "typography": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "success": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "successBackground": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "errorBackground": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "warning": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "warningBackground": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "info": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "infoBackground": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        },
+        "border": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "maxLength": 25
+        }
+      }
+    },
+    "ThemeCore": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 32
+        },
+        "logo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "font": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "colors": {
+          "$ref": "#/$defs/ThemeColor"
+        },
+        "supportEmail": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "maxLength": 100
+        }
+      }
+    }
+  }
+}

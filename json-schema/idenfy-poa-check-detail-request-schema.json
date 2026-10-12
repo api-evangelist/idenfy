@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-poa-check-detail-request-schema.json",
+  "title": "PoaCheckDetailRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-poa-api-openapi.yml#/components/schemas/PoaCheckDetailRequest",
+  "type": "object",
+  "properties": {
+    "file": {
+      "type": "string",
+      "format": "byte",
+      "description": "Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `webp`, `heic`, `heif`, `pdf` files."
+    },
+    "providedName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255
+    },
+    "providedAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255
+    }
+  },
+  "required": [
+    "file"
+  ]
+}

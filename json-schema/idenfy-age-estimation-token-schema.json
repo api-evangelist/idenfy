@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-age-estimation-token-schema.json",
+  "title": "AgeEstimationToken",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/AgeEstimationToken",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Opaque session credential used by the capture page."
+    },
+    "session_url": {
+      "type": "string",
+      "format": "uri",
+      "readOnly": true,
+      "description": "URL to send the end user to."
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true,
+      "description": "Absolute UTC expiry."
+    },
+    "min_age": {
+      "type": "integer"
+    },
+    "confidence_threshold": {
+      "type": "number",
+      "format": "float"
+    },
+    "buffer": {
+      "type": "integer"
+    },
+    "escalation": {
+      "$ref": "#/$defs/AgeEstimationEscalationEnum"
+    },
+    "retry_limit": {
+      "type": "integer"
+    },
+    "save_photo": {
+      "type": "boolean"
+    },
+    "expiry_minutes": {
+      "type": "integer"
+    },
+    "client_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "token",
+    "session_url",
+    "expires_at",
+    "min_age",
+    "confidence_threshold"
+  ],
+  "$defs": {
+    "AgeEstimationEscalationEnum": {
+      "enum": [
+        "DOC",
+        "NONE"
+      ],
+      "type": "string"
+    }
+  }
+}

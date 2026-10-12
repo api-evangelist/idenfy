@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-token-request-schema.json",
+  "title": "KybTokenRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-token-api-openapi.yml#/components/schemas/KybTokenRequest",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/KybFormTokenRequest"
+    }
+  ],
+  "$defs": {
+    "KybFormTokenRequest": {
+      "type": "object",
+      "properties": {
+        "tokenType": {
+          "$ref": "#/$defs/KybTokenTypeEnum"
+        },
+        "lifetime": {
+          "type": "integer",
+          "maximum": 2592000,
+          "minimum": 0,
+          "writeOnly": true,
+          "default": 3600,
+          "description": "The duration in seconds of KYB token validity."
+        },
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A unique string identifying a client on your side.",
+          "maxLength": 100
+        },
+        "externalRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Any additional value chosen by you.",
+          "maxLength": 40
+        },
+        "locale": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/KybLocaleEnum"
+            }
+          ],
+          "nullable": true,
+          "description": "The default client's language. By default selected by a client's IP address."
+        },
+        "flow": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "KYB flow's `id` to use for this KYB session."
+        },
+        "theme": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "KYB theme's `id` to use for this KYB session."
+        },
+        "questionnaire": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "writeOnly": true,
+          "description": "KYB questionnaire's `key` to use for this KYB session. `null` for no questionnaire. If not given, the default questionnaire (from your KYB settings) will be used. Ignored when KYB flow is used, then questionnaire is taken according to used flow."
+        },
+        "questionnaireRequired": {
+          "type": "boolean",
+          "writeOnly": true,
+          "default": true,
+          "description": "If KYB session should have a questionnaire."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[^,]+$"
+          },
+          "default": [],
+          "description": "List of case-sensitive strings. Each tag can not be longer than 32 characters.",
+          "maxItems": 5
+        },
+        "scanRefs": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[^,]+$",
+            "maxLength": 40
+          }
+        }
+      },
+      "required": [
+        "clientId",
+        "tokenType"
+      ]
+    },
+    "KybLocaleEnum": {
+      "enum": [
+        "en",
+        "es",
+        "fr",
+        "ru",
+        "de",
+        "it",
+        "pl",
+        "lt",
+        "lv",
+        "et",
+        "cs",
+        "ro",
+        "hu",
+        "ja",
+        "bg",
+        "nl",
+        "pt"
+      ],
+      "type": "string"
+    },
+    "KybTokenTypeEnum": {
+      "enum": [
+        "FORM",
+        "GOV1",
+        "GOV2"
+      ],
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,434 @@
+generated: '2026-10-12'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/idenfy-age-estimation-api-openapi.yml
+- openapi/idenfy-aml-checks-api-openapi.yml
+- openapi/idenfy-aml-monitorings-api-openapi.yml
+- openapi/idenfy-bank-api-openapi.yml
+- openapi/idenfy-bank-card-verification-api-openapi.yml
+vocabulary:
+  name: iDenfy Domain Vocabulary
+  description: 'Terms declared by iDenfy''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-12'
+  terms:
+  - term: Age Estimation
+    definition: Age estimation session endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-age-estimation-api-openapi.yml
+  - term: AML Checks
+    definition: Anti-money laundering check endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-aml-checks-api-openapi.yml
+  - term: AML Monitorings
+    definition: Anti-money laundering monitoring endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-aml-monitorings-api-openapi.yml
+  - term: Bank
+    definition: Bank verification endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-bank-api-openapi.yml
+  - term: Bank Card Verification
+    definition: Bank card verification endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-bank-card-verification-api-openapi.yml
+  - term: Beneficiaries
+    definition: Beneficiaries CRUD endpoints for the KYB form.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-beneficiaries-api-openapi.yml
+  - term: Companies
+    definition: Endpoints for actions with companies.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-companies-api-openapi.yml
+  - term: Face Auth Sessions
+    definition: Face authentication session endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-face-auth-sessions-api-openapi.yml
+  - term: GOV Orders
+    definition: Endpoints for actions with GOV ordered documents.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-gov-orders-api-openapi.yml
+  - term: KYB Documents
+    definition: KYB documents CRUD endpoints for the KYB form.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyb-documents-api-openapi.yml
+  - term: KYB Forms
+    definition: Endpoints for KYB form actions.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyb-forms-api-openapi.yml
+  - term: KYB Questionnaires
+    definition: KYB questionnaires endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyb-questionnaires-api-openapi.yml
+  - term: KYB Token
+    definition: KYB token endpoints to begin KYB flow.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyb-token-api-openapi.yml
+  - term: KYC Blocklist
+    definition: Endpoints for managing face, document-face and document-info blocklist entries.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyc-blocklist-api-openapi.yml
+  - term: KYC Token
+    definition: Endpoints for creating KYC verification session tokens.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyc-token-api-openapi.yml
+  - term: KYC Verifications
+    definition: Endpoints for actions with KYC verifications.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-kyc-verifications-api-openapi.yml
+  - term: POA
+    definition: Endpoints for standalone proof of address (POA) checks.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-poa-api-openapi.yml
+  - term: Registry Center Checks
+    definition: Registry center check endpoints.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-registry-center-checks-api-openapi.yml
+  - term: SOS Reports
+    definition: Endpoints for actions with SOS filing documents.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-sos-reports-api-openapi.yml
+  - term: Webhooks
+    definition: Webhooks.
+    tags:
+    - Resource Group
+    source: openapi/idenfy-webhooks-api-openapi.yml
+  - term: InsufficientFinances
+    definition: 'Object declared by the contract with fields: message, code, detail.'
+    tags:
+    - Object
+    source: openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/InsufficientFinances
+  - term: InsufficientFinancesDetail
+    definition: 'Object declared by the contract with fields: detail, missing_limits, missing_additional_step_limits, missing_funds, missing_pool_funds,
+      expired_expenses.'
+    tags:
+    - Object
+    source: openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/InsufficientFinancesDetail
+  - term: MissingPoolFund
+    definition: 'Object declared by the contract with fields: fund_pool, missing.'
+    tags:
+    - Object
+    source: openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/MissingPoolFund
+  - term: AgeEstimationEscalationEnum
+    definition: 'Enumeration declared by the contract with values: DOC, NONE.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/AgeEstimationEscalationEnum
+  - term: AgeEstimationTokenRequest
+    definition: 'Object declared by the contract with fields: min_age, confidence_threshold, buffer, escalation, retry_limit, save_photo, expiry_minutes,
+      success_redirect, underage_redirect, uncertain_redirect, webhook_url, client_id.'
+    tags:
+    - Object
+    source: openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/AgeEstimationTokenRequest
+  - term: AgeEstimationToken
+    definition: 'Object declared by the contract with fields: token, session_url, expires_at, min_age, confidence_threshold, buffer, escalation,
+      retry_limit, save_photo, expiry_minutes, client_id.'
+    tags:
+    - Object
+    source: openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/AgeEstimationToken
+  - term: BusinessSearchDatasetEnum
+    definition: 'Enumeration declared by the contract with values: PEP, PEP_LINKED, SAN, SAN_CURRENT, SAN_FORMER, INS, RRE, POI, REL, SOE, SOE_CURRENT,
+      SOE_FORMER.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessSearchDatasetEnum
+  - term: BusinessEvidenceSchema
+    definition: 'Object declared by the contract with fields: evidenceId, originalUrl, isCopyrighted, title, credibility, language, summary, keywords,
+      captureDate, publicationDate, assetUrl, datasets.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessEvidenceSchema
+  - term: DeletionReasonEnum
+    definition: 'Enumeration declared by the contract with values: GOVERNMENT_POSITION_OUT_OF_SCOPE, ADVERSE_MEDIA_CATEGORY_OUT_OF_SCOPE, DUPLICATE_PROFILE,
+      REDUNDANT_PROFILE, EXPIRED_RISK_RELEVANCE, OTHER.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/DeletionReasonEnum
+  - term: IdentifierSchema
+    definition: 'Object declared by the contract with fields: category, value.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/IdentifierSchema
+  - term: IndividualEvidenceDatasetEnum
+    definition: 'Enumeration declared by the contract with values: PEP_CURRENT, PEP_FORMER, PEP_LINKED, SAN_CURRENT, SAN_FORMER, INS, RRE, DD,
+      POI, REL, GRI, ID. (1 more)'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/IndividualEvidenceDatasetEnum
+  - term: BusinessAlias
+    definition: 'Object declared by the contract with fields: alias, type.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessAlias
+  - term: MainSexEnum
+    definition: 'Enumeration declared by the contract with values: MALE, FEMALE.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/MainSexEnum
+  - term: PoiSchema
+    definition: Serializer for a Profile of Interest (POI) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PoiSchema
+  - term: DeletionReason
+    definition: 'Object declared by the contract with fields: reason, otherReason.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/DeletionReason
+  - term: SanctionEventTypeEnum
+    definition: 'Enumeration declared by the contract with values: ADDED, AMENDED, REMOVED.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/SanctionEventTypeEnum
+  - term: PoiPosition
+    definition: Serializer for a position within a Profile of Interest (POI) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PoiPosition
+  - term: RelCategoryEnum
+    definition: 'Enumeration declared by the contract with values: FINANCIAL_REGULATOR, LAW_ENFORCEMENT.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/RelCategoryEnum
+  - term: CompanyAmlCheckInput
+    definition: 'Object declared by the contract with fields: companyName, country.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/CompanyAmlCheckInput
+  - term: BusinessContactCategoryEnum
+    definition: 'Enumeration declared by the contract with values: TELEPHONE, FAX, WEBSITE.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessContactCategoryEnum
+  - term: RreSchema
+    definition: Serializer for an Reputational Risk Exposure (RRE) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/RreSchema
+  - term: IndividualAliasTypeEnum
+    definition: 'Enumeration declared by the contract with values: ORIGINAL_SCRIPT_NAME, NAME_SPELLING_VARIATION, SHORTENED_NAME, MAIDEN_NAME,
+      NICKNAME, PREVIOUS_NAME, FAKE_NAME.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/IndividualAliasTypeEnum
+  - term: SoeLevelEnum
+    definition: 'Enumeration declared by the contract with values: NATIONAL, LOCAL.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/SoeLevelEnum
+  - term: SoeSchema
+    definition: Serializer for a State-Owned Enterprise (SOE) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/SoeSchema
+  - term: InsSchema
+    definition: Serializer for an Insolvency (INS) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/InsSchema
+  - term: ContactEntriesIndividualSchema
+    definition: 'Object declared by the contract with fields: category, value.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/ContactEntriesIndividualSchema
+  - term: BusinessAliasTypeEnum
+    definition: 'Enumeration declared by the contract with values: ORIGINAL_SCRIPT_NAME, NAME_SPELLING_VARIATION, NAME_ABBREVIATION, PREVIOUS_NAME,
+      BRAND_NAME, FAKE_NAME.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessAliasTypeEnum
+  - term: CompanyAmlCheckFilterRequest
+    definition: 'Object declared by the contract with fields: threshold, datasets, sanctionBodies.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/CompanyAmlCheckFilterRequest
+  - term: IndividualDatasetEnum
+    definition: 'Enumeration declared by the contract with values: PEP_CURRENT, PEP_FORMER, PEP_LINKED, SAN_CURRENT, SAN_FORMER, INS, RRE, DD,
+      POI, REL, GRI.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/IndividualDatasetEnum
+  - term: NotesSchema
+    definition: 'Object declared by the contract with fields: value.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/NotesSchema
+  - term: Period
+    definition: 'Object declared by the contract with fields: days, years, months.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/Period
+  - term: RelEvent
+    definition: Serializer for a Regulatory Enforcement List (REL) event.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/RelEvent
+  - term: SanctionRegime
+    definition: 'Object declared by the contract with fields: body, bodyId, name, origin, types.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/SanctionRegime
+  - term: CompanyAmlCheckInputRequest
+    definition: 'Object declared by the contract with fields: companyName, country.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/CompanyAmlCheckInputRequest
+  - term: ContactEntriesBusinessSchema
+    definition: 'Object declared by the contract with fields: category, value.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/ContactEntriesBusinessSchema
+  - term: PersonAmlCheckRequest
+    definition: 'Object declared by the contract with fields: clientId, userType, input, filter.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PersonAmlCheckRequest
+  - term: RreEvent
+    definition: Serializer for a Reputational Risk Exposure (RRE) event.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/RreEvent
+  - term: BusinessAddressSchema
+    definition: 'Object declared by the contract with fields: line1, line2, postcode, city, county, countyAbbrev, country, addressType.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessAddressSchema
+  - term: AmlCheckMonitoring
+    definition: 'Object declared by the contract with fields: id, status, isSubscribed, expiration, tags, created.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/AmlCheckMonitoring
+  - term: BusinessEvidenceDatasetEnum
+    definition: 'Enumeration declared by the contract with values: SAN_CURRENT, SAN_FORMER, INS, RRE, POI, REL, SOE_CURRENT, SOE_FORMER, GRI,
+      ID, CORP, PEP_CURRENT.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessEvidenceDatasetEnum
+  - term: BusinessSearchResult
+    definition: 'Object declared by the contract with fields: version, resourceId, score, match, name, addresses, datasets, currentSanBodyIds,
+      formerSanBodyIds.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessSearchResult
+  - term: DateOfBirthMatchingEnum
+    definition: 'Enumeration declared by the contract with values: EXACT, SAME_YEAR, WITHIN_ONE_YEAR, WITHIN_TWO_YEARS, WITHIN_THREE_YEARS, WITHIN_FOUR_YEARS,
+      WITHIN_FIVE_YEARS.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/DateOfBirthMatchingEnum
+  - term: FullPepTierEnum
+    definition: 'Enumeration declared by the contract with values: PEP_TIER_1, PEP_TIER_2, PEP_TIER_3, PEP_BY_ASSOCIATION.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/FullPepTierEnum
+  - term: PepAssociationSchema
+    definition: Serializer for a Politically Exposed Person (PEP) by Association entry, detailing an individual's connection to a PEP.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PepAssociationSchema
+  - term: CountryEnum
+    definition: 'Enumeration declared by the contract with values: AF, AX, AL, DZ, AS, AD, AO, AI, AQ, AG, AR, AM. (238 more)'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/CountryEnum
+  - term: PersonAmlCheckFilter
+    definition: 'Object declared by the contract with fields: threshold, datasets, sanctionBodies, dateOfBirthMatching, pepTiers.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PersonAmlCheckFilter
+  - term: AmlCheckPdfRequest
+    definition: 'Object declared by the contract with fields: password.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/AmlCheckPdfRequest
+  - term: IndividualProfileSchema
+    definition: 'Object declared by the contract with fields: version, resourceId, firstName, middleName, lastName, gender, isDeleted, deletionReason,
+      isDeceased, aliases, datesOfBirth, datesOfDeath. (19 more)'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/IndividualProfileSchema
+  - term: CompanyAmlCheckFilterDatasetsEnum
+    definition: 'Enumeration declared by the contract with values: PEP_LINKED, SAN_CURRENT, SAN_FORMER, INS, RRE, POI, REL, SOE_CURRENT, SOE_FORMER.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/CompanyAmlCheckFilterDatasetsEnum
+  - term: BusinessTypeEnum
+    definition: 'Enumeration declared by the contract with values: VESSEL, AIRCRAFT, TERRORIST_ORGANISATION, ORGANISED_CRIME_GROUP, MILITANT_GROUP,
+      SHELL_CORPORATION, SOVEREIGN_WEALTH_FUND, GOVERNMENT_BODY, POLITICAL_PARTY, CIVIC_MOVEMENT, INTERNATIONAL_ORGANISATION, OTHER_INTERNATIONAL_ORGANISATIONS.
+      (14 more)'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessTypeEnum
+  - term: PepSchema
+    definition: Serializer for a Politically Exposed Person (PEP) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PepSchema
+  - term: BusinessDatasetEnum
+    definition: 'Enumeration declared by the contract with values: PEP_LINKED, SAN_CURRENT, SAN_FORMER, INS, RRE, POI, REL, SOE_CURRENT, SOE_FORMER,
+      GRI.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/BusinessDatasetEnum
+  - term: LinkedIndividualSchema
+    definition: 'Object declared by the contract with fields: resourceId, relationship, ownershipPercentage, firstName, middleName, lastName,
+      datasets.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/LinkedIndividualSchema
+  - term: SanctionEvent
+    definition: 'Object declared by the contract with fields: type, date, evidenceIds.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/SanctionEvent
+  - term: GriSchema
+    definition: Serializer for a Gambling Risk Intelligence (GRI) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/GriSchema
+  - term: PersonAmlCheckInput
+    definition: 'Object declared by the contract with fields: fullName, nationality, dateOfBirth, sex.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/PersonAmlCheckInput
+  - term: RelSchema
+    definition: Serializer for an Regulatory Enforcement List (REL) entry.
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/RelSchema
+  - term: UserMonitoringTypeEnum
+    definition: 'Enumeration declared by the contract with values: COMPANY, PERSON.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/UserMonitoringTypeEnum
+  - term: IndividualEvidenceSchema
+    definition: 'Object declared by the contract with fields: evidenceId, originalUrl, isCopyrighted, title, credibility, language, summary, keywords,
+      captureDate, publicationDate, assetUrl, datasets.'
+    tags:
+    - Object
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/IndividualEvidenceSchema
+  - term: CredibilityEnum
+    definition: 'Enumeration declared by the contract with values: LOW, MEDIUM, HIGH.'
+    tags:
+    - Enumeration
+    source: openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/CredibilityEnum

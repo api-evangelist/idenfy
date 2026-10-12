@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-company-status-request-schema.json",
+  "title": "CompanyStatusRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-companies-api-openapi.yml#/components/schemas/CompanyStatusRequest",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/NeedToStatusRequest"
+    },
+    {
+      "$ref": "#/$defs/NeedToStatusRequest"
+    },
+    {
+      "$ref": "#/$defs/CompletedStatusRequest"
+    }
+  ],
+  "$defs": {
+    "ApprovalStatusEnum": {
+      "enum": [
+        "APPROVED",
+        "DENIED"
+      ],
+      "type": "string"
+    },
+    "CompletedStatusRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/KybStatusEnum"
+            }
+          ],
+          "description": "Setting this status is the same as a manual review through the dashboard.<br>In the end, the KYB review webhook is sent."
+        },
+        "reviewInfo": {
+          "$ref": "#/$defs/ManualReviewRequest"
+        }
+      },
+      "required": [
+        "reviewInfo"
+      ]
+    },
+    "KybStatusEnum": {
+      "enum": [
+        "PENDING",
+        "PROCESSING",
+        "NEED_TO_PROCESS",
+        "NEED_TO_REVIEW",
+        "COMPLETED"
+      ],
+      "type": "string"
+    },
+    "ManualApproveRequest": {
+      "type": "object",
+      "properties": {
+        "approvalStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ApprovalStatusEnum"
+            }
+          ],
+          "description": "Review approval status.\n- Can not select this status if there are unreviewed AML statuses.\n- In the end, AML monitoring subjects are added according to account settings."
+        }
+      },
+      "required": [
+        "approvalStatus"
+      ]
+    },
+    "ManualDenyRequest": {
+      "type": "object",
+      "properties": {
+        "approvalStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ApprovalStatusEnum"
+            }
+          ],
+          "description": "Review approval status."
+        },
+        "denyReason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The reason why this KYB form was denied.",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "approvalStatus"
+      ]
+    },
+    "ManualReviewRequest": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ManualApproveRequest"
+        },
+        {
+          "$ref": "#/$defs/ManualDenyRequest"
+        }
+      ]
+    },
+    "NeedToStatusRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/KybStatusEnum"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-age-estimation-token-request-schema.json",
+  "title": "AgeEstimationTokenRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-age-estimation-api-openapi.yml#/components/schemas/AgeEstimationTokenRequest",
+  "type": "object",
+  "properties": {
+    "min_age": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120,
+      "description": "Minimum age the end user must meet."
+    },
+    "confidence_threshold": {
+      "type": "number",
+      "format": "float",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Minimum model confidence to accept an estimate without a step-up."
+    },
+    "buffer": {
+      "type": "integer",
+      "default": 0,
+      "minimum": 0,
+      "maximum": 20,
+      "description": "Age band (in years) around `min_age` that triggers a step-up instead of an immediate decision. Must not exceed `min_age`. Applies to the AI estimate only, never to a document-derived age."
+    },
+    "escalation": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/AgeEstimationEscalationEnum"
+        }
+      ],
+      "default": "DOC",
+      "description": "Action when the estimate is uncertain. `DOC` = document step-up; `NONE` = resolve as `UNCERTAIN`."
+    },
+    "retry_limit": {
+      "type": "integer",
+      "default": 3,
+      "minimum": 1,
+      "maximum": 3,
+      "description": "Max estimation attempts before the session locks."
+    },
+    "save_photo": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the analysed selfie is stored for sessions from this token."
+    },
+    "expiry_minutes": {
+      "type": "integer",
+      "default": 60,
+      "minimum": 5,
+      "maximum": 1440,
+      "description": "Token validity window in minutes from creation."
+    },
+    "success_redirect": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 2048,
+      "default": "",
+      "description": "Redirect after a `SUCCESS` outcome (blank = built-in result screen)."
+    },
+    "underage_redirect": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 2048,
+      "default": "",
+      "description": "Redirect after an `UNDERAGE` outcome."
+    },
+    "uncertain_redirect": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 2048,
+      "default": "",
+      "description": "Redirect after a terminal `UNCERTAIN` outcome."
+    },
+    "webhook_url": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 2048,
+      "default": "",
+      "description": "Per-session override for where the result notification is sent. Blank = use your account's default Age Estimation webhook notification."
+    },
+    "client_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 100,
+      "description": "Your own identifier for the end user; echoed back in the result webhook for correlation."
+    }
+  },
+  "required": [
+    "min_age",
+    "confidence_threshold"
+  ],
+  "$defs": {
+    "AgeEstimationEscalationEnum": {
+      "enum": [
+        "DOC",
+        "NONE"
+      ],
+      "type": "string"
+    }
+  }
+}

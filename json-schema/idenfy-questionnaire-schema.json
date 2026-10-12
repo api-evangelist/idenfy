@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-questionnaire-schema.json",
+  "title": "Questionnaire",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-questionnaires-api-openapi.yml#/components/schemas/Questionnaire",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readOnly": true
+    },
+    "key": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Used for token creation to identify this questionnaire.",
+      "pattern": "^[\\w_*-]+$",
+      "maxLength": 32
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 32
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": "",
+      "maxLength": 512
+    },
+    "type": {
+      "$ref": "#/$defs/QuestionnaireTypeEnum"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Section"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "key",
+    "name",
+    "sections",
+    "title"
+  ],
+  "$defs": {
+    "Choice": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[\\w_*-]+$",
+          "maxLength": 32
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "key",
+        "title"
+      ]
+    },
+    "Question": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[\\w_*-]+$",
+          "maxLength": 32
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "",
+          "maxLength": 512
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          }
+        },
+        "type": {
+          "$ref": "#/$defs/TypeB9cEnum"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "placeholder": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "condition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "title",
+        "type"
+      ]
+    },
+    "QuestionnaireTypeEnum": {
+      "enum": [
+        "KYC",
+        "KYB"
+      ],
+      "type": "string"
+    },
+    "Section": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[\\w_*-]+$",
+          "maxLength": 32
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "",
+          "maxLength": 512
+        },
+        "condition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Question"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "questions",
+        "title"
+      ]
+    },
+    "TypeB9cEnum": {
+      "enum": [
+        "CHECKBOX",
+        "COLOR",
+        "COUNTRY",
+        "COUNTRY_MULTI",
+        "DATE",
+        "DATETIME",
+        "EMAIL",
+        "FILE",
+        "FILE_MULTI",
+        "FLOAT",
+        "LIST",
+        "INTEGER",
+        "PASSWORD",
+        "RADIO",
+        "SELECT",
+        "SELECT_MULTI",
+        "TEL",
+        "TEXT",
+        "TEXT_AREA",
+        "TIME",
+        "URL"
+      ],
+      "type": "string"
+    }
+  }
+}

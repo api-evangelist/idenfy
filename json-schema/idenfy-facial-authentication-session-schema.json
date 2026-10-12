@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-facial-authentication-session-schema.json",
+  "title": "FacialAuthenticationSession",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-face-auth-sessions-api-openapi.yml#/components/schemas/FacialAuthenticationSession",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "tokenString": {
+      "type": "string",
+      "description": "Token string used for authentication.",
+      "maxLength": 40
+    },
+    "approved": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "givenScanRef": {
+      "type": "string",
+      "description": "deprecated",
+      "maxLength": 40
+    },
+    "type": {
+      "$ref": "#/$defs/FacialAuthenticationStatusTypeEnum"
+    },
+    "authenticationMethod": {
+      "$ref": "#/$defs/FacialAuthenticationMethodEnum"
+    },
+    "facePhoto": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    }
+  },
+  "required": [
+    "givenScanRef",
+    "id"
+  ],
+  "$defs": {
+    "FacialAuthenticationMethodEnum": {
+      "enum": [
+        "ACTIVE_LIVENESS",
+        "FACE_MATCHING"
+      ],
+      "type": "string"
+    },
+    "FacialAuthenticationStatusTypeEnum": {
+      "enum": [
+        "ENROLLMENT",
+        "AUTHENTICATION"
+      ],
+      "type": "string"
+    }
+  }
+}

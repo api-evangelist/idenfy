@@ -1,0 +1,996 @@
+{
+  "@context": {
+    "@vocab": "https://idenfy.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "idenfy": "https://idenfy.com/schema#",
+    "InsufficientFinances": "idenfy:InsufficientFinances",
+    "message": {
+      "@id": "idenfy:message",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "idenfy:code",
+      "@type": "xsd:string"
+    },
+    "detail": {
+      "@id": "idenfy:detail",
+      "@type": "@id"
+    },
+    "InsufficientFinancesDetail": "idenfy:InsufficientFinancesDetail",
+    "missing_limits": {
+      "@id": "idenfy:missing_limits",
+      "@container": "@list"
+    },
+    "missing_additional_step_limits": {
+      "@id": "idenfy:missing_additional_step_limits",
+      "@container": "@list"
+    },
+    "missing_funds": {
+      "@id": "idenfy:missing_funds"
+    },
+    "missing_pool_funds": {
+      "@id": "idenfy:missing_pool_funds",
+      "@container": "@list"
+    },
+    "expired_expenses": {
+      "@id": "idenfy:expired_expenses",
+      "@container": "@list"
+    },
+    "MissingPoolFund": "idenfy:MissingPoolFund",
+    "fund_pool": {
+      "@id": "idenfy:fund_pool",
+      "@type": "xsd:string"
+    },
+    "missing": {
+      "@id": "idenfy:missing",
+      "@type": "xsd:decimal"
+    },
+    "AgeEstimationEscalationEnum": "idenfy:AgeEstimationEscalationEnum",
+    "AgeEstimationTokenRequest": "idenfy:AgeEstimationTokenRequest",
+    "min_age": {
+      "@id": "idenfy:min_age",
+      "@type": "xsd:integer"
+    },
+    "confidence_threshold": {
+      "@id": "idenfy:confidence_threshold",
+      "@type": "xsd:decimal"
+    },
+    "buffer": {
+      "@id": "idenfy:buffer",
+      "@type": "xsd:integer"
+    },
+    "escalation": {
+      "@id": "idenfy:escalation"
+    },
+    "retry_limit": {
+      "@id": "idenfy:retry_limit",
+      "@type": "xsd:integer"
+    },
+    "save_photo": {
+      "@id": "idenfy:save_photo",
+      "@type": "xsd:boolean"
+    },
+    "expiry_minutes": {
+      "@id": "idenfy:expiry_minutes",
+      "@type": "xsd:integer"
+    },
+    "success_redirect": {
+      "@id": "idenfy:success_redirect",
+      "@type": "@id"
+    },
+    "underage_redirect": {
+      "@id": "idenfy:underage_redirect",
+      "@type": "@id"
+    },
+    "uncertain_redirect": {
+      "@id": "idenfy:uncertain_redirect",
+      "@type": "@id"
+    },
+    "webhook_url": {
+      "@id": "idenfy:webhook_url",
+      "@type": "@id"
+    },
+    "client_id": {
+      "@id": "idenfy:client_id",
+      "@type": "xsd:string"
+    },
+    "AgeEstimationToken": "idenfy:AgeEstimationToken",
+    "token": {
+      "@id": "idenfy:token",
+      "@type": "xsd:string"
+    },
+    "session_url": {
+      "@id": "idenfy:session_url",
+      "@type": "@id"
+    },
+    "expires_at": {
+      "@id": "idenfy:expires_at",
+      "@type": "xsd:dateTime"
+    },
+    "BusinessSearchDatasetEnum": "idenfy:BusinessSearchDatasetEnum",
+    "BusinessEvidenceSchema": "idenfy:BusinessEvidenceSchema",
+    "evidenceId": {
+      "@id": "idenfy:evidenceId",
+      "@type": "xsd:string"
+    },
+    "originalUrl": {
+      "@id": "idenfy:originalUrl",
+      "@type": "xsd:string"
+    },
+    "isCopyrighted": {
+      "@id": "idenfy:isCopyrighted",
+      "@type": "xsd:boolean"
+    },
+    "title": {
+      "@id": "idenfy:title",
+      "@type": "xsd:string"
+    },
+    "credibility": {
+      "@id": "idenfy:credibility",
+      "@type": "@id"
+    },
+    "language": {
+      "@id": "idenfy:language",
+      "@type": "xsd:string"
+    },
+    "summary": {
+      "@id": "idenfy:summary",
+      "@type": "xsd:string"
+    },
+    "keywords": {
+      "@id": "idenfy:keywords",
+      "@type": "xsd:string"
+    },
+    "captureDate": {
+      "@id": "idenfy:captureDate",
+      "@type": "xsd:string"
+    },
+    "publicationDate": {
+      "@id": "idenfy:publicationDate",
+      "@type": "xsd:string"
+    },
+    "assetUrl": {
+      "@id": "idenfy:assetUrl",
+      "@type": "xsd:string"
+    },
+    "datasets": {
+      "@id": "idenfy:datasets",
+      "@container": "@list"
+    },
+    "DeletionReasonEnum": "idenfy:DeletionReasonEnum",
+    "IdentifierSchema": "idenfy:IdentifierSchema",
+    "category": {
+      "@id": "idenfy:category",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "idenfy:value",
+      "@type": "xsd:string"
+    },
+    "IndividualEvidenceDatasetEnum": "idenfy:IndividualEvidenceDatasetEnum",
+    "BusinessAlias": "idenfy:BusinessAlias",
+    "alias": {
+      "@id": "idenfy:alias",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "idenfy:type"
+    },
+    "MainSexEnum": "idenfy:MainSexEnum",
+    "PoiSchema": "idenfy:PoiSchema",
+    "evidenceIds": {
+      "@id": "idenfy:evidenceIds",
+      "@container": "@list"
+    },
+    "positions": {
+      "@id": "idenfy:positions",
+      "@container": "@list"
+    },
+    "DeletionReason": "idenfy:DeletionReason",
+    "reason": {
+      "@id": "idenfy:reason"
+    },
+    "otherReason": {
+      "@id": "idenfy:otherReason",
+      "@type": "xsd:string"
+    },
+    "SanctionEventTypeEnum": "idenfy:SanctionEventTypeEnum",
+    "PoiPosition": "idenfy:PoiPosition",
+    "position": {
+      "@id": "idenfy:position",
+      "@type": "xsd:string"
+    },
+    "segment": {
+      "@id": "idenfy:segment",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "idenfy:country",
+      "@type": "@id"
+    },
+    "dateFrom": {
+      "@id": "idenfy:dateFrom",
+      "@type": "xsd:string"
+    },
+    "dateTo": {
+      "@id": "idenfy:dateTo",
+      "@type": "xsd:string"
+    },
+    "RelCategoryEnum": "idenfy:RelCategoryEnum",
+    "CompanyAmlCheckInput": "idenfy:CompanyAmlCheckInput",
+    "companyName": {
+      "@id": "idenfy:companyName",
+      "@type": "xsd:string"
+    },
+    "BusinessContactCategoryEnum": "idenfy:BusinessContactCategoryEnum",
+    "RreSchema": "idenfy:RreSchema",
+    "subcategory": {
+      "@id": "idenfy:subcategory",
+      "@type": "xsd:string"
+    },
+    "events": {
+      "@id": "idenfy:events",
+      "@container": "@list"
+    },
+    "IndividualAliasTypeEnum": "idenfy:IndividualAliasTypeEnum",
+    "SoeLevelEnum": "idenfy:SoeLevelEnum",
+    "SoeSchema": "idenfy:SoeSchema",
+    "level": {
+      "@id": "idenfy:level"
+    },
+    "status": {
+      "@id": "idenfy:status"
+    },
+    "InsSchema": "idenfy:InsSchema",
+    "insolvencyIdNumber": {
+      "@id": "idenfy:insolvencyIdNumber",
+      "@type": "xsd:string"
+    },
+    "solicitor": {
+      "@id": "idenfy:solicitor",
+      "@type": "xsd:string"
+    },
+    "court": {
+      "@id": "idenfy:court",
+      "@type": "xsd:string"
+    },
+    "petitioner": {
+      "@id": "idenfy:petitioner",
+      "@type": "xsd:string"
+    },
+    "debt": {
+      "@id": "idenfy:debt",
+      "@type": "xsd:string"
+    },
+    "accountantInBankruptcyCaseNumber": {
+      "@id": "idenfy:accountantInBankruptcyCaseNumber",
+      "@type": "xsd:string"
+    },
+    "insolvencyStartDate": {
+      "@id": "idenfy:insolvencyStartDate",
+      "@type": "xsd:string"
+    },
+    "insolvencyEndDate": {
+      "@id": "idenfy:insolvencyEndDate",
+      "@type": "xsd:string"
+    },
+    "hearingDate": {
+      "@id": "idenfy:hearingDate",
+      "@type": "xsd:string"
+    },
+    "presentedDateOfPetition": {
+      "@id": "idenfy:presentedDateOfPetition",
+      "@type": "xsd:string"
+    },
+    "gazetteIssueDate": {
+      "@id": "idenfy:gazetteIssueDate",
+      "@type": "xsd:string"
+    },
+    "awardDate": {
+      "@id": "idenfy:awardDate",
+      "@type": "xsd:string"
+    },
+    "firstOrderDate": {
+      "@id": "idenfy:firstOrderDate",
+      "@type": "xsd:string"
+    },
+    "ContactEntriesIndividualSchema": "idenfy:ContactEntriesIndividualSchema",
+    "BusinessAliasTypeEnum": "idenfy:BusinessAliasTypeEnum",
+    "CompanyAmlCheckFilterRequest": "idenfy:CompanyAmlCheckFilterRequest",
+    "threshold": {
+      "@id": "idenfy:threshold",
+      "@type": "xsd:integer"
+    },
+    "sanctionBodies": {
+      "@id": "idenfy:sanctionBodies",
+      "@container": "@list"
+    },
+    "IndividualDatasetEnum": "idenfy:IndividualDatasetEnum",
+    "NotesSchema": "idenfy:NotesSchema",
+    "Period": "idenfy:Period",
+    "days": {
+      "@id": "idenfy:days",
+      "@type": "xsd:integer"
+    },
+    "years": {
+      "@id": "idenfy:years",
+      "@type": "xsd:integer"
+    },
+    "months": {
+      "@id": "idenfy:months",
+      "@type": "xsd:integer"
+    },
+    "RelEvent": "idenfy:RelEvent",
+    "currencyCode": {
+      "@id": "idenfy:currencyCode",
+      "@type": "xsd:string"
+    },
+    "amount": {
+      "@id": "idenfy:amount",
+      "@type": "xsd:integer"
+    },
+    "period": {
+      "@id": "idenfy:period"
+    },
+    "date": {
+      "@id": "idenfy:date",
+      "@type": "xsd:string"
+    },
+    "SanctionRegime": "idenfy:SanctionRegime",
+    "body": {
+      "@id": "idenfy:body",
+      "@type": "xsd:string"
+    },
+    "bodyId": {
+      "@id": "idenfy:bodyId",
+      "@type": "xsd:integer"
+    },
+    "name": {
+      "@id": "idenfy:name",
+      "@type": "xsd:string"
+    },
+    "origin": {
+      "@id": "idenfy:origin",
+      "@type": "xsd:string"
+    },
+    "types": {
+      "@id": "idenfy:types",
+      "@container": "@list"
+    },
+    "CompanyAmlCheckInputRequest": "idenfy:CompanyAmlCheckInputRequest",
+    "ContactEntriesBusinessSchema": "idenfy:ContactEntriesBusinessSchema",
+    "PersonAmlCheckRequest": "idenfy:PersonAmlCheckRequest",
+    "clientId": {
+      "@id": "idenfy:clientId",
+      "@type": "xsd:string"
+    },
+    "userType": {
+      "@id": "idenfy:userType",
+      "@type": "@id"
+    },
+    "input": {
+      "@id": "idenfy:input",
+      "@type": "@id"
+    },
+    "filter": {
+      "@id": "idenfy:filter",
+      "@type": "@id"
+    },
+    "RreEvent": "idenfy:RreEvent",
+    "BusinessAddressSchema": "idenfy:BusinessAddressSchema",
+    "line1": {
+      "@id": "idenfy:line1",
+      "@type": "xsd:string"
+    },
+    "line2": {
+      "@id": "idenfy:line2",
+      "@type": "xsd:string"
+    },
+    "postcode": {
+      "@id": "idenfy:postcode",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "idenfy:city",
+      "@type": "xsd:string"
+    },
+    "county": {
+      "@id": "idenfy:county",
+      "@type": "xsd:string"
+    },
+    "countyAbbrev": {
+      "@id": "idenfy:countyAbbrev",
+      "@type": "xsd:string"
+    },
+    "addressType": {
+      "@id": "idenfy:addressType"
+    },
+    "AmlCheckMonitoring": "idenfy:AmlCheckMonitoring",
+    "id": {
+      "@id": "idenfy:id",
+      "@type": "xsd:string"
+    },
+    "isSubscribed": {
+      "@id": "idenfy:isSubscribed",
+      "@type": "xsd:boolean"
+    },
+    "expiration": {
+      "@id": "idenfy:expiration",
+      "@type": "xsd:dateTime"
+    },
+    "tags": {
+      "@id": "idenfy:tags",
+      "@container": "@list"
+    },
+    "created": {
+      "@id": "idenfy:created",
+      "@type": "xsd:dateTime"
+    },
+    "BusinessEvidenceDatasetEnum": "idenfy:BusinessEvidenceDatasetEnum",
+    "BusinessSearchResult": "idenfy:BusinessSearchResult",
+    "version": {
+      "@id": "idenfy:version",
+      "@type": "xsd:integer"
+    },
+    "resourceId": {
+      "@id": "idenfy:resourceId",
+      "@type": "xsd:string"
+    },
+    "score": {
+      "@id": "idenfy:score",
+      "@type": "xsd:integer"
+    },
+    "match": {
+      "@id": "idenfy:match",
+      "@type": "xsd:string"
+    },
+    "addresses": {
+      "@id": "idenfy:addresses",
+      "@container": "@list"
+    },
+    "currentSanBodyIds": {
+      "@id": "idenfy:currentSanBodyIds",
+      "@container": "@list"
+    },
+    "formerSanBodyIds": {
+      "@id": "idenfy:formerSanBodyIds",
+      "@container": "@list"
+    },
+    "DateOfBirthMatchingEnum": "idenfy:DateOfBirthMatchingEnum",
+    "FullPepTierEnum": "idenfy:FullPepTierEnum",
+    "PepAssociationSchema": "idenfy:PepAssociationSchema",
+    "CountryEnum": "idenfy:CountryEnum",
+    "PersonAmlCheckFilter": "idenfy:PersonAmlCheckFilter",
+    "dateOfBirthMatching": {
+      "@id": "idenfy:dateOfBirthMatching"
+    },
+    "pepTiers": {
+      "@id": "idenfy:pepTiers",
+      "@container": "@list"
+    },
+    "AmlCheckPdfRequest": "idenfy:AmlCheckPdfRequest",
+    "password": {
+      "@id": "idenfy:password",
+      "@type": "xsd:string"
+    },
+    "IndividualProfileSchema": "idenfy:IndividualProfileSchema",
+    "firstName": {
+      "@id": "idenfy:firstName",
+      "@type": "xsd:string"
+    },
+    "middleName": {
+      "@id": "idenfy:middleName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "idenfy:lastName",
+      "@type": "xsd:string"
+    },
+    "gender": {
+      "@id": "idenfy:gender"
+    },
+    "isDeleted": {
+      "@id": "idenfy:isDeleted",
+      "@type": "xsd:boolean"
+    },
+    "deletionReason": {
+      "@id": "idenfy:deletionReason",
+      "@type": "@id"
+    },
+    "isDeceased": {
+      "@id": "idenfy:isDeceased",
+      "@type": "xsd:boolean"
+    },
+    "aliases": {
+      "@id": "idenfy:aliases",
+      "@container": "@list"
+    },
+    "datesOfBirth": {
+      "@id": "idenfy:datesOfBirth",
+      "@container": "@list"
+    },
+    "datesOfDeath": {
+      "@id": "idenfy:datesOfDeath",
+      "@container": "@list"
+    },
+    "nationalities": {
+      "@id": "idenfy:nationalities",
+      "@container": "@list"
+    },
+    "profileImages": {
+      "@id": "idenfy:profileImages",
+      "@container": "@list"
+    },
+    "notes": {
+      "@id": "idenfy:notes",
+      "@container": "@list"
+    },
+    "contactEntries": {
+      "@id": "idenfy:contactEntries",
+      "@container": "@list"
+    },
+    "identifiers": {
+      "@id": "idenfy:identifiers",
+      "@container": "@list"
+    },
+    "evidences": {
+      "@id": "idenfy:evidences",
+      "@container": "@list"
+    },
+    "sanEntries": {
+      "@id": "idenfy:sanEntries",
+      "@type": "@id"
+    },
+    "relEntries": {
+      "@id": "idenfy:relEntries",
+      "@container": "@list"
+    },
+    "rreEntries": {
+      "@id": "idenfy:rreEntries",
+      "@container": "@list"
+    },
+    "poiEntries": {
+      "@id": "idenfy:poiEntries",
+      "@container": "@list"
+    },
+    "insEntries": {
+      "@id": "idenfy:insEntries",
+      "@container": "@list"
+    },
+    "ddEntries": {
+      "@id": "idenfy:ddEntries",
+      "@container": "@list"
+    },
+    "pepEntries": {
+      "@id": "idenfy:pepEntries",
+      "@type": "@id"
+    },
+    "pepByAssociationEntries": {
+      "@id": "idenfy:pepByAssociationEntries",
+      "@container": "@list"
+    },
+    "individualLinks": {
+      "@id": "idenfy:individualLinks",
+      "@container": "@list"
+    },
+    "businessLinks": {
+      "@id": "idenfy:businessLinks",
+      "@container": "@list"
+    },
+    "griEntries": {
+      "@id": "idenfy:griEntries",
+      "@container": "@list"
+    },
+    "CompanyAmlCheckFilterDatasetsEnum": "idenfy:CompanyAmlCheckFilterDatasetsEnum",
+    "BusinessTypeEnum": "idenfy:BusinessTypeEnum",
+    "PepSchema": "idenfy:PepSchema",
+    "BusinessDatasetEnum": "idenfy:BusinessDatasetEnum",
+    "LinkedIndividualSchema": "idenfy:LinkedIndividualSchema",
+    "relationship": {
+      "@id": "idenfy:relationship",
+      "@type": "xsd:string"
+    },
+    "ownershipPercentage": {
+      "@id": "idenfy:ownershipPercentage",
+      "@type": "xsd:integer"
+    },
+    "SanctionEvent": "idenfy:SanctionEvent",
+    "GriSchema": "idenfy:GriSchema",
+    "PersonAmlCheckInput": "idenfy:PersonAmlCheckInput",
+    "fullName": {
+      "@id": "idenfy:fullName",
+      "@type": "xsd:string"
+    },
+    "nationality": {
+      "@id": "idenfy:nationality"
+    },
+    "dateOfBirth": {
+      "@id": "idenfy:dateOfBirth",
+      "@type": "xsd:date"
+    },
+    "sex": {
+      "@id": "idenfy:sex"
+    },
+    "RelSchema": "idenfy:RelSchema",
+    "UserMonitoringTypeEnum": "idenfy:UserMonitoringTypeEnum",
+    "IndividualEvidenceSchema": "idenfy:IndividualEvidenceSchema",
+    "CredibilityEnum": "idenfy:CredibilityEnum",
+    "SanctionSchema": "idenfy:SanctionSchema",
+    "sanctionId": {
+      "@id": "idenfy:sanctionId",
+      "@type": "xsd:string"
+    },
+    "measures": {
+      "@id": "idenfy:measures",
+      "@container": "@list"
+    },
+    "regime": {
+      "@id": "idenfy:regime",
+      "@type": "@id"
+    },
+    "BusinessAddressTypeEnum": "idenfy:BusinessAddressTypeEnum",
+    "AmlCheckStatusEnum": "idenfy:AmlCheckStatusEnum",
+    "AmlArticleTypeEnum": "idenfy:AmlArticleTypeEnum",
+    "BusinessProfileSchema": "idenfy:BusinessProfileSchema",
+    "description": {
+      "@id": "idenfy:description",
+      "@type": "xsd:string"
+    },
+    "businessTypes": {
+      "@id": "idenfy:businessTypes",
+      "@container": "@list"
+    },
+    "activities": {
+      "@id": "idenfy:activities",
+      "@container": "@list"
+    },
+    "soeEntry": {
+      "@id": "idenfy:soeEntry",
+      "@type": "@id"
+    },
+    "CompanyAmlCheckFilter": "idenfy:CompanyAmlCheckFilter",
+    "PersonAmlCheck": "idenfy:PersonAmlCheck",
+    "checkedAt": {
+      "@id": "idenfy:checkedAt",
+      "@type": "xsd:dateTime"
+    },
+    "amlCheck": {
+      "@id": "idenfy:amlCheck",
+      "@container": "@list"
+    },
+    "adverseMedia": {
+      "@id": "idenfy:adverseMedia",
+      "@container": "@list"
+    },
+    "overallStatus": {
+      "@id": "idenfy:overallStatus"
+    },
+    "monitoring": {
+      "@id": "idenfy:monitoring"
+    },
+    "IndividualAddressTypeEnum": "idenfy:IndividualAddressTypeEnum",
+    "MonitoringStatusEnum": "idenfy:MonitoringStatusEnum",
+    "PersonAmlCheckInputRequest": "idenfy:PersonAmlCheckInputRequest",
+    "DdSchema": "idenfy:DdSchema",
+    "caseReference": {
+      "@id": "idenfy:caseReference",
+      "@type": "xsd:string"
+    },
+    "conduct": {
+      "@id": "idenfy:conduct",
+      "@type": "xsd:string"
+    },
+    "IndividualContactCategoryEnum": "idenfy:IndividualContactCategoryEnum",
+    "PersonAmlCheckFilterRequest": "idenfy:PersonAmlCheckFilterRequest",
+    "IndividualAddressSchema": "idenfy:IndividualAddressSchema",
+    "IndividualSearchResult": "idenfy:IndividualSearchResult",
+    "profileImage": {
+      "@id": "idenfy:profileImage",
+      "@type": "xsd:string"
+    },
+    "pepTier": {
+      "@id": "idenfy:pepTier"
+    },
+    "PepTierEnum": "idenfy:PepTierEnum",
+    "PepEntries": "idenfy:PepEntries",
+    "current": {
+      "@id": "idenfy:current",
+      "@container": "@list"
+    },
+    "former": {
+      "@id": "idenfy:former",
+      "@container": "@list"
+    },
+    "IndividualAlias": "idenfy:IndividualAlias",
+    "PersonAmlCheckFilterDatasetsEnum": "idenfy:PersonAmlCheckFilterDatasetsEnum",
+    "AdverseMediaSearchResult": "idenfy:AdverseMediaSearchResult",
+    "url": {
+      "@id": "idenfy:url",
+      "@type": "@id"
+    },
+    "text": {
+      "@id": "idenfy:text",
+      "@type": "xsd:string"
+    },
+    "publishDate": {
+      "@id": "idenfy:publishDate",
+      "@type": "xsd:date"
+    },
+    "CompanyAmlCheck": "idenfy:CompanyAmlCheck",
+    "SanEntries": "idenfy:SanEntries",
+    "SearchAddress": "idenfy:SearchAddress",
+    "geography": {
+      "@id": "idenfy:geography",
+      "@type": "xsd:string"
+    },
+    "SanctionRegimeTypeEnum": "idenfy:SanctionRegimeTypeEnum",
+    "SoeSchemaStatusEnum": "idenfy:SoeSchemaStatusEnum",
+    "LinkedBusinessSchema": "idenfy:LinkedBusinessSchema",
+    "CompanyAmlCheckRequest": "idenfy:CompanyAmlCheckRequest",
+    "AmlMonitoring": "idenfy:AmlMonitoring",
+    "AmlMonitoringPdfRequest": "idenfy:AmlMonitoringPdfRequest",
+    "AmlMonitoringPersonAmlCheck": "idenfy:AmlMonitoringPersonAmlCheck",
+    "AmlMonitoringCompanyAmlCheck": "idenfy:AmlMonitoringCompanyAmlCheck",
+    "AmlMonitoringCompanyAmlCheckRequest": "idenfy:AmlMonitoringCompanyAmlCheckRequest",
+    "AmlMonitoringPersonAmlCheckRequest": "idenfy:AmlMonitoringPersonAmlCheckRequest",
+    "PatchedAmlMonitoringUpdateRequest": "idenfy:PatchedAmlMonitoringUpdateRequest",
+    "AmlMonitoringList": "idenfy:AmlMonitoringList",
+    "AmlMonitoringStartStopRequest": "idenfy:AmlMonitoringStartStopRequest",
+    "comment": {
+      "@id": "idenfy:comment",
+      "@type": "xsd:string"
+    },
+    "AmlMonitoringRequest": "idenfy:AmlMonitoringRequest",
+    "PaginatedAmlMonitoringListList": "idenfy:PaginatedAmlMonitoringListList",
+    "count": {
+      "@id": "idenfy:count",
+      "@type": "xsd:integer"
+    },
+    "next": {
+      "@id": "idenfy:next",
+      "@type": "@id"
+    },
+    "previous": {
+      "@id": "idenfy:previous",
+      "@type": "@id"
+    },
+    "results": {
+      "@id": "idenfy:results",
+      "@container": "@list"
+    },
+    "BankToken": "idenfy:BankToken",
+    "tokenString": {
+      "@id": "idenfy:tokenString",
+      "@type": "xsd:string"
+    },
+    "isValid": {
+      "@id": "idenfy:isValid",
+      "@type": "xsd:boolean"
+    },
+    "bank": {
+      "@id": "idenfy:bank",
+      "@type": "xsd:string"
+    },
+    "access": {
+      "@id": "idenfy:access",
+      "@type": "@id"
+    },
+    "BankTokenCountryEnum": "idenfy:BankTokenCountryEnum",
+    "BankTransactionAmount": "idenfy:BankTransactionAmount",
+    "currency": {
+      "@id": "idenfy:currency",
+      "@type": "xsd:string"
+    },
+    "BankTransaction": "idenfy:BankTransaction",
+    "creditor": {
+      "@id": "idenfy:creditor",
+      "@type": "@id"
+    },
+    "debtor": {
+      "@id": "idenfy:debtor",
+      "@type": "@id"
+    },
+    "bookingDate": {
+      "@id": "idenfy:bookingDate",
+      "@type": "xsd:date"
+    },
+    "transactionDate": {
+      "@id": "idenfy:transactionDate",
+      "@type": "xsd:date"
+    },
+    "transactionAmount": {
+      "@id": "idenfy:transactionAmount",
+      "@type": "@id"
+    },
+    "BankPartyIdentification": "idenfy:BankPartyIdentification",
+    "PaginatedBankTransactionList": "idenfy:PaginatedBankTransactionList",
+    "BankTokenRequest": "idenfy:BankTokenRequest",
+    "lifetime": {
+      "@id": "idenfy:lifetime",
+      "@type": "xsd:integer"
+    },
+    "BankAccess": "idenfy:BankAccess",
+    "accounts": {
+      "@id": "idenfy:accounts",
+      "@type": "xsd:boolean"
+    },
+    "balances": {
+      "@id": "idenfy:balances",
+      "@type": "xsd:boolean"
+    },
+    "transactions": {
+      "@id": "idenfy:transactions",
+      "@type": "xsd:boolean"
+    },
+    "BankAccessRequest": "idenfy:BankAccessRequest",
+    "BankCardToken": "idenfy:BankCardToken",
+    "sessionUrl": {
+      "@id": "idenfy:sessionUrl",
+      "@type": "@id"
+    },
+    "mobileCode": {
+      "@id": "idenfy:mobileCode",
+      "@type": "xsd:string"
+    },
+    "BankCardTokenRequest": "idenfy:BankCardTokenRequest",
+    "expectedName": {
+      "@id": "idenfy:expectedName",
+      "@type": "xsd:string"
+    },
+    "expectedLastFour": {
+      "@id": "idenfy:expectedLastFour",
+      "@type": "xsd:string"
+    },
+    "sessionLength": {
+      "@id": "idenfy:sessionLength",
+      "@type": "xsd:integer"
+    },
+    "theme": {
+      "@id": "idenfy:theme",
+      "@type": "xsd:string"
+    },
+    "generateMobileCode": {
+      "@id": "idenfy:generateMobileCode",
+      "@type": "xsd:boolean"
+    },
+    "successUrl": {
+      "@id": "idenfy:successUrl",
+      "@type": "@id"
+    },
+    "failUrl": {
+      "@id": "idenfy:failUrl",
+      "@type": "@id"
+    },
+    "BeneficiaryTypeEnum": "idenfy:BeneficiaryTypeEnum",
+    "DateFieldValue": "idenfy:DateFieldValue",
+    "BeneficiaryCreate": "idenfy:BeneficiaryCreate",
+    "beneficiaryType": {
+      "@id": "idenfy:beneficiaryType",
+      "@type": "@id"
+    },
+    "beneficiaryTypes": {
+      "@id": "idenfy:beneficiaryTypes",
+      "@container": "@list"
+    },
+    "info": {
+      "@id": "idenfy:info",
+      "@type": "@id"
+    },
+    "formFiller": {
+      "@id": "idenfy:formFiller",
+      "@type": "xsd:boolean"
+    },
+    "parent": {
+      "@id": "idenfy:parent",
+      "@type": "xsd:string"
+    },
+    "AdditionalFieldValueRequest": "idenfy:AdditionalFieldValueRequest",
+    "CustomFieldTypeEnum": "idenfy:CustomFieldTypeEnum",
+    "IndividualApplicantCreate": "idenfy:IndividualApplicantCreate",
+    "infoType": {
+      "@id": "idenfy:infoType",
+      "@type": "@id"
+    },
+    "surname": {
+      "@id": "idenfy:surname",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "idenfy:email",
+      "@type": "xsd:string"
+    },
+    "phone": {
+      "@id": "idenfy:phone",
+      "@type": "xsd:string"
+    },
+    "documentNumber": {
+      "@id": "idenfy:documentNumber",
+      "@type": "xsd:string"
+    },
+    "personalNumber": {
+      "@id": "idenfy:personalNumber",
+      "@type": "xsd:string"
+    },
+    "citizenship": {
+      "@id": "idenfy:citizenship"
+    },
+    "countryOfBirth": {
+      "@id": "idenfy:countryOfBirth"
+    },
+    "residentialAddress": {
+      "@id": "idenfy:residentialAddress",
+      "@type": "xsd:string"
+    },
+    "countryOfResidence": {
+      "@id": "idenfy:countryOfResidence"
+    },
+    "address": {
+      "@id": "idenfy:address",
+      "@type": "xsd:string"
+    },
+    "street": {
+      "@id": "idenfy:street",
+      "@type": "xsd:string"
+    },
+    "tin": {
+      "@id": "idenfy:tin",
+      "@type": "xsd:string"
+    },
+    "taxResidence": {
+      "@id": "idenfy:taxResidence"
+    },
+    "selfDeclaredPep": {
+      "@id": "idenfy:selfDeclaredPep",
+      "@type": "xsd:boolean"
+    },
+    "additionalInfo": {
+      "@id": "idenfy:additionalInfo"
+    },
+    "CompanyApplicantCreate": "idenfy:CompanyApplicantCreate",
+    "registrationNumber": {
+      "@id": "idenfy:registrationNumber",
+      "@type": "xsd:string"
+    },
+    "region": {
+      "@id": "idenfy:region",
+      "@type": "xsd:string"
+    },
+    "website": {
+      "@id": "idenfy:website",
+      "@type": "@id"
+    },
+    "brandNames": {
+      "@id": "idenfy:brandNames",
+      "@container": "@list"
+    },
+    "activityCode": {
+      "@id": "idenfy:activityCode",
+      "@type": "xsd:string"
+    },
+    "operatingAddress": {
+      "@id": "idenfy:operatingAddress",
+      "@type": "xsd:string"
+    },
+    "postalAddress": {
+      "@id": "idenfy:postalAddress",
+      "@type": "xsd:string"
+    },
+    "CheckboxFieldValue": "idenfy:CheckboxFieldValue",
+    "BeneficiaryRequest": "idenfy:BeneficiaryRequest",
+    "AdditionalFieldValue": "idenfy:AdditionalFieldValue",
+    "IndividualApplicantRequest": "idenfy:IndividualApplicantRequest"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "iDenfy API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects iDenfy's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-12) from openapi/idenfy-age-estimation-api-openapi.yml, openapi/idenfy-aml-checks-api-openapi.yml, openapi/idenfy-aml-monitorings-api-openapi.yml.",
+  "dcterms:created": "2026-10-12",
+  "dcterms:source": [
+    "openapi/idenfy-age-estimation-api-openapi.yml",
+    "openapi/idenfy-aml-checks-api-openapi.yml",
+    "openapi/idenfy-aml-monitorings-api-openapi.yml",
+    "openapi/idenfy-bank-api-openapi.yml",
+    "openapi/idenfy-bank-card-verification-api-openapi.yml"
+  ]
+}

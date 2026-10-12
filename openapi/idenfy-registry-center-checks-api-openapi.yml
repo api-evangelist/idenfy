@@ -931,6 +931,41 @@ components:
       required:
       - checkedPersonalNumber
       - database
+    AddressStatusEnum:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    DateOfBirthStatusEnum:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    FirstNameStatus5e4Enum:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    LastNameStatus5e4Enum:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    SoftKycMatchStatusEnum:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    UkAddress:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    UkAddressRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     apiKeyPair:
       type: http

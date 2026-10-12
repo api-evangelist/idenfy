@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-paginated-aml-monitoring-list-list-schema.json",
+  "title": "PaginatedAmlMonitoringListList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-aml-monitorings-api-openapi.yml#/components/schemas/PaginatedAmlMonitoringListList",
+  "type": "object",
+  "required": [
+    "count",
+    "results"
+  ],
+  "properties": {
+    "count": {
+      "type": "integer"
+    },
+    "next": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "previous": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AmlMonitoringList"
+      }
+    }
+  },
+  "$defs": {
+    "AmlMonitoringList": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "status": {
+          "$ref": "#/$defs/MonitoringStatusEnum"
+        },
+        "userType": {
+          "$ref": "#/$defs/UserMonitoringTypeEnum"
+        },
+        "isSubscribed": {
+          "type": "boolean"
+        },
+        "checkedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 32,
+            "pattern": "^[^,]+$"
+          },
+          "default": [],
+          "description": "List of case-sensitive strings. Each tag can not be longer than 32 characters.",
+          "maxItems": 5
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "checkedAt",
+        "created",
+        "id",
+        "name",
+        "userType"
+      ]
+    },
+    "MonitoringStatusEnum": {
+      "enum": [
+        "ACTIVE",
+        "STOPPED",
+        "PENDING",
+        "ALERT"
+      ],
+      "type": "string"
+    },
+    "UserMonitoringTypeEnum": {
+      "enum": [
+        "COMPANY",
+        "PERSON"
+      ],
+      "type": "string"
+    }
+  }
+}

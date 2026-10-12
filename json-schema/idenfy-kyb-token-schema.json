@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-token-schema.json",
+  "title": "KybToken",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-token-api-openapi.yml#/components/schemas/KybToken",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/KybFormToken"
+    }
+  ],
+  "$defs": {
+    "KybFormToken": {
+      "type": "object",
+      "properties": {
+        "tokenType": {
+          "$ref": "#/$defs/KybTokenTypeEnum"
+        },
+        "tokenString": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Token string used for authentication."
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "Date and time when this token will become expired."
+        },
+        "isActive": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "Indicates whether this token is not deactivated.",
+          "deprecated": true
+        },
+        "isValid": {
+          "type": "boolean",
+          "description": "Indicates whether this token is valid.",
+          "readOnly": true
+        },
+        "companyId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "clientId": {
+          "type": "string",
+          "description": "A unique string identifying a client on your side.",
+          "maxLength": 100
+        },
+        "externalRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Any additional value chosen by you.",
+          "maxLength": 40
+        },
+        "locale": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/KybLocaleEnum"
+            }
+          ],
+          "nullable": true,
+          "description": "The default client's language. By default selected by a client's IP address."
+        },
+        "flow": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "KYB flow's `id` to use for this KYB session."
+        },
+        "theme": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "KYB theme's `id` to use for this KYB session."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 32,
+            "pattern": "^[^,]+$"
+          },
+          "default": [],
+          "description": "List of case-sensitive strings. Each tag can not be longer than 32 characters.",
+          "maxItems": 5
+        },
+        "scanRefs": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "pattern": "^[^,]+$",
+            "maxLength": 40
+          }
+        }
+      },
+      "required": [
+        "clientId",
+        "companyId",
+        "expiration",
+        "isActive",
+        "isValid",
+        "tokenString",
+        "tokenType"
+      ]
+    },
+    "KybLocaleEnum": {
+      "enum": [
+        "en",
+        "es",
+        "fr",
+        "ru",
+        "de",
+        "it",
+        "pl",
+        "lt",
+        "lv",
+        "et",
+        "cs",
+        "ro",
+        "hu",
+        "ja",
+        "bg",
+        "nl",
+        "pt"
+      ],
+      "type": "string"
+    },
+    "KybTokenTypeEnum": {
+      "enum": [
+        "FORM",
+        "GOV1",
+        "GOV2"
+      ],
+      "type": "string"
+    }
+  }
+}

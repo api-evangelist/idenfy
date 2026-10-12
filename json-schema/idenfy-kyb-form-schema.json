@@ -1,0 +1,1193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-form-schema.json",
+  "title": "KybForm",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-kyb-forms-api-openapi.yml#/components/schemas/KybForm",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readOnly": true
+    },
+    "company": {
+      "$ref": "#/$defs/CompanyInfo"
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/KybFormDocument"
+      }
+    },
+    "beneficiaries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Beneficiary"
+      }
+    },
+    "clientSystem": {
+      "$ref": "#/$defs/ClientSystem"
+    },
+    "meta": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/KybFormMeta"
+        }
+      ],
+      "readOnly": true
+    }
+  },
+  "required": [
+    "company",
+    "id",
+    "meta"
+  ],
+  "$defs": {
+    "AdditionalFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "readOnly": true
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CustomFieldTypeEnum"
+            }
+          ],
+          "readOnly": true
+        },
+        "value": {
+          "nullable": true
+        }
+      },
+      "required": [
+        "title",
+        "type",
+        "value"
+      ]
+    },
+    "Applicant": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IndividualApplicant"
+        },
+        {
+          "$ref": "#/$defs/CompanyApplicant"
+        }
+      ]
+    },
+    "ApplicantTypeEnum": {
+      "enum": [
+        "INDIVIDUAL",
+        "COMPANY"
+      ],
+      "type": "string"
+    },
+    "ApprovalStatusEnum": {
+      "enum": [
+        "APPROVED",
+        "DENIED"
+      ],
+      "type": "string"
+    },
+    "Beneficiary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": true
+        },
+        "beneficiaryType": {
+          "$ref": "#/$defs/BeneficiaryTypeEnum"
+        },
+        "beneficiaryTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BeneficiaryTypeEnum"
+          },
+          "minItems": 1
+        },
+        "info": {
+          "$ref": "#/$defs/Applicant"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[^,]+$",
+            "maxLength": 50
+          },
+          "default": [],
+          "description": "Positions of the beneficiary. Can be `shareholder`, `director`, or any other position.",
+          "maxItems": 3
+        },
+        "formFiller": {
+          "type": "boolean",
+          "description": "Indicates whether this beneficiary is the filler of the KYB form."
+        },
+        "ownershipPercentage": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "maximum": 100.0,
+          "minimum": 0.0
+        },
+        "parent": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "info",
+        "parent"
+      ]
+    },
+    "BeneficiaryTypeEnum": {
+      "enum": [
+        "CEO",
+        "REPRESENTATIVE",
+        "SHAREHOLDER",
+        "UBO",
+        "ABO"
+      ],
+      "type": "string"
+    },
+    "CheckboxFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "ClientSystem": {
+      "type": "object",
+      "properties": {
+        "ipAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "[ipv4](https://wikipedia.org/wiki/IPv4#Addressing) or [ipv6](https://wikipedia.org/wiki/IPv6_address) address."
+        },
+        "timeZone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Time zone from [TZ database list](https://wikipedia.org/wiki/List_of_tz_database_time_zones#List)."
+        }
+      }
+    },
+    "CompanyApplicant": {
+      "type": "object",
+      "properties": {
+        "infoType": {
+          "$ref": "#/$defs/ApplicantTypeEnum"
+        },
+        "companyName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "registrationNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "country": {
+          "$ref": "#/$defs/CountryEnum"
+        },
+        "region": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.",
+          "maxLength": 128
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "maxLength": 200
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "description": "Email address.",
+          "maxLength": 254
+        },
+        "brandNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "default": [],
+          "maxItems": 10
+        },
+        "activityCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 8
+        },
+        "tin": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Taxpayer identification number.",
+          "maxLength": 32
+        },
+        "operatingAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "postalAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Registration address.",
+          "maxLength": 255
+        },
+        "postcode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "street": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "additionalInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/CustomFieldValue"
+          }
+        }
+      },
+      "required": [
+        "companyName",
+        "country",
+        "infoType"
+      ]
+    },
+    "CompanyInfo": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "registrationNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "country": {
+          "$ref": "#/$defs/CountryEnum"
+        },
+        "region": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.",
+          "maxLength": 128
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "maxLength": 200
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "description": "Email address.",
+          "maxLength": 254
+        },
+        "brandNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "default": [],
+          "maxItems": 10
+        },
+        "activityCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 8
+        },
+        "tin": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Taxpayer identification number.",
+          "maxLength": 32
+        },
+        "operatingAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "postalAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Registration address.",
+          "maxLength": 255
+        },
+        "postcode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "street": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "additionalInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/AdditionalFieldValue"
+          }
+        }
+      },
+      "required": [
+        "companyName",
+        "country"
+      ]
+    },
+    "CountryEnum": {
+      "enum": [
+        "AF",
+        "AX",
+        "AL",
+        "DZ",
+        "AS",
+        "AD",
+        "AO",
+        "AI",
+        "AQ",
+        "AG",
+        "AR",
+        "AM",
+        "AW",
+        "AU",
+        "AT",
+        "AZ",
+        "BS",
+        "BH",
+        "BD",
+        "BB",
+        "BY",
+        "BE",
+        "BZ",
+        "BJ",
+        "BM",
+        "BT",
+        "BO",
+        "BQ",
+        "BA",
+        "BW",
+        "BV",
+        "BR",
+        "IO",
+        "BN",
+        "BG",
+        "BF",
+        "BI",
+        "CV",
+        "KH",
+        "CM",
+        "CA",
+        "KY",
+        "CF",
+        "TD",
+        "CL",
+        "CN",
+        "CX",
+        "CC",
+        "CO",
+        "KM",
+        "CG",
+        "CK",
+        "CR",
+        "CI",
+        "HR",
+        "CU",
+        "CW",
+        "CY",
+        "CZ",
+        "CD",
+        "DK",
+        "DJ",
+        "DM",
+        "DO",
+        "EC",
+        "EG",
+        "SV",
+        "GQ",
+        "ER",
+        "EE",
+        "SZ",
+        "ET",
+        "FK",
+        "FO",
+        "FJ",
+        "FI",
+        "FR",
+        "GF",
+        "PF",
+        "TF",
+        "GA",
+        "GM",
+        "GE",
+        "DE",
+        "GH",
+        "GI",
+        "GR",
+        "GL",
+        "GD",
+        "GP",
+        "GU",
+        "GT",
+        "GG",
+        "GN",
+        "GW",
+        "GY",
+        "HT",
+        "HM",
+        "HN",
+        "HK",
+        "HU",
+        "IS",
+        "IN",
+        "ID",
+        "IR",
+        "IQ",
+        "IE",
+        "IM",
+        "IL",
+        "IT",
+        "JM",
+        "JP",
+        "JE",
+        "JO",
+        "KZ",
+        "KE",
+        "KI",
+        "XK",
+        "KW",
+        "KG",
+        "LA",
+        "LV",
+        "LB",
+        "LS",
+        "LR",
+        "LY",
+        "LI",
+        "LT",
+        "LU",
+        "MO",
+        "MG",
+        "MW",
+        "MY",
+        "MV",
+        "ML",
+        "MT",
+        "MH",
+        "MQ",
+        "MR",
+        "MU",
+        "YT",
+        "MX",
+        "FM",
+        "MD",
+        "MC",
+        "MN",
+        "ME",
+        "MS",
+        "MA",
+        "MZ",
+        "MM",
+        "NA",
+        "NR",
+        "NP",
+        "NL",
+        "NC",
+        "NZ",
+        "NI",
+        "NE",
+        "NG",
+        "NU",
+        "NF",
+        "KP",
+        "MK",
+        "MP",
+        "NO",
+        "OM",
+        "PK",
+        "PW",
+        "PS",
+        "PA",
+        "PG",
+        "PY",
+        "PE",
+        "PH",
+        "PN",
+        "PL",
+        "PT",
+        "PR",
+        "QA",
+        "RE",
+        "RO",
+        "RU",
+        "RW",
+        "BL",
+        "SH",
+        "KN",
+        "LC",
+        "MF",
+        "PM",
+        "VC",
+        "WS",
+        "SM",
+        "ST",
+        "SA",
+        "SN",
+        "RS",
+        "SC",
+        "SL",
+        "SG",
+        "SX",
+        "SK",
+        "SI",
+        "SB",
+        "SO",
+        "ZA",
+        "GS",
+        "KR",
+        "SS",
+        "ES",
+        "LK",
+        "SD",
+        "SR",
+        "SJ",
+        "SE",
+        "CH",
+        "SY",
+        "TW",
+        "TJ",
+        "TZ",
+        "TH",
+        "TL",
+        "TG",
+        "TK",
+        "TO",
+        "TT",
+        "TN",
+        "TR",
+        "TM",
+        "TC",
+        "TV",
+        "UG",
+        "UA",
+        "AE",
+        "GB",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VU",
+        "VA",
+        "VE",
+        "VN",
+        "VG",
+        "VI",
+        "WF",
+        "EH",
+        "YE",
+        "ZM",
+        "ZW"
+      ],
+      "type": "string"
+    },
+    "CountryFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "CountryMultiFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/CountryEnum"
+          }
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "CustomFieldTypeEnum": {
+      "enum": [
+        "CHECKBOX",
+        "COUNTRY",
+        "COUNTRY_MULTI",
+        "DATE",
+        "INTEGER",
+        "SELECT",
+        "SELECT_MULTI",
+        "TEXT"
+      ],
+      "type": "string"
+    },
+    "CustomFieldValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CheckboxFieldValue"
+        },
+        {
+          "$ref": "#/$defs/CountryFieldValue"
+        },
+        {
+          "$ref": "#/$defs/CountryMultiFieldValue"
+        },
+        {
+          "$ref": "#/$defs/DateFieldValue"
+        },
+        {
+          "$ref": "#/$defs/IntegerFieldValue"
+        },
+        {
+          "$ref": "#/$defs/SelectFieldValue"
+        },
+        {
+          "$ref": "#/$defs/SelectMultiFieldValue"
+        },
+        {
+          "$ref": "#/$defs/TextFieldValue"
+        }
+      ]
+    },
+    "DateFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "IndividualApplicant": {
+      "type": "object",
+      "properties": {
+        "infoType": {
+          "$ref": "#/$defs/ApplicantTypeEnum"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "surname": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "description": "Email address.",
+          "maxLength": 254
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Phone number in [E.164](https://wikipedia.org/wiki/E.164) format.",
+          "maxLength": 128
+        },
+        "dateOfBirth": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "country": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true,
+          "description": "ID issuing country."
+        },
+        "nationality": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        },
+        "documentNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[\\u0000-\\u007F]+$",
+          "maxLength": 50
+        },
+        "personalNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[\\u0000-\\u007F]+$",
+          "maxLength": 50
+        },
+        "citizenship": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        },
+        "countryOfBirth": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        },
+        "residentialAddress": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "countryOfResidence": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        },
+        "postcode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "address": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "street": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "tin": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "taxResidence": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        },
+        "selfDeclaredPep": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "additionalInfo": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/CustomFieldValue"
+          }
+        }
+      },
+      "required": [
+        "infoType",
+        "name",
+        "surname"
+      ]
+    },
+    "IntegerFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "KybDocumentTypeEnum": {
+      "enum": [
+        "INCORPORATION_CERT",
+        "DIRECTOR_CERT",
+        "SHAREHOLDER_CERT",
+        "UBO_CERT",
+        "INCORPORATION_ARTICLES",
+        "SHAREHOLDER_REGISTRY",
+        "DIRECTORS_REGISTRY",
+        "STATE_REGISTRY",
+        "UBO_REGISTRY",
+        "OWNERSHIP_STRUCTURE",
+        "INCUMBENCY_CERT",
+        "TRUST_AGREEMENT",
+        "INFORMATION_STATEMENT",
+        "GOOD_STANDING_CERT",
+        "PROOF_OF_DOMAIN",
+        "PROOF_OF_ADDRESS",
+        "SOURCE_OF_FUNDS",
+        "BANK_STATEMENT",
+        "INVOICE",
+        "ONLINE_PRESENCE",
+        "DIRECTOR_ONLINE_PRESENCE",
+        "SHAREHOLDER_ONLINE_PRESENCE",
+        "WEBSITE_OVERVIEW",
+        "E_SIGNATURE_CERT",
+        "ANNUAL_REPORT",
+        "NAME_CHANGE_PROOF",
+        "TRADING_STATUS_PROOF",
+        "ORG_CHART",
+        "COMPANY_ADVERSE_MEDIA",
+        "INDIVIDUAL_ADVERSE_MEDIA",
+        "EMAIL_CHECK",
+        "SOURCE_OF_WEALTH",
+        "OTHER"
+      ],
+      "type": "string"
+    },
+    "KybFormDocument": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": true
+        },
+        "type": {
+          "$ref": "#/$defs/KybDocumentTypeEnum"
+        },
+        "filename": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "file": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true,
+          "description": "Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `gif`, `webp`, `heic`, `heif`, `pdf` files."
+        }
+      },
+      "required": [
+        "file",
+        "id",
+        "type"
+      ]
+    },
+    "KybFormMeta": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/KybStatusEnum"
+        },
+        "approvalStatus": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ApprovalStatusEnum"
+            }
+          ],
+          "nullable": true,
+          "description": "Review approval status."
+        },
+        "submissionTime": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Date and time when KYB form submit endpoint was called."
+        },
+        "soleProprietor": {
+          "type": "boolean"
+        }
+      }
+    },
+    "KybStatusEnum": {
+      "enum": [
+        "PENDING",
+        "PROCESSING",
+        "NEED_TO_PROCESS",
+        "NEED_TO_REVIEW",
+        "COMPLETED"
+      ],
+      "type": "string"
+    },
+    "SelectFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[\\w_*-]+$",
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "SelectMultiFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "pattern": "^[\\w_*-]+$",
+            "maxLength": 32
+          }
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    },
+    "TextFieldValue": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CustomFieldTypeEnum"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "title",
+        "type"
+      ]
+    }
+  }
+}

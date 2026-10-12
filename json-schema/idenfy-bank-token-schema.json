@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-bank-token-schema.json",
+  "title": "BankToken",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-bank-api-openapi.yml#/components/schemas/BankToken",
+  "type": "object",
+  "properties": {
+    "tokenString": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Token string used for authentication."
+    },
+    "expiration": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true,
+      "description": "Date and time when this token will become expired."
+    },
+    "isValid": {
+      "type": "boolean",
+      "description": "Indicates whether this token is valid.",
+      "readOnly": true
+    },
+    "country": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BankTokenCountryEnum"
+        }
+      ],
+      "nullable": true
+    },
+    "bank": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 32
+    },
+    "access": {
+      "$ref": "#/$defs/BankAccess"
+    }
+  },
+  "required": [
+    "expiration",
+    "isValid",
+    "tokenString"
+  ],
+  "$defs": {
+    "BankAccess": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "boolean",
+          "default": false
+        },
+        "balances": {
+          "type": "boolean",
+          "default": false
+        },
+        "transactions": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "BankTokenCountryEnum": {
+      "enum": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CY",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IS",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "NO",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "SE"
+      ],
+      "type": "string"
+    }
+  }
+}

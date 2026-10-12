@@ -1,21 +1,18 @@
-generated: '2026-09-13'
+generated: '2026-10-12'
 method: searched
-source: >-
-  Documentation tree walked live via the iDenfy MCP server (tree / -L 2 against
-  https://documentation.idenfy.com/mcp) plus the three migration guides it lists.
+source: Documentation tree walked live via the iDenfy MCP server (tree / -L 2 against https://documentation.idenfy.com/mcp)
+  plus the three migration guides it lists.
 provider: iDenfy
 providerId: idenfy
 scheme: migration-guides
-dated_changelog_published: false
-detail: >-
-  iDenfy publishes no dated API changelog. The whole documentation tree — 84 pages across 42
-  directories — contains no changelog, release-notes or "what's new" page. What exists instead are
-  three migration guides, each describing one version transition without dates: an AML v2 -> v3
-  guide and per-platform SDK migration guides for Android and iOS. The Android quickstart even
-  points at the SDK migration guide as "the changelog", which is the clearest statement that no
-  separate one exists. Dated release history is therefore only recoverable from the GitHub tags of
-  the SDK repositories (see packages/idenfy-packages.yml), not from anything iDenfy publishes as a
-  changelog.
+dated_changelog_published: true
+detail: 'iDenfy publishes no dated API changelog. The whole documentation tree — 84 pages across 42 directories
+  — contains no changelog, release-notes or "what''s new" page. What exists instead are three migration guides,
+  each describing one version transition without dates: an AML v2 -> v3 guide and per-platform SDK migration guides
+  for Android and iOS. The Android quickstart even points at the SDK migration guide as "the changelog", which is
+  the clearest statement that no separate one exists. Dated release history is therefore only recoverable from the
+  GitHub tags of the SDK repositories (see packages/idenfy-packages.yml), not from anything iDenfy publishes as
+  a changelog.'
 sources:
 - url: https://documentation.idenfy.com/aml/migration-guide
   kind: api-migration-guide
@@ -26,7 +23,7 @@ sources:
   - New screening engine behind AML Monitoring v3.
   - Request body becomes nested — amlCheck.input (who to screen) and amlCheck.filter (what to screen for).
   - 'Person fields: name + surname collapse into amlCheck.input.fullName; type becomes userType.'
-  - 'New status field with new values (ACTIVE/ALERT/STOPPED/PENDING); legacy alertStatus retained alongside it.'
+  - New status field with new values (ACTIVE/ALERT/STOPPED/PENDING); legacy alertStatus retained alongside it.
   - v2 integrations keep working through a compatibility mapping layer with no announced shutdown date.
 - url: https://documentation.idenfy.com/sdks/android/migration-guide
   kind: sdk-migration-guide
@@ -36,7 +33,73 @@ sources:
   kind: sdk-migration-guide
   scope: iOS SDK, version-to-version upgrade notes and breaking changes
   http_status: 200
-entries: []
-entries_note: >-
-  Deliberately empty. No dated entries exist to record, and inventing dates from git tags would
-  misrepresent a migration guide as a changelog.
+- https://idenfy.com/changelog/
+entries:
+- version: null
+  date: '2026-09-18'
+  breaking: false
+  highlights:
+  - Website-Based Theme Personalization
+- version: null
+  date: '2026-06-23'
+  breaking: false
+  highlights:
+  - Flexible Tax Identification Fields in KYB Workflows
+- version: null
+  date: '2026-06-23'
+  breaking: false
+  highlights:
+  - PDF Export for Risk Assessment Reports
+- version: null
+  date: '2026-06-04'
+  breaking: false
+  highlights:
+  - Flexible KYB Re-verification Scheduling
+- version: null
+  date: '2026-06-04'
+  breaking: false
+  highlights:
+  - Configurable Representative Requirements in KYB
+- version: null
+  date: '2026-06-04'
+  breaking: false
+  highlights:
+  - KYC Branding Themes
+- version: null
+  date: '2026-06-04'
+  breaking: false
+  highlights:
+  - Arabic Language Support for Identity Verification
+- version: null
+  date: '2026-05-12'
+  breaking: false
+  highlights:
+  - 'AI Reviewer: Skip Checks for Missing or Placeholder Data'
+- version: null
+  date: '2026-05-12'
+  breaking: false
+  highlights:
+  - More Flexible PDF Export Options in IDV Review
+- version: null
+  date: '2026-05-12'
+  breaking: false
+  highlights:
+  - Expand IDV with New eID Methods
+- version: null
+  date: '2026-04-13'
+  breaking: false
+  highlights:
+  - IDV Now Available in Traditional Chinese and Korean
+- version: null
+  date: '2026-04-13'
+  breaking: false
+  highlights:
+  - 'NEW: Dynamic KYB Workflows & Automated Routing'
+- version: null
+  date: '2026-03-23'
+  breaking: false
+  highlights:
+  - 'IDV: Expanded Digital ID Support'
+entries_note: Recent window read from the dated product changelog at https://idenfy.com/changelog/ (2026-10-12,
+  page 1 of 12). Entries are unversioned, product/dashboard-level; none is marked breaking.
+changelog_url: https://idenfy.com/changelog/

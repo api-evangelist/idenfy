@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-kyb-pdf-request-schema.json",
+  "title": "KybPdfRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-companies-api-openapi.yml#/components/schemas/KybPdfRequest",
+  "type": "object",
+  "properties": {
+    "password": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CompanyPdfContentEnum"
+      },
+      "default": [
+        "SUBMITTED_COMPANY_INFO",
+        "COMPANY_META",
+        "RELATED_SUBJECTS",
+        "OWNERSHIP_STRUCTURE",
+        "QUESTIONNAIRE_ANSWERS",
+        "COMPANY_NAME_AUDIT",
+        "BANK_VERIFICATION",
+        "WEBSITE_AUDIT",
+        "ADDRESS_AUDIT",
+        "GOV_CHECKS",
+        "KYB_DATA_MATCHING",
+        "KYB_DOCUMENTS",
+        "AUDIT_LOGS",
+        "VAT_VERIFICATION",
+        "TAGS",
+        "SHAREHOLDERS_CHECK",
+        "AML_MONITORING_USERS",
+        "LINKED_COMPANIES",
+        "COMMENTS",
+        "COMPANY_AML_CHECK",
+        "COMPANY_ADVERSE_MEDIA_CHECK",
+        "BENEFICIARY_AML_CHECKS",
+        "BENEFICIARY_ADVERSE_MEDIA_CHECKS"
+      ]
+    }
+  },
+  "$defs": {
+    "CompanyPdfContentEnum": {
+      "enum": [
+        "SUBMITTED_COMPANY_INFO",
+        "COMPANY_META",
+        "RELATED_SUBJECTS",
+        "OWNERSHIP_STRUCTURE",
+        "QUESTIONNAIRE_ANSWERS",
+        "COMPANY_NAME_AUDIT",
+        "BANK_VERIFICATION",
+        "WEBSITE_AUDIT",
+        "ADDRESS_AUDIT",
+        "GOV_CHECKS",
+        "KYB_DATA_MATCHING",
+        "KYB_DOCUMENTS",
+        "AUDIT_LOGS",
+        "VAT_VERIFICATION",
+        "TAGS",
+        "SHAREHOLDERS_CHECK",
+        "AML_MONITORING_USERS",
+        "LINKED_COMPANIES",
+        "COMMENTS",
+        "COMPANY_AML_CHECK",
+        "COMPANY_ADVERSE_MEDIA_CHECK",
+        "BENEFICIARY_AML_CHECKS",
+        "BENEFICIARY_ADVERSE_MEDIA_CHECKS"
+      ],
+      "type": "string"
+    }
+  }
+}

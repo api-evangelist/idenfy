@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-sos-report-document-schema.json",
+  "title": "SosReportDocument",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-sos-reports-api-openapi.yml#/components/schemas/SosReportDocument",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readOnly": true
+    },
+    "checkedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "status": {
+      "$ref": "#/$defs/GovDocumentOrderStatusEnum"
+    },
+    "dataFile": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "pattern": "(?:json)$"
+    },
+    "reportFile": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "pattern": "(?:pdf)$"
+    },
+    "companyName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "formationDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "entityType": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SosEntityTypeEnum"
+        }
+      ],
+      "nullable": true
+    },
+    "watchlistHitsCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "$defs": {
+    "GovDocumentOrderStatusEnum": {
+      "enum": [
+        "NOT_ORDERED",
+        "IN_PROGRESS",
+        "FINISHED",
+        "FAILED",
+        "TIMED_OUT"
+      ],
+      "type": "string"
+    },
+    "SosEntityTypeEnum": {
+      "enum": [
+        "CORPORATION",
+        "LLC",
+        "PARTNERSHIP",
+        "NON_PROFIT",
+        "TRUST",
+        "SOLE_PROPRIETORSHIP"
+      ],
+      "type": "string"
+    }
+  }
+}

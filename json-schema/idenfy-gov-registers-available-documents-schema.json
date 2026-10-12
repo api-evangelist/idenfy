@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-gov-registers-available-documents-schema.json",
+  "title": "GovRegistersAvailableDocuments",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-gov-orders-api-openapi.yml#/components/schemas/GovRegistersAvailableDocuments",
+  "type": "object",
+  "properties": {
+    "products": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GovRegistersFilingResult"
+      }
+    }
+  },
+  "required": [
+    "products"
+  ],
+  "$defs": {
+    "GovDocumentOrderStatusEnum": {
+      "enum": [
+        "NOT_ORDERED",
+        "IN_PROGRESS",
+        "FINISHED",
+        "FAILED",
+        "TIMED_OUT"
+      ],
+      "type": "string"
+    },
+    "GovRegistersFilingResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "price": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "productFormat": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "productTitle": {
+          "type": "string"
+        },
+        "deliveryTimeMinutes": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "displayDate": {
+          "type": "string"
+        },
+        "priceTag": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "countryISO": {
+          "type": "string"
+        },
+        "noVatPrice": {
+          "type": "string"
+        },
+        "vatCharge": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "companyCode": {
+          "type": "string"
+        },
+        "productDetails": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "downloadURL": {
+          "type": "string"
+        },
+        "propertyChanged": {
+          "type": "string"
+        },
+        "tierCode": {
+          "type": "string"
+        },
+        "tierValue": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/GovDocumentOrderStatusEnum"
+        },
+        "canOrder": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "file": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "canOrder",
+        "id",
+        "price",
+        "productFormat"
+      ]
+    }
+  }
+}

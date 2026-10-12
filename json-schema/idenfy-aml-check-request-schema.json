@@ -1,0 +1,530 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-aml-check-request-schema.json",
+  "title": "AmlCheckRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-aml-checks-api-openapi.yml#/components/schemas/AmlCheckRequest",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/PersonAmlCheckRequest"
+    },
+    {
+      "$ref": "#/$defs/CompanyAmlCheckRequest"
+    }
+  ],
+  "$defs": {
+    "CompanyAmlCheckFilterDatasetsEnum": {
+      "enum": [
+        "PEP_LINKED",
+        "SAN_CURRENT",
+        "SAN_FORMER",
+        "INS",
+        "RRE",
+        "POI",
+        "REL",
+        "SOE_CURRENT",
+        "SOE_FORMER"
+      ],
+      "type": "string"
+    },
+    "CompanyAmlCheckFilterRequest": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 100,
+          "minimum": 75,
+          "default": 85
+        },
+        "datasets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CompanyAmlCheckFilterDatasetsEnum"
+          },
+          "description": "Required. Specifies which screening datasets to include in the check."
+        },
+        "sanctionBodies": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer",
+            "maximum": 80,
+            "minimum": 1
+          },
+          "description": "When searching `SAN` dataset, specify the values of sanctioning bodies that should be included when screening `SAN` dataset. The full list of supported sanction bodies and their values are provided by the API info endpoint. If none sanction bodies are provided the system will search sanctions issued by any sanctioning body."
+        }
+      }
+    },
+    "CompanyAmlCheckInputRequest": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "country": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        }
+      },
+      "required": [
+        "companyName"
+      ]
+    },
+    "CompanyAmlCheckRequest": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A unique string identifying a client on your side.",
+          "maxLength": 100
+        },
+        "userType": {
+          "$ref": "#/$defs/UserMonitoringTypeEnum"
+        },
+        "input": {
+          "$ref": "#/$defs/CompanyAmlCheckInputRequest"
+        },
+        "filter": {
+          "$ref": "#/$defs/CompanyAmlCheckFilterRequest"
+        }
+      },
+      "required": [
+        "clientId",
+        "filter",
+        "input",
+        "userType"
+      ]
+    },
+    "CountryEnum": {
+      "enum": [
+        "AF",
+        "AX",
+        "AL",
+        "DZ",
+        "AS",
+        "AD",
+        "AO",
+        "AI",
+        "AQ",
+        "AG",
+        "AR",
+        "AM",
+        "AW",
+        "AU",
+        "AT",
+        "AZ",
+        "BS",
+        "BH",
+        "BD",
+        "BB",
+        "BY",
+        "BE",
+        "BZ",
+        "BJ",
+        "BM",
+        "BT",
+        "BO",
+        "BQ",
+        "BA",
+        "BW",
+        "BV",
+        "BR",
+        "IO",
+        "BN",
+        "BG",
+        "BF",
+        "BI",
+        "CV",
+        "KH",
+        "CM",
+        "CA",
+        "KY",
+        "CF",
+        "TD",
+        "CL",
+        "CN",
+        "CX",
+        "CC",
+        "CO",
+        "KM",
+        "CG",
+        "CK",
+        "CR",
+        "CI",
+        "HR",
+        "CU",
+        "CW",
+        "CY",
+        "CZ",
+        "CD",
+        "DK",
+        "DJ",
+        "DM",
+        "DO",
+        "EC",
+        "EG",
+        "SV",
+        "GQ",
+        "ER",
+        "EE",
+        "SZ",
+        "ET",
+        "FK",
+        "FO",
+        "FJ",
+        "FI",
+        "FR",
+        "GF",
+        "PF",
+        "TF",
+        "GA",
+        "GM",
+        "GE",
+        "DE",
+        "GH",
+        "GI",
+        "GR",
+        "GL",
+        "GD",
+        "GP",
+        "GU",
+        "GT",
+        "GG",
+        "GN",
+        "GW",
+        "GY",
+        "HT",
+        "HM",
+        "HN",
+        "HK",
+        "HU",
+        "IS",
+        "IN",
+        "ID",
+        "IR",
+        "IQ",
+        "IE",
+        "IM",
+        "IL",
+        "IT",
+        "JM",
+        "JP",
+        "JE",
+        "JO",
+        "KZ",
+        "KE",
+        "KI",
+        "XK",
+        "KW",
+        "KG",
+        "LA",
+        "LV",
+        "LB",
+        "LS",
+        "LR",
+        "LY",
+        "LI",
+        "LT",
+        "LU",
+        "MO",
+        "MG",
+        "MW",
+        "MY",
+        "MV",
+        "ML",
+        "MT",
+        "MH",
+        "MQ",
+        "MR",
+        "MU",
+        "YT",
+        "MX",
+        "FM",
+        "MD",
+        "MC",
+        "MN",
+        "ME",
+        "MS",
+        "MA",
+        "MZ",
+        "MM",
+        "NA",
+        "NR",
+        "NP",
+        "NL",
+        "NC",
+        "NZ",
+        "NI",
+        "NE",
+        "NG",
+        "NU",
+        "NF",
+        "KP",
+        "MK",
+        "MP",
+        "NO",
+        "OM",
+        "PK",
+        "PW",
+        "PS",
+        "PA",
+        "PG",
+        "PY",
+        "PE",
+        "PH",
+        "PN",
+        "PL",
+        "PT",
+        "PR",
+        "QA",
+        "RE",
+        "RO",
+        "RU",
+        "RW",
+        "BL",
+        "SH",
+        "KN",
+        "LC",
+        "MF",
+        "PM",
+        "VC",
+        "WS",
+        "SM",
+        "ST",
+        "SA",
+        "SN",
+        "RS",
+        "SC",
+        "SL",
+        "SG",
+        "SX",
+        "SK",
+        "SI",
+        "SB",
+        "SO",
+        "ZA",
+        "GS",
+        "KR",
+        "SS",
+        "ES",
+        "LK",
+        "SD",
+        "SR",
+        "SJ",
+        "SE",
+        "CH",
+        "SY",
+        "TW",
+        "TJ",
+        "TZ",
+        "TH",
+        "TL",
+        "TG",
+        "TK",
+        "TO",
+        "TT",
+        "TN",
+        "TR",
+        "TM",
+        "TC",
+        "TV",
+        "UG",
+        "UA",
+        "AE",
+        "GB",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VU",
+        "VA",
+        "VE",
+        "VN",
+        "VG",
+        "VI",
+        "WF",
+        "EH",
+        "YE",
+        "ZM",
+        "ZW"
+      ],
+      "type": "string"
+    },
+    "DateOfBirthMatchingEnum": {
+      "enum": [
+        "EXACT",
+        "SAME_YEAR",
+        "WITHIN_ONE_YEAR",
+        "WITHIN_TWO_YEARS",
+        "WITHIN_THREE_YEARS",
+        "WITHIN_FOUR_YEARS",
+        "WITHIN_FIVE_YEARS"
+      ],
+      "type": "string"
+    },
+    "MainSexEnum": {
+      "enum": [
+        "MALE",
+        "FEMALE"
+      ],
+      "type": "string"
+    },
+    "PepTierEnum": {
+      "enum": [
+        "PEP_TIER_1",
+        "PEP_TIER_2",
+        "PEP_TIER_3"
+      ],
+      "type": "string"
+    },
+    "PersonAmlCheckFilterDatasetsEnum": {
+      "enum": [
+        "PEP_CURRENT",
+        "PEP_FORMER",
+        "PEP_LINKED",
+        "SAN_CURRENT",
+        "SAN_FORMER",
+        "INS",
+        "RRE",
+        "DD",
+        "POI",
+        "REL"
+      ],
+      "type": "string"
+    },
+    "PersonAmlCheckFilterRequest": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 100,
+          "minimum": 75,
+          "default": 85
+        },
+        "datasets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersonAmlCheckFilterDatasetsEnum"
+          },
+          "description": "Required. Specifies which screening datasets to include in the check."
+        },
+        "sanctionBodies": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer",
+            "maximum": 80,
+            "minimum": 1
+          },
+          "description": "When searching `SAN` dataset, specify the values of sanctioning bodies that should be included when screening `SAN` dataset. The full list of supported sanction bodies and their values are provided by the API info endpoint. If none sanction bodies are provided the system will search sanctions issued by any sanctioning body."
+        },
+        "dateOfBirthMatching": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DateOfBirthMatchingEnum"
+            }
+          ],
+          "nullable": true,
+          "default": "EXACT"
+        },
+        "pepTiers": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/PepTierEnum"
+          }
+        }
+      }
+    },
+    "PersonAmlCheckInputRequest": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "nationality": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CountryEnum"
+            }
+          ],
+          "nullable": true
+        },
+        "dateOfBirth": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "sex": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/MainSexEnum"
+            }
+          ],
+          "nullable": true
+        }
+      },
+      "required": [
+        "fullName"
+      ]
+    },
+    "PersonAmlCheckRequest": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A unique string identifying a client on your side.",
+          "maxLength": 100
+        },
+        "userType": {
+          "$ref": "#/$defs/UserMonitoringTypeEnum"
+        },
+        "input": {
+          "$ref": "#/$defs/PersonAmlCheckInputRequest"
+        },
+        "filter": {
+          "$ref": "#/$defs/PersonAmlCheckFilterRequest"
+        }
+      },
+      "required": [
+        "clientId",
+        "filter",
+        "input",
+        "userType"
+      ]
+    },
+    "UserMonitoringTypeEnum": {
+      "enum": [
+        "COMPANY",
+        "PERSON"
+      ],
+      "type": "string"
+    }
+  }
+}

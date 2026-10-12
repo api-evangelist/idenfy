@@ -1,0 +1,134 @@
+generated: '2026-10-12'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 10
+  own: 6
+  other_domain: 1
+  platform: 3
+  roles:
+  - collections
+  - identity
+  - other
+  - portal
+  - source
+  - status
+  - support
+  - website
+hosts:
+- host: admin.idenfy.com
+  found_by:
+  - pointer
+  - vendor-detect
+  types:
+  - Login
+  serves:
+  - cdn
+  vendor: cloudfront
+  registrable_domain: idenfy.com
+  role: identity
+  relation: own
+- host: documentation.idenfy.com
+  found_by:
+  - pointer
+  - apis[]
+  - vendor-detect
+  types:
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  - GettingStarted
+  serves:
+  - docs
+  - api
+  - hosting
+  vendor: vercel
+  registrable_domain: idenfy.com
+  role: portal
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: idenfy-ivs.atlassian.net
+  found_by:
+  - pointer
+  types:
+  - Support
+  serves: []
+  registrable_domain: atlassian.net
+  role: support
+  relation: other-domain
+- host: idenfy.com
+  found_by:
+  - pointer
+  types:
+  - Security
+  - LlmsText
+  - Pricing
+  - SignUp
+  - Blog
+  - Integrations
+  - PrivacyPolicy
+  serves: []
+  registrable_domain: idenfy.com
+  role: identity
+  relation: own
+- host: ivs.idenfy.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: idenfy.com
+  role: other
+  relation: own
+- host: status.idenfy.com
+  found_by:
+  - pointer
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: idenfy.com
+  role: status
+  relation: own
+- host: www.idenfy.com
+  found_by:
+  - pointer
+  - vendor-detect
+  types:
+  - Website
+  - HelpCenter
+  serves:
+  - cdn
+  vendor: cloudflare
+  registrable_domain: idenfy.com
+  role: website
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform
+- host: www.postman.com
+  found_by:
+  - pointer
+  - vendor-detect
+  types:
+  - Postman
+  serves:
+  - api-collections
+  vendor: postman
+  registrable_domain: postman.com
+  role: collections
+  relation: platform

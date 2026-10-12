@@ -1,0 +1,435 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/idenfy/main/json-schema/idenfy-poa-check-detail-schema.json",
+  "title": "PoaCheckDetail",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/idenfy-poa-api-openapi.yml#/components/schemas/PoaCheckDetail",
+  "type": "object",
+  "properties": {
+    "file": {
+      "type": "string",
+      "format": "uri",
+      "description": "Base64 encoded document file. Can be: `jpeg`, `jpg`, `png`, `webp`, `heic`, `heif`, `pdf` files."
+    },
+    "providedName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255
+    },
+    "providedAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "issueDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "readOnly": true
+    },
+    "documentType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "country": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CountryEnum"
+        }
+      ],
+      "readOnly": true,
+      "nullable": true
+    },
+    "hasLogo": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "isScreenshot": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "nameMatch": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "addressMatch": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "dateValid": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "overallStatus": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/PoaCheckStatusEnum"
+        }
+      ],
+      "readOnly": true
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "address": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "orgName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "orgAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "documentTypeSupported": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "countrySupported": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "readOnly": true
+    }
+  },
+  "required": [
+    "address",
+    "addressMatch",
+    "country",
+    "countrySupported",
+    "created",
+    "dateValid",
+    "documentType",
+    "documentTypeSupported",
+    "file",
+    "hasLogo",
+    "id",
+    "isScreenshot",
+    "issueDate",
+    "name",
+    "nameMatch",
+    "orgAddress",
+    "orgName",
+    "overallStatus"
+  ],
+  "$defs": {
+    "CountryEnum": {
+      "enum": [
+        "AF",
+        "AX",
+        "AL",
+        "DZ",
+        "AS",
+        "AD",
+        "AO",
+        "AI",
+        "AQ",
+        "AG",
+        "AR",
+        "AM",
+        "AW",
+        "AU",
+        "AT",
+        "AZ",
+        "BS",
+        "BH",
+        "BD",
+        "BB",
+        "BY",
+        "BE",
+        "BZ",
+        "BJ",
+        "BM",
+        "BT",
+        "BO",
+        "BQ",
+        "BA",
+        "BW",
+        "BV",
+        "BR",
+        "IO",
+        "BN",
+        "BG",
+        "BF",
+        "BI",
+        "CV",
+        "KH",
+        "CM",
+        "CA",
+        "KY",
+        "CF",
+        "TD",
+        "CL",
+        "CN",
+        "CX",
+        "CC",
+        "CO",
+        "KM",
+        "CG",
+        "CK",
+        "CR",
+        "CI",
+        "HR",
+        "CU",
+        "CW",
+        "CY",
+        "CZ",
+        "CD",
+        "DK",
+        "DJ",
+        "DM",
+        "DO",
+        "EC",
+        "EG",
+        "SV",
+        "GQ",
+        "ER",
+        "EE",
+        "SZ",
+        "ET",
+        "FK",
+        "FO",
+        "FJ",
+        "FI",
+        "FR",
+        "GF",
+        "PF",
+        "TF",
+        "GA",
+        "GM",
+        "GE",
+        "DE",
+        "GH",
+        "GI",
+        "GR",
+        "GL",
+        "GD",
+        "GP",
+        "GU",
+        "GT",
+        "GG",
+        "GN",
+        "GW",
+        "GY",
+        "HT",
+        "HM",
+        "HN",
+        "HK",
+        "HU",
+        "IS",
+        "IN",
+        "ID",
+        "IR",
+        "IQ",
+        "IE",
+        "IM",
+        "IL",
+        "IT",
+        "JM",
+        "JP",
+        "JE",
+        "JO",
+        "KZ",
+        "KE",
+        "KI",
+        "XK",
+        "KW",
+        "KG",
+        "LA",
+        "LV",
+        "LB",
+        "LS",
+        "LR",
+        "LY",
+        "LI",
+        "LT",
+        "LU",
+        "MO",
+        "MG",
+        "MW",
+        "MY",
+        "MV",
+        "ML",
+        "MT",
+        "MH",
+        "MQ",
+        "MR",
+        "MU",
+        "YT",
+        "MX",
+        "FM",
+        "MD",
+        "MC",
+        "MN",
+        "ME",
+        "MS",
+        "MA",
+        "MZ",
+        "MM",
+        "NA",
+        "NR",
+        "NP",
+        "NL",
+        "NC",
+        "NZ",
+        "NI",
+        "NE",
+        "NG",
+        "NU",
+        "NF",
+        "KP",
+        "MK",
+        "MP",
+        "NO",
+        "OM",
+        "PK",
+        "PW",
+        "PS",
+        "PA",
+        "PG",
+        "PY",
+        "PE",
+        "PH",
+        "PN",
+        "PL",
+        "PT",
+        "PR",
+        "QA",
+        "RE",
+        "RO",
+        "RU",
+        "RW",
+        "BL",
+        "SH",
+        "KN",
+        "LC",
+        "MF",
+        "PM",
+        "VC",
+        "WS",
+        "SM",
+        "ST",
+        "SA",
+        "SN",
+        "RS",
+        "SC",
+        "SL",
+        "SG",
+        "SX",
+        "SK",
+        "SI",
+        "SB",
+        "SO",
+        "ZA",
+        "GS",
+        "KR",
+        "SS",
+        "ES",
+        "LK",
+        "SD",
+        "SR",
+        "SJ",
+        "SE",
+        "CH",
+        "SY",
+        "TW",
+        "TJ",
+        "TZ",
+        "TH",
+        "TL",
+        "TG",
+        "TK",
+        "TO",
+        "TT",
+        "TN",
+        "TR",
+        "TM",
+        "TC",
+        "TV",
+        "UG",
+        "UA",
+        "AE",
+        "GB",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VU",
+        "VA",
+        "VE",
+        "VN",
+        "VG",
+        "VI",
+        "WF",
+        "EH",
+        "YE",
+        "ZM",
+        "ZW"
+      ],
+      "type": "string"
+    },
+    "PoaCheckStatusEnum": {
+      "enum": [
+        "MATCH",
+        "NO_MATCH",
+        "NOT_COMPARED"
+      ],
+      "type": "string"
+    }
+  }
+}

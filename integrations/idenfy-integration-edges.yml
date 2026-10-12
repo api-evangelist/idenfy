@@ -1,0 +1,127 @@
+generated: '2026-10-12'
+method: searched
+source:
+- https://zapier.com/apps/idenfy/integrations
+- https://n8n.io/integrations/idenfy/
+- https://composio.dev/toolkits/idenfy
+- https://monid.ai/tools/idenfy
+checked:
+- https://composio.dev/toolkits/idenfy
+- https://monid.ai/tools/idenfy
+- https://n8n.io/integrations/idenfy/
+- https://www.idenfy.com/integrations/
+- https://zapier.com/apps/idenfy/integrations
+summary: 'iDenfy integrations page names 9 native integrations, all built by iDenfy: Shopify, WordPress, Bubble
+  and viaSocket marketplace listings; Zapier, WooCommerce and Magento extensions; Flutter and React Native SDK wrappers.
+  Zapier/n8n app sweeps found no listing under the idenfy key.'
+marketplace_apps: []
+edges:
+- partner_name: Shopify
+  partner: shopify
+  type: marketplace
+  evidence: https://apps.shopify.com/idenfy-id-verification
+  marketplace: Shopify App Store
+  direction: provider-built
+  category: e-commerce
+  operations: []
+  use_case: null
+  partner_url: https://www.shopify.com
+  partner_match: name-exact
+  relationship: platform-app
+- partner_name: WordPress
+  partner: wordpress
+  type: marketplace
+  evidence: https://wordpress.org/plugins/idenfy/
+  marketplace: WordPress Plugin Directory
+  direction: provider-built
+  category: cms
+  operations: []
+  use_case: null
+  partner_url: https://wordpress.org
+  partner_match: domain
+  relationship: platform-app
+- partner_name: Bubble
+  partner: bubble
+  type: marketplace
+  evidence: https://bubble.io/plugin/idenfy-identity-verification---kyc-1699527303843x386861968434659300
+  marketplace: Bubble Plugin Marketplace
+  direction: provider-built
+  category: no-code
+  operations: []
+  use_case: null
+  partner_url: https://bubble.io
+  partner_match: domain
+  relationship: platform-app
+- partner_name: viaSocket
+  partner: null
+  type: marketplace
+  evidence: https://viasocket.com/integrations/idenfy
+  marketplace: viaSocket
+  direction: provider-built
+  category: ipaas
+  operations: []
+  use_case: null
+  partner_url: https://viasocket.com
+  partner_match: null
+  relationship: connector-listing
+- partner_name: Zapier
+  partner: null
+  type: claimed
+  evidence: https://idenfy.com/zapier-identity-verification-service/
+  marketplace: null
+  direction: provider-built
+  category: ipaas
+  operations: []
+  use_case: null
+  partner_url: https://zapier.com
+  partner_match: null
+  relationship: connector-listing
+- partner_name: WooCommerce
+  partner: woocommerce
+  type: claimed
+  evidence: https://idenfy.com/identity-verification-woocommerce/
+  marketplace: null
+  direction: provider-built
+  category: e-commerce
+  operations: []
+  use_case: null
+  partner_url: https://woocommerce.com
+  partner_match: domain
+  relationship: platform-app
+- partner_name: Magento (Adobe Commerce)
+  partner: null
+  type: claimed
+  evidence: https://www.idenfy.com/integrations/
+  marketplace: null
+  direction: provider-built
+  category: e-commerce
+  operations: []
+  use_case: null
+  partner_url: null
+  partner_match: null
+  relationship: platform-app
+- partner_name: Flutter
+  partner: null
+  type: claimed
+  evidence: https://www.idenfy.com/integrations/
+  marketplace: null
+  direction: provider-built
+  category: mobile-sdk
+  operations: []
+  use_case: null
+  partner_url: null
+  partner_match: null
+  relationship: embedded
+- partner_name: React Native
+  partner: null
+  type: claimed
+  evidence: https://www.idenfy.com/integrations/
+  marketplace: null
+  direction: provider-built
+  category: mobile-sdk
+  operations: []
+  use_case: null
+  partner_url: null
+  partner_match: null
+  relationship: embedded
+templates: []
