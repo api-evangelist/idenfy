@@ -41,7 +41,6 @@
   arazzo: null
 - slug: idenfy-viasocket
   label: viaSocket
-  partner: idenfy
   partner_name: viaSocket
   category: ipaas
   type: marketplace
@@ -53,7 +52,6 @@
   arazzo: null
 - slug: idenfy-zapier
   label: Zapier
-  partner: zapier
   partner_name: Zapier
   category: ipaas
   type: claimed
