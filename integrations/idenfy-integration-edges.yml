@@ -20,6 +20,9 @@ checked:
 - https://www.idenfy.com/integrations/
 - https://zapier.com/api/v4/apps/
 - https://zapier.com/apps/idenfy/integrations
+- https://addons.mozilla.org/api/v5/addons/addon/<slug>/
+- https://addons.mozilla.org/api/v5/addons/search/?type=extension&app=firefox
+- https://chromewebstore.google.com/sitemap
 summary: 'iDenfy integrations page names 9 native integrations, all built by iDenfy: Shopify, WordPress, Bubble
   and viaSocket marketplace listings; Zapier, WooCommerce and Magento extensions; Flutter and React Native SDK wrappers.
   Zapier/n8n app sweeps found no listing under the idenfy key.'
@@ -133,39 +136,6 @@ edges:
   partner_url: null
   partner_match: null
   relationship: embedded
-- partner_name: A2A protocol (own Agent Card)
-  partner: null
-  partner_match: register
-  type: register
-  direction: provider-built
-  category: A2A agent
-  evidence: https://documentation.idenfy.com/.well-known/agent-card.json
-  channel: provider-built
-  relationship: compatible
-  shape: a2a
-  evidence_kind: own-wellknown
-  degree: conformant
-  report_only: true
-  a2a_card:
-    grade: conformant
-    verdict: live
-    protocol_version: '0.3'
-    deviations:
-    - supportedInterfaces-instead-of-additionalInterfaces
-    card_subject: api
-  contract_reference:
-    register: provider's own /.well-known/agent-card.json
-    spec_file: null
-    standard: A2A
-    role: a2a-agent-card
-    registered_name: iDenfy Documentation
-    organization: iDenfy Documentation
-    matched_domain: idenfy.com
-    matched_by: own-domain
-    detected_by: sweep-ai-agents.py
-    detected: '2026-10-15'
-  detected_by: sweep-ai-agents.py
-  first_seen: '2026-10-15'
 - partner_name: Zapier
   partner: zapier
   partner_match: aggregator
@@ -221,4 +191,68 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+- partner_name: A2A protocol (own Agent Card)
+  partner: null
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: A2A agent
+  evidence: https://documentation.idenfy.com/.well-known/agent-card.json
+  channel: provider-built
+  relationship: compatible
+  shape: a2a
+  evidence_kind: own-wellknown
+  degree: conformant
+  report_only: true
+  a2a_card:
+    grade: conformant
+    verdict: live
+    protocol_version: '0.3'
+    deviations:
+    - supportedInterfaces-instead-of-additionalInterfaces
+    card_subject: api
+  contract_reference:
+    register: provider's own /.well-known/agent-card.json
+    spec_file: null
+    standard: A2A
+    role: a2a-agent-card
+    registered_name: iDenfy Documentation
+    organization: iDenfy Documentation
+    matched_domain: idenfy.com
+    matched_by: own-domain
+    detected_by: sweep-ai-agents.py
+    detected: '2026-10-19'
+  detected_by: sweep-ai-agents.py
+  first_seen: '2026-10-15'
+- partner_name: Mozilla Firefox Add-ons (AMO)
+  partner: null
+  partner_match: null
+  type: marketplace
+  marketplace: firefox-add-ons
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://addons.mozilla.org/en-US/firefox/addon/idenfy/
+  app: iDenfy
+  listing_count: 1
+  category: browser extension (Firefox Add-ons)
+  partner_url: https://addons.mozilla.org/
+  contract_reference:
+    register: 'Firefox Add-ons (addons.mozilla.org public API v5 search: authors, homepage, support_url)'
+    spec_file: null
+    role: firefox-add-on-publisher
+    registered_name: iDenfy
+    register_id: https://addons.mozilla.org/api/v5/addons/addon/idenfy/
+    matched_domain: idenfy.com
+    matched_by: domain
+    matched_name: iDenfy
+    builder: publisher
+    signal_note: ONE edge per provider for the store; listing alone = participation. The AMO author name (builder
+      publisher) or homepage + support_url both on the provider's domain (builder domain-attested) identifies it;
+      extension / user counts are context, never counted. No Mozilla repo in all/*, so no platform-side edge exists
+      to mirror.
+    detected_by: sweep-browser-extension-stores.py
+    detected: '2026-10-21'
+  detected_by: sweep-browser-extension-stores.py
+  first_seen: '2026-10-21'
 templates: []
