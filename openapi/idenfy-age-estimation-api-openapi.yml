@@ -231,3 +231,9 @@ x-tagGroups:
 - name: General
   tags:
   - Webhooks
+x-provenance:
+  method: harvested
+  publisher: iDenfy
+  source: https://documentation.idenfy.com/openapi/age-estimation.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

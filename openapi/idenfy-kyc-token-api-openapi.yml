@@ -458,3 +458,9 @@ x-tagGroups:
   - KYC Token
   - KYC Verifications
   - POA
+x-provenance:
+  method: harvested
+  publisher: iDenfy
+  source: https://documentation.idenfy.com/openapi/kyc.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

@@ -261,3 +261,9 @@ x-tagGroups:
   tags:
   - Webhooks
   - Bank
+x-provenance:
+  method: harvested
+  publisher: iDenfy
+  source: https://documentation.idenfy.com/openapi/bank.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
