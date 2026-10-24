@@ -18,6 +18,9 @@ artifacts:
   authentication/idenfy-authentication.yml:
     method: searched
     evidence: declared in the artifact
+  capabilities/idenfy-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/idenfy-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -42,127 +45,211 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  hosts/idenfy-hosts.yml:
+    method: derived
+    evidence: declared in the artifact
+  integrations/_index.yml:
     method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T125852.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T133943.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T143147.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T154045.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-26T215308.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T094438.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T103455.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T123021.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T132314.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T140727.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T213958.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T230545.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T203505.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T220315.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-31T223420.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T063623.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T210448.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T222808.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+    evidence: carries an API Evangelist house phrase
+  integrations/idenfy-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
+  json-ld/idenfy-context.jsonld:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-age-estimation-token-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-age-estimation-token-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-check-pdf-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-check-profile-detail-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-check-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-check-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-monitoring-pdf-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-monitoring-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-monitoring-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-aml-monitoring-start-stop-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-bank-card-token-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-bank-card-token-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-bank-token-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-bank-token-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-beneficiary-create-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-beneficiary-create-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-beneficiary-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-beneficiary-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-company-detail-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-company-status-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-company-status-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-facial-authentication-session-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-gov-partner-order-document-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-gov-partner-ordered-document-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-gov-registers-available-documents-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-identification-blacklist-entry-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-identification-blacklist-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-identification-request-information-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-identification-request-information-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-answers-display-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-answers-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-answers-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-create-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-create-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-document-create-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-document-create-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-document-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-document-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-form-update-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-info-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-pdf-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-token-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-token-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-token-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-kyb-token-update-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-paginated-aml-monitoring-list-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-paginated-bank-transaction-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-paginated-company-list-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-paginated-partner-identification-list-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-patched-aml-monitoring-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-patched-beneficiary-document-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-patched-beneficiary-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-patched-kyb-form-document-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-patched-kyb-token-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-poa-check-detail-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-poa-check-detail-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-questionnaire-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-registry-center-check-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-registry-center-check-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-sos-report-document-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/idenfy-sos-report-parameter-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -246,15 +333,36 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/idenfy-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
   llms/idenfy-docs-llms.txt:
     method: searched
     evidence: 'derive-llms-provenance.py: harvested'
+  llms/idenfy-llms-provenance.yml:
+    method: searched
+    evidence: 'derive-llms-provenance.py: harvested'
   llms/idenfy-llms.txt:
     method: searched
     evidence: 'derive-llms-provenance.py: harvested'
+  mcp/idenfy-mcp-tools.json:
+    method: unknown
+    evidence: no authorship recorded
   mcp/idenfy-mcp.yml:
     method: unknown
     evidence: no authorship recorded
@@ -263,60 +371,60 @@ artifacts:
     evidence: declared in the artifact
   openapi/_original/idenfy-age-estimation-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/age-estimation.yaml (sha256
+      02c32caea230, fetched 2026-10-04)
   openapi/_original/idenfy-age-estimation.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://documentation.idenfy.com/openapi/age-estimation.yaml (sha256 02c32caea230,
+      fetched 2026-10-04)
   openapi/_original/idenfy-aml-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/aml.yaml (sha256 1401b2824d13,
+      fetched 2026-10-04)
   openapi/_original/idenfy-aml.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://documentation.idenfy.com/openapi/aml.yaml (sha256 1401b2824d13,
+      fetched 2026-10-04)
   openapi/_original/idenfy-bank-card-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/bank-card.yaml (sha256 adac22bbb70e,
+      fetched 2026-10-04)
   openapi/_original/idenfy-bank-card.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://documentation.idenfy.com/openapi/bank-card.yaml (sha256 adac22bbb70e,
+      fetched 2026-10-04)
   openapi/_original/idenfy-bank-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/bank.yaml (sha256 f460a298727c,
+      fetched 2026-10-04)
   openapi/_original/idenfy-bank.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://documentation.idenfy.com/openapi/bank.yaml (sha256 f460a298727c,
+      fetched 2026-10-04)
   openapi/_original/idenfy-face-authentication-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/face-authentication.yaml
+      (sha256 e95a2beae39e, fetched 2026-10-04)
   openapi/_original/idenfy-face-authentication.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://documentation.idenfy.com/openapi/face-authentication.yaml (sha256
+      e95a2beae39e, fetched 2026-10-04)
   openapi/_original/idenfy-kyb-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/kyb.yaml (sha256 305f269828e7,
+      fetched 2026-10-04)
   openapi/_original/idenfy-kyb.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/kyb.yaml (sha256 305f269828e7,
+      fetched 2026-10-04)
   openapi/_original/idenfy-kyc-openapi.yml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://documentation.idenfy.com/openapi/kyc.yaml (sha256 ab49d2f80525,
+      fetched 2026-10-04)
   openapi/_original/idenfy-kyc.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://documentation.idenfy.com/openapi/kyc.yaml (sha256 ab49d2f80525,
+      fetched 2026-10-04)
   openapi/idenfy-age-estimation-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -378,26 +486,26 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   overlays/idenfy-age-estimation-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   overlays/idenfy-aml-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   overlays/idenfy-bank-card-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   overlays/idenfy-bank-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   overlays/idenfy-face-authentication-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   overlays/idenfy-kyb-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   overlays/idenfy-kyc-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   packages/idenfy-packages.yml:
     method: searched
     evidence: declared in the artifact
@@ -406,6 +514,9 @@ artifacts:
     evidence: declared in the artifact
   rate-limits/idenfy-rate-limits.yml:
     method: searched
+    evidence: declared in the artifact
+  rules/idenfy-rules.yml:
+    method: generated
     evidence: declared in the artifact
   sandbox/idenfy-sandbox.yml:
     method: searched
@@ -425,6 +536,12 @@ artifacts:
   skills/idenfy-verification-skill.md:
     method: unknown
     evidence: no authorship recorded
+  vendors/idenfy-vendors.yml:
+    method: unknown
+    evidence: no authorship recorded
+  vocabulary/idenfy-vocabulary.yml:
+    method: derived
+    evidence: declared in the artifact
   well-known/idenfy-well-known.yml:
     method: unknown
     evidence: no authorship recorded
