@@ -1,4 +1,4 @@
-# iDenfy (idenfy)
+# iDenfy
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,147 +66,222 @@
 
 iDenfy is an identity verification platform providing KYC, KYB, and AML compliance solutions. The iDenfy API enables businesses to verify identities, check for fraud, and comply with regulatory requirements through automated document verification, facial recognition, AML screening, business verification, and bank verification services.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/idenfy/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/idenfy/refs/heads/main/apis.yml)
+**Areas:** AML · Age Verification · Bank Verification · Biometrics · Compliance · Fraud Prevention · Identity Verification · KYB · KYC · MCP · Open Banking · RegTech
 
-## Scope
+## iDenfy on APIs.io
 
-- **Type:** Index
+Everything profiled for iDenfy is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/idenfy/](https://apis.io/providers/idenfy/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (22)
 
-- AML
-- Compliance
-- Fraud Detection
-- Identity Verification
-- KYB
-- KYC
+- [iDenfy Fraud Prevention and Risk API](https://apis.io/apis/idenfy/idenfy-fraud-api/) — AI risk scoring, proxy/VPN/Tor detection, phone validation, SMS phone verification, fraud probability estimation, address verification and AI proof of…
+- [iDenfy Documentation MCP Server](https://apis.io/apis/idenfy/idenfy-docs-mcp/) — A hosted, unauthenticated remote Model Context Protocol server over the whole public documentation site, including the seven OpenAPI specs. Three live…
+- [iDenfy Age Estimation API](https://apis.io/apis/idenfy/idenfy-age-estimation-api/) — Age estimation session endpoints.
+- [iDenfy AML Checks API](https://apis.io/apis/idenfy/idenfy-aml-checks-api/) — Anti-money laundering check endpoints.
+- [iDenfy AML Monitorings API](https://apis.io/apis/idenfy/idenfy-aml-monitorings-api/) — Anti-money laundering monitoring endpoints.
+- [iDenfy Bank API](https://apis.io/apis/idenfy/idenfy-bank-api/) — Bank verification endpoints.
+- [iDenfy Bank Card Verification API](https://apis.io/apis/idenfy/idenfy-bank-card-verification-api/) — Bank card verification endpoints.
+- [iDenfy Beneficiaries API](https://apis.io/apis/idenfy/idenfy-beneficiaries-api/) — Beneficiaries CRUD endpoints for the KYB form.
+- [iDenfy Companies API](https://apis.io/apis/idenfy/idenfy-companies-api/) — Endpoints for actions with companies.
+- [iDenfy Face Auth Sessions API](https://apis.io/apis/idenfy/idenfy-face-auth-sessions-api/) — Face authentication session endpoints.
+- [iDenfy GOV Orders API](https://apis.io/apis/idenfy/idenfy-gov-orders-api/) — Endpoints for actions with GOV ordered documents.
+- [iDenfy KYB Documents API](https://apis.io/apis/idenfy/idenfy-kyb-documents-api/) — KYB documents CRUD endpoints for the KYB form.
+- [iDenfy KYB Forms API](https://apis.io/apis/idenfy/idenfy-kyb-forms-api/) — Endpoints for KYB form actions.
+- [iDenfy KYB Questionnaires API](https://apis.io/apis/idenfy/idenfy-kyb-questionnaires-api/) — KYB questionnaires endpoints.
+- [iDenfy KYB Token API](https://apis.io/apis/idenfy/idenfy-kyb-token-api/) — KYB token endpoints to begin KYB flow.
+- [iDenfy KYC Blocklist API](https://apis.io/apis/idenfy/idenfy-kyc-blocklist-api/) — Endpoints for managing face, document-face and document-info blocklist entries.
+- [iDenfy KYC Token API](https://apis.io/apis/idenfy/idenfy-kyc-token-api/) — Endpoints for creating KYC verification session tokens.
+- [iDenfy KYC Verifications API](https://apis.io/apis/idenfy/idenfy-kyc-verifications-api/) — Endpoints for actions with KYC verifications.
+- [iDenfy POA API](https://apis.io/apis/idenfy/idenfy-poa-api/) — Endpoints for standalone proof of address (POA) checks.
+- [iDenfy Registry Center Checks API](https://apis.io/apis/idenfy/idenfy-registry-center-checks-api/) — Registry center check endpoints.
+- [iDenfy SOS Reports API](https://apis.io/apis/idenfy/idenfy-sos-reports-api/) — Endpoints for actions with SOS filing documents.
+- [iDenfy Webhooks API](https://apis.io/apis/idenfy/idenfy-webhooks-api/) — Webhooks.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2024-11-13
-- **Modified:** 2026-04-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### iDenfy Identity Verification API
+Event-driven and webhook contracts.
 
-The iDenfy Identity Verification (KYC) API provides document verification, selfie checks, and liveness detection through redirect, iFrame, mobile SDK, or direct API integration.
+- [Idenfy Webhooks](https://apis.io/asyncapis/idenfy/idenfy-webhooks/)
 
-- **Human URL:** [https://documentation.idenfy.com/](https://documentation.idenfy.com/)
+#### MCP servers (1)
 
-#### Tags
+Model Context Protocol servers that expose the API to agents.
 
-- Identity Verification
-- KYC
-- Liveness
+- [iDenfy Documentation MCP Server](https://apis.io/servers/idenfy/idenfy-documentation-mcp-server/)
 
-#### Properties
+#### Agentic access (1)
 
-- [Documentation](https://documentation.idenfy.com/)
-- [Postman Collection](collections/idenfy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/idenfy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Which operations an agent can call, which act, and which need a human in the loop.
 
-### iDenfy Business Verification API
+- [Idenfy Agentic Access](https://apis.io/agentic-access/idenfy/idenfy-agentic-access/)
 
-The iDenfy Business Verification (KYB) API enables company verification using registry lookups, ultimate beneficial owner identification, and credit report checks via redirect or iFrame integration.
+#### JSON Schema (64)
 
-- **Human URL:** [https://documentation.idenfy.com/](https://documentation.idenfy.com/)
+The data models the API reads and writes.
 
-#### Tags
+- [AgeEstimationToken](https://apis.io/schemas/idenfy/idenfy-age-estimation-token/)
+- [AgeEstimationTokenRequest](https://apis.io/schemas/idenfy/idenfy-age-estimation-token-request/)
+- [AmlCheck](https://apis.io/schemas/idenfy/idenfy-aml-check/)
+- [AmlCheckPdfRequest](https://apis.io/schemas/idenfy/idenfy-aml-check-pdf-request/)
+- [AmlCheckProfileDetail](https://apis.io/schemas/idenfy/idenfy-aml-check-profile-detail/)
+- [AmlCheckRequest](https://apis.io/schemas/idenfy/idenfy-aml-check-request/)
+- [AmlMonitoring](https://apis.io/schemas/idenfy/idenfy-aml-monitoring/)
+- [AmlMonitoringPdfRequest](https://apis.io/schemas/idenfy/idenfy-aml-monitoring-pdf-request/)
+- [AmlMonitoringRequest](https://apis.io/schemas/idenfy/idenfy-aml-monitoring-request/)
+- [AmlMonitoringStartStopRequest](https://apis.io/schemas/idenfy/idenfy-aml-monitoring-start-stop-request/)
+- [BankCardToken](https://apis.io/schemas/idenfy/idenfy-bank-card-token/)
+- [BankCardTokenRequest](https://apis.io/schemas/idenfy/idenfy-bank-card-token-request/)
+- [BankToken](https://apis.io/schemas/idenfy/idenfy-bank-token/)
+- [BankTokenRequest](https://apis.io/schemas/idenfy/idenfy-bank-token-request/)
+- [Beneficiary](https://apis.io/schemas/idenfy/idenfy-beneficiary/)
+- [BeneficiaryCreate](https://apis.io/schemas/idenfy/idenfy-beneficiary-create/)
+- [BeneficiaryCreateRequest](https://apis.io/schemas/idenfy/idenfy-beneficiary-create-request/)
+- [BeneficiaryRequest](https://apis.io/schemas/idenfy/idenfy-beneficiary-request/)
+- [CompanyDetail](https://apis.io/schemas/idenfy/idenfy-company-detail/)
+- [CompanyStatus](https://apis.io/schemas/idenfy/idenfy-company-status/)
+- [CompanyStatusRequest](https://apis.io/schemas/idenfy/idenfy-company-status-request/)
+- [FacialAuthenticationSession](https://apis.io/schemas/idenfy/idenfy-facial-authentication-session/)
+- [GovPartnerOrderDocumentRequest](https://apis.io/schemas/idenfy/idenfy-gov-partner-order-document-request/)
+- [GovPartnerOrderedDocument](https://apis.io/schemas/idenfy/idenfy-gov-partner-ordered-document/)
+- [GovRegistersAvailableDocuments](https://apis.io/schemas/idenfy/idenfy-gov-registers-available-documents/)
+- …and 39 more published on APIs.io
 
-- Business Verification
-- KYB
-- UBO
+#### JSON-LD (1)
 
-#### Properties
+Linked-data contexts for the provider's vocabulary.
 
-- [Documentation](https://documentation.idenfy.com/)
-- [Postman Collection](collections/idenfy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/idenfy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Idenfy Context](https://apis.io/jsonld/idenfy/idenfy-context/)
 
-### iDenfy AML Screening API
+#### Collections (8)
 
-The iDenfy AML Screening API screens individuals and companies against sanctions lists, politically exposed persons (PEPs), and adverse media, with one-time and ongoing monitoring options.
+Postman and Open Collection request collections.
 
-- **Human URL:** [https://documentation.idenfy.com/](https://documentation.idenfy.com/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-aml-api/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-bank-api/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-face-authentication-api/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-fraud-api/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-kyb-api/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-kyc-api/)
+- [Moved to /providers/idenfy/](https://apis.io/collections/idenfy/open-idenfy-token-api/)
 
-#### Tags
+#### Overlays (7)
 
-- AML
-- Compliance
-- PEP
-- Sanctions
+OpenAPI overlays, including conversational phrasing for each operation.
 
-#### Properties
+- [Idenfy Age Estimation Overlay](https://apis.io/overlays/idenfy/idenfy-age-estimation-overlay/)
+- [Idenfy Aml Overlay](https://apis.io/overlays/idenfy/idenfy-aml-overlay/)
+- [Idenfy Bank Card Overlay](https://apis.io/overlays/idenfy/idenfy-bank-card-overlay/)
+- [Idenfy Bank Overlay](https://apis.io/overlays/idenfy/idenfy-bank-overlay/)
+- [Idenfy Face Authentication Overlay](https://apis.io/overlays/idenfy/idenfy-face-authentication-overlay/)
+- [Idenfy Kyb Overlay](https://apis.io/overlays/idenfy/idenfy-kyb-overlay/)
+- [Idenfy Kyc Overlay](https://apis.io/overlays/idenfy/idenfy-kyc-overlay/)
 
-- [Documentation](https://documentation.idenfy.com/)
-- [Postman Collection](collections/idenfy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/idenfy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Governance rules (1)
 
-### iDenfy Fraud Prevention API
+Spectral rulesets for the provider's contracts.
 
-The iDenfy Fraud Prevention API provides risk scoring, proxy detection, phone and address verification, and proof of address checks to identify and stop fraudulent activities.
+- [iDenfy API Rules](https://apis.io/rules/idenfy/idenfy-rules/)
 
-- **Human URL:** [https://documentation.idenfy.com/fraud/FraudApi/](https://documentation.idenfy.com/fraud/FraudApi/)
+#### Security (4)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- Fraud Detection
-- Identity Verification
-- Risk Scoring
+- [Idenfy Authentication](https://apis.io/security/idenfy/idenfy-authentication/)
+- [Idenfy Domain Security](https://apis.io/security/idenfy/idenfy-domain-security/)
+- [Idenfy Trust Center](https://apis.io/security/idenfy/idenfy-trust-center/)
+- [Idenfy Vulnerability Disclosure](https://apis.io/security/idenfy/idenfy-vulnerability-disclosure/)
 
-#### Properties
+#### Plans and pricing (1)
 
-- [Documentation](https://documentation.idenfy.com/fraud/FraudApi/)
-- [Postman Collection](collections/idenfy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/idenfy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published plans, tiers and prices.
 
-### iDenfy Face Authentication API
+- [Idenfy Plans Pricing](https://apis.io/plans/idenfy/idenfy-plans-pricing/)
 
-The iDenfy Face Authentication API re-authenticates returning users by comparing a live facial scan against a previously verified identity.
+#### Rate limits (1)
 
-- **Human URL:** [https://documentation.idenfy.com/](https://documentation.idenfy.com/)
+Published request limits.
 
-#### Tags
+- [Idenfy Rate Limits](https://apis.io/rate-limits/idenfy/idenfy-rate-limits/)
 
-- Biometrics
-- Face Authentication
-- Identity Verification
+#### FinOps (1)
 
-#### Properties
+What the API costs to run, by operation.
 
-- [Documentation](https://documentation.idenfy.com/)
-- [Postman Collection](collections/idenfy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/idenfy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Idenfy Finops](https://apis.io/finops/idenfy/idenfy-finops/)
 
-### iDenfy Bank Verification API
+## Where to find this API
 
-The iDenfy Bank Verification API verifies bank accounts via open banking connections to over 2,500 European banks.
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- **Human URL:** [https://documentation.idenfy.com/](https://documentation.idenfy.com/)
-
-#### Tags
-
-- Bank Verification
-- Open Banking
-
-#### Properties
-
-- [Documentation](https://documentation.idenfy.com/)
-- [Postman Collection](collections/idenfy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/idenfy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/idenfy)
-- [LinkedIn](https://www.linkedin.com/company/idenfy)
 - [Website](https://www.idenfy.com/)
 - [Documentation](https://documentation.idenfy.com/)
-- [Support](https://www.idenfy.com/contact/)
-- [Integrations](https://idenfy.com/integrations/)
-- [L L Ms Txt](https://idenfy.com/llms.txt)
+- [Getting started](https://documentation.idenfy.com/quickstart)
+- [API reference](https://documentation.idenfy.com/api-reference/overview)
+- [Pricing](https://idenfy.com/pricing-plans-v4/)
+- [Sign up](https://idenfy.com/pricing-plans-v4/)
+- [Support](https://idenfy-ivs.atlassian.net/servicedesk/customer/portal/1)
+- [Blog](https://idenfy.com/blog/)
+- [Security](https://idenfy.com/.well-known/security.txt)
+- [Privacy policy](https://idenfy.com/privacy-policy/)
+- [GitHub](https://github.com/idenfy)
+- [Status](https://status.idenfy.com/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 67.2** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 69.4 |
+| Contract governance | 22.0 |
+| Operational transparency | 52.6 |
+| Developer ergonomics | 81.0 |
+| Access clarity | 81.6 |
+
+**Agent readiness 41.3** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | conformant |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 24.4** — Banking & Open Finance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/idenfy/](https://apis.io/providers/idenfy/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for iDenfy: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/idenfy/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
