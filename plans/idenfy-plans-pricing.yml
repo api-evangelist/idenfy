@@ -1,0 +1,129 @@
+name: iDenfy API Plans
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: iDenfy
+providerId: idenfy
+created: '2026-05-04'
+modified: '2026-09-13'
+generated: '2026-10-12'
+method: searched
+source: https://documentation.idenfy.com/resources/billing/pay-as-you-go
+sources:
+- url: https://documentation.idenfy.com/resources/billing/overview
+  http_status: 200
+- url: https://documentation.idenfy.com/resources/billing/pay-as-you-go
+  http_status: 200
+- url: https://documentation.idenfy.com/resources/billing/enterprise
+  http_status: 200
+- url: https://idenfy.com/pricing-plans-v4/
+  http_status: 403
+  note: Cloudflare bot challenge; the page exists and is the named signup destination, but the numbers below were
+    read from iDenfy's documentation site rather than scraped from it.
+note: Enterprise price_text 'Custom quotes' is verbatim on https://documentation.idenfy.com/resources/billing/enterprise
+  (the row's own source), not on the file-level pay-as-you-go source page.
+pricing_model: Per-approved-verification consumption against a monthly minimum commitment. iDenfy bills only for
+  APPROVED verifications — denied attempts are not charged (stated in https://idenfy.com/llms.txt). Unit prices
+  per verification type are not published; the published numbers are the monthly commitment and the overdraft ceiling.
+plan_count: 3
+currency: USD
+free_trial:
+  available: true
+  duration_days: 14
+  or_quota: 10
+  quota_unit: KYC verifications
+  terms: 14 days or 10 KYC verifications, whichever comes first. The account converts to a paid monthly plan afterwards
+    unless cancelled beforehand.
+plans:
+- id: idenfy-basic
+  name: Basic
+  type: pay-as-you-go
+  billing_period: month
+  description: Pay-as-you-go monthly plan. The minimum monthly commitment is billed like a subscription even if
+    the verifications are not used, and unused verifications do not roll over.
+  monthly_minimum_commitment:
+    amount: '135.00'
+    currency: USD
+  overage:
+    model: overdraft-on-credit
+    ceiling:
+      amount: '325.00'
+      currency: USD
+    billing: Overdraft usage is billed with the next monthly payment.
+  rollover: false
+  cancellation: Cancel anytime.
+  price_text: $135
+  price: 135
+- id: idenfy-premium
+  name: Premium
+  type: pay-as-you-go
+  billing_period: month
+  description: Higher-commitment pay-as-you-go monthly plan with a larger overdraft allowance.
+  monthly_minimum_commitment:
+    amount: '325.00'
+    currency: USD
+  overage:
+    model: overdraft-on-credit
+    ceiling:
+      amount: '650.00'
+      currency: USD
+    billing: Overdraft usage is billed with the next monthly payment.
+  rollover: false
+  cancellation: Cancel anytime.
+  price_text: $325
+  price: 325
+- id: idenfy-enterprise
+  name: Enterprise
+  type: contract
+  billing_period: year
+  description: Custom yearly contract with volume-based discounts and a custom quote. No prices are published; this
+    tier is sales-gated.
+  docs: https://documentation.idenfy.com/resources/billing/enterprise
+  price_text: Custom quotes
+  price: Custom quotes
+  source: https://documentation.idenfy.com/resources/billing/enterprise
+signup:
+  url: https://idenfy.com/pricing-plans-v4/
+  self_serve: true
+  methods:
+  - email + password
+  - Continue with Google
+  - Continue with Microsoft Entra ID
+refunds:
+  docs: https://documentation.idenfy.com/resources/billing/refunds
+  note: Eligibility review process, not an automatic per-call refund.
+unpublished:
+- Per-verification unit prices for KYC, KYB, AML, age estimation, bank and bank-card verification.
+- Volume tiers and discount breakpoints for Enterprise.
+- Any published rate limit or request quota attached to a tier.
+audience: business-product
+pricing_basis: tiered-subscription
+published: true
+delivery:
+  delivery: managed
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - metered
+  - negotiated
+  units: []
+  plans:
+  - name: Basic
+    access: other
+    model: metered
+    model_how: stated
+    units: []
+    periods: []
+  - name: Premium
+    access: other
+    model: metered
+    model_how: stated
+    units: []
+    periods: []
+  - name: Enterprise
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units: []
+    periods: []
